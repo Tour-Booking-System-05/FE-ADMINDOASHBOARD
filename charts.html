@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Thống kê & báo cáo - TravelAmin</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Template Main CSS File -->
+    <link href="assets/css/style.css" rel="stylesheet">
+    <!-- Quill CSS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Bundle JS (bao gồm Popper) -->
+    <!-- Quill JS -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+    <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+            <a href="index.html" class="logo d-flex align-items-center">
+                <img src="assets/img/logo.png" alt="">
+                <span class="d-none d-lg-block">TravelAdmin</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div><!-- End Logo -->
+
+        <div class="search-bar">
+            <form class="search-form d-flex align-items-center" method="POST" action="#">
+                <input type="text" name="query" placeholder="Nhập điều kiện tìm kiếm" title="Enter search keyword">
+                <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+            </form>
+        </div><!-- End Search Bar -->
+
+        <nav class="header-nav ms-auto">
+            <ul class="d-flex align-items-center">
+
+                <li class="nav-item d-block d-lg-none">
+                    <a class="nav-link nav-icon search-bar-toggle " href="#">
+                        <i class="bi bi-search"></i>
+                    </a>
+                </li><!-- End Search Icon-->
+
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-bell"></i>
+                        <span class="badge bg-primary badge-number">3</span>
+                    </a><!-- End Notification Icon -->
+
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                        <li class="dropdown-header">
+                            Bạn có 3 thông báo mới
+                            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">Xem tất cả</span></a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="notification-item">
+                            <i class="bi bi-exclamation-circle text-warning"></i>
+                            <div>
+                                <h4>Tour Đà Lạt sắp khởi hành</h4>
+                                <p>Vui lòng kiểm tra lại thông tin vé và lịch trình trước khi đi.</p>
+                                <p>30 phút trước</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="notification-item">
+                            <i class="bi bi-x-circle text-danger"></i>
+                            <div>
+                                <h4>Thanh toán thất bại</h4>
+                                <p>Giao dịch đặt tour Nha Trang chưa được hoàn tất. Vui lòng thử lại.</p>
+                                <p>1 giờ trước</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="notification-item">
+                            <i class="bi bi-info-circle text-primary"></i>
+                            <div>
+                                <h4>Ưu đãi mới dành cho bạn</h4>
+                                <p>Giảm ngay 15% cho tour Đà Nẵng nếu đặt trong hôm nay!</p>
+                                <p>4 giờ trước</p>
+                            </div>
+                        </li>
+
+
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="dropdown-footer">
+                            <a href="#">Xem tất cả</a>
+                        </li>
+
+                    </ul><!-- End Notification Dropdown Items -->
+
+                </li><!-- End Notification Nav -->
+
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-chat-left-text"></i>
+                        <span class="badge bg-success badge-number">3</span>
+                    </a><!-- End Messages Icon -->
+
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                        <li class="dropdown-header">
+                            Bạn có 3 tin nhắn mới
+                            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">Xem tất cả</span></a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="message-item">
+                            <a href="#">
+                                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
+                                <div>
+                                    <h4>Mai Tran</h4>
+                                    <p>Chuyến đi thật tuyệt vời! Dịch vụ chu đáo, hướng dẫn viên thân thiện và lịch
+                                        trình
+                                        rất hợp lý.</p>
+                                    <p>4 giờ trước</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                        <li class="message-item">
+                            <a href="#">
+                                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
+                                <div>
+                                    <h4>John Doe</h4>
+                                    <p>Tôi rất hài lòng với chuyến du lịch vừa rồi. Mọi thứ đều được tổ chức chuyên
+                                        nghiệp
+                                        và
+                                        tôi đã có những trải nghiệm tuyệt vời.</p>
+                                    <p>6 giờ trước</p>
+                                </div>
+                        </li>
+                </li>
+
+                <li class="dropdown-footer">
+                    <a href="#">Tất cả tin nhắn</a>
+                </li>
+
+            </ul><!-- End Messages Dropdown Items -->
+
+            </li><!-- End Messages Nav -->
+
+            <li class="nav-item dropdown pe-3">
+
+                <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                    <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2">ThaoHT</span>
+                </a><!-- End Profile Iamge Icon -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                    <li class="dropdown-header">
+                        <h6>Thao Thu Hoang</h6>
+                        <span>Nhà phát triển web</span>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                            <i class="bi bi-person"></i>
+                            <span>Thông tin cá nhân</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                            <i class="bi bi-gear"></i>
+                            <span>Chỉnh sửa tài khoản</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="faq.html">
+                            <i class="bi bi-question-circle"></i>
+                            <span>Bạn cần giúp đỡ?</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Đăng xuất</span>
+                        </a>
+                    </li>
+
+                </ul><!-- End Profile Dropdown Items -->
+            </li><!-- End Profile Nav -->
+
+            </ul>
+        </nav><!-- End Icons Navigation -->
+
+    </header><!-- End Header -->
+
+    <!-- ======= Sidebar ======= -->
+    <aside id="sidebar" class="sidebar">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="index.html">
+                    <i class="bi bi-grid"></i>
+                    <span>Trang chủ</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-globe-asia-australia"></i><span>Quản lý chuyến đi</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="tour-managerment.html">
+                            <i class="bi bi-circle"></i><span>Quản lý thông tin chuyến đi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tour-category.html">
+                            <i class="bi bi-circle"></i><span>Quản lý danh mục chuyến đi</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!-- End managerment tour -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="order.html">
+                    <i class="bi bi-cash-coin"></i><span> Quản lý đơn hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="users.html">
+                    <i class="bi bi-people"></i><span>Quản lý khách hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="charts.html">
+                    <i class="bi bi-bar-chart"></i><span>Thống kê</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="employees.html">
+                    <i class="bi bi-person-check-fill"></i><span>Quản lý nhân viên</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="promotion.html">
+                    <i class="bi bi-gift"></i><span>Quản lý khuyến mãi</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="content.html">
+                    <i class="bi bi-file-earmark-richtext"></i><span>Quản lý nội dung</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="settings.html">
+                    <i class="bi bi-gear"></i><span>Cài đặt</span>
+                </a>
+            </li>
+            <li class="nav-heading">Pages</li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="faq.html">
+                    <i class="bi bi-question-circle"></i>
+                    <span>F.A.Q</span>
+                </a>
+            </li><!-- End F.A.Q Page Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </li><!-- End Login Page Nav -->
+            <!-- End Dashboard Nav -->
+        </ul>
+    </aside>
+
+    <!-- End Sidebar-->
+
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>Thống kê & báo cáo</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                    <li class="breadcrumb-item active"><a href="charts.html">Thống kê & báo cáo</a></li>
+                </ol>
+            </nav>
+        </div>
+        <!-- End Page Title -->
+        <section class="section">
+            <div class="row mb-4 align-items-center">
+                <div class="col-auto">
+                    <select class="form-select" id="selectMonth" style="min-width: 120px;">
+                        <option>12 tháng</option>
+                        <option>6 tháng</option>
+                        <option>3 tháng</option>
+                        <option>1 tháng</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <select class="form-select" id="selectType" style="min-width: 120px;">
+                        <option>Doanh thu</option>
+                        <option>Đơn đặt</option>
+                        <option>Khách hàng</option>
+                    </select>
+                </div>
+                <div class="col-auto ms-auto">
+                    <button class="btn btn-light" id="exportReportBtn"> <i class="bi bi-download"></i> Xuất báo
+                        cáo
+                    </button>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-bold">Tổng doanh thu</span>
+                                <span class="text-secondary"><i class="bi bi-currency-dollar"></i></span>
+                            </div>
+                            <h3 class="fw-bold mb-1" id="statRevenue">724.000.000 ₫</h3>
+                            <div class="text-success small">
+                                <i class="bi bi-graph-up-arrow"></i>
+                                +21.8% so với tháng trước
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-bold">Tổng đơn đặt</span>
+                                <span class="text-secondary"><i class="bi bi-calendar"></i></span>
+                            </div>
+                            <h3 class="fw-bold mb-1" id="statOrders">724</h3>
+                            <div class="text-success small">
+                                <i class="bi bi-graph-up-arrow"></i>
+                                +18.2% so với tháng trước
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-bold">Tổng khách hàng</span>
+                                <span class="text-secondary"><i class="bi bi-people"></i></span>
+                            </div>
+                            <h3 class="fw-bold mb-1" id="statCustomers">622</h3>
+                            <div class="text-success small">
+                                <i class="bi bi-graph-up-arrow"></i>
+                                +23.4% so với tháng trước
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-bold">Tỉ lệ hủy tour</span>
+                                <span class="text-secondary"><i class="bi bi-percent"></i></span>
+                            </div>
+                            <h3 class="fw-bold mb-1 text-danger" id="statCancelRate">5.5%</h3>
+                            <i class="bi bi-graph-down-arrow"></i> -19.4% so với
+                            tháng trước
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="card mb-4">
+                <div class="card-body pb-0">
+                    <ul class="nav nav-tabs" id="statTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="overview-tab" data-bs-toggle="tab"
+                                data-bs-target="#overview" type="button" role="tab">Tổng quan</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="customer-tab" data-bs-toggle="tab" data-bs-target="#customer"
+                                type="button" role="tab">Phân tích khách hàng</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content pt-3" id="statTabsContent">
+                        <!-- Tab Tổng quan -->
+                        <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                            <div class="row">
+                                <div class="col-lg-6 mb-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Tổng doanh thu</h5>
+                                            <div id="areaChart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Trạng thái đơn đặt</h5>
+                                            <canvas id="pieChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Tab Phân tích khách hàng -->
+                        <div class="tab-pane fade" id="customer" role="tabpanel">
+                            <div class="row">
+                                <div class="col-lg-6 mb-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title"> Các mức vip của khách hàng</h5>
+                                            <canvas id="donutChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 mb-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Khách hàng theo tháng</h5>
+                                            <div id="lineChart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <!-- End #main -->
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="copyright">
+            &copy; Copyright <strong><span>Nhóm 5</span></strong>. Mọi quyền được bảo lưu
+        </div>
+        <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+            Thiết kế bởi <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+    </footer><!-- End Footer --> <!-- End Footer -->
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="assets/vendor/echarts/echarts.min.js"></script>
+    <script src="assets/vendor/quill/quill.js"></script>
+    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script>
+        document.getElementById('exportReportBtn').addEventListener('click', function () {
+            const month = document.getElementById('selectMonth').value;
+            const type = document.getElementById('selectType').value;
+            alert('Xuất báo cáo: ' + type + ' - ' + month);
+            // Xử lý xuất file ở đây
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Area Chart: Tổng doanh thu
+            new ApexCharts(document.querySelector("#areaChart"), {
+                series: [{
+                    name: "Doanh thu",
+                    data: [120, 150, 180, 170, 200, 220, 210, 230, 250, 270, 300, 320] // Đơn vị: triệu hoặc tỷ tùy bạn
+                }],
+                chart: {
+                    type: 'area',
+                    height: 350,
+                    toolbar: { show: true }
+                },
+                dataLabels: { enabled: false },
+                stroke: { curve: 'smooth' },
+                xaxis: {
+                    categories: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+                    title: { text: 'Tháng' }
+                },
+                yaxis: {
+                    labels: {
+                        formatter: function (val) {
+                            return val + 'tr'; // hoặc 'tỷ' nếu bạn dùng tỷ
+                        }
+                    },
+                    title: { text: 'Doanh thu' }
+                },
+                colors: ['#0d6efd'],
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.4,
+                        opacityTo: 0.1,
+                        stops: [0, 90, 100]
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return val + ' triệu VNĐ'; // hoặc 'tỷ VNĐ'
+                        }
+                    }
+                }
+            }).render();
+            // Pie Chart: Trạng thái đơn đặt
+            new Chart(document.getElementById('pieChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['Hoàn thành', 'Đang xử lý', 'Đã hủy'],
+                    datasets: [{
+                        data: [500, 150, 74],
+                        backgroundColor: ['#198754', '#ffc107', '#dc3545']
+                    }]
+                }
+            });
+
+            // Donut Chart: Các mức vip của khách hàng
+            new Chart(document.getElementById('donutChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Thường', 'Đồng', 'Bạc', 'Vàng', 'Kim cương'],
+                    datasets: [{
+                        data: [200, 120, 180, 80, 42],
+                        backgroundColor: [
+                            '#3a3a3a', // Thường (vip-normal)
+                            '#cd5c00', // Đồng (vip-bronze)
+                            '#cfd2d6', // Bạc (vip-silver)
+                            '#ffb300', // Vàng (vip-gold)
+                            '#6c63ff'  // Kim cương (vip-platinum)
+                        ],
+                    }]
+                }
+            });
+
+            // Line Chart: Khách hàng theo tháng
+            new ApexCharts(document.querySelector("#lineChart"), {
+                series: [{
+                    name: "Khách hàng mới",
+                    data: [10, 41, 35, 51, 49, 62, 69, 91, 148, 120, 98, 110]
+                }],
+                chart: {
+                    height: 350,
+                    type: 'line',
+                    zoom: {
+                        enabled: false
+                    }
+                },
+                dataLabels: {
+                    enabled: true
+                },
+                stroke: {
+                    curve: 'straight'
+                },
+                grid: {
+                    row: {
+                        colors: ['#f3f3f3', 'transparent'],
+                        opacity: 0.5
+                    },
+                },
+                xaxis: {
+                    categories: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+                    title: { text: 'Tháng' }
+
+                },
+                yaxis: {
+                    title: { text: 'Số khách hàng' }
+                },
+                colors: ['#0d6efd']
+            }).render();
+        });
+    </script>
+    <!-- Template Main JS File -->
+    <script src="assets/js/main.js"></script>
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Quill JS -->
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+</body>
+
+</html>

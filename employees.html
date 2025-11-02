@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Quản lý Nhân viên - TravelAdmin</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+    <link href="assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+            <a href="index.html" class="logo d-flex align-items-center">
+                <img src="assets/img/logo.png" alt="">
+                <span class="d-none d-lg-block">TravelAdmin</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div>
+        <div class="search-bar">
+            <form class="search-form d-flex align-items-center" method="POST" action="#">
+                <input type="text" name="query" placeholder="Nhập điều kiện tìm kiếm" title="Enter search keyword">
+                <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+            </form>
+        </div>
+        <nav class="header-nav ms-auto">
+            <ul class="d-flex align-items-center">
+
+                <li class="nav-item d-block d-lg-none">
+                    <a class="nav-link nav-icon search-bar-toggle " href="#">
+                        <i class="bi bi-search"></i>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-bell"></i>
+                        <span class="badge bg-primary badge-number">3</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                        <li class="dropdown-header">
+                            Bạn có 3 thông báo mới
+                            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">Xem tất cả</span></a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="notification-item">
+                            <i class="bi bi-exclamation-circle text-warning"></i>
+                            <div>
+                                <h4>Tour Đà Lạt sắp khởi hành</h4>
+                                <p>Vui lòng kiểm tra lại thông tin vé và lịch trình trước khi đi.</p>
+                                <p>30 phút trước</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="notification-item">
+                            <i class="bi bi-x-circle text-danger"></i>
+                            <div>
+                                <h4>Thanh toán thất bại</h4>
+                                <p>Giao dịch đặt tour Nha Trang chưa được hoàn tất. Vui lòng thử lại.</p>
+                                <p>1 giờ trước</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="notification-item">
+                            <i class="bi bi-info-circle text-primary"></i>
+                            <div>
+                                <h4>Ưu đãi mới dành cho bạn</h4>
+                                <p>Giảm ngay 15% cho tour Đà Nẵng nếu đặt trong hôm nay!</p>
+                                <p>4 giờ trước</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="dropdown-footer">
+                            <a href="#">Xem tất cả</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-chat-left-text"></i>
+                        <span class="badge bg-success badge-number">3</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                        <li class="dropdown-header">
+                            Bạn có 3 tin nhắn mới
+                            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">Xem tất cả</span></a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="message-item">
+                            <a href="#">
+                                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
+                                <div>
+                                    <h4>Mai Tran</h4>
+                                    <p>Chuyến đi thật tuyệt vời! Dịch vụ chu đáo, hướng dẫn viên thân thiện và lịch
+                                        trình
+                                        rất hợp lý.</p>
+                                    <p>4 giờ trước</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                        <li class="message-item">
+                            <a href="#">
+                                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
+                                <div>
+                                    <h4>John Doe</h4>
+                                    <p>Tôi rất hài lòng với chuyến du lịch vừa rồi. Mọi thứ đều được tổ chức chuyên
+                                        nghiệp
+                                        và
+                                        tôi đã có những trải nghiệm tuyệt vời.</p>
+                                    <p>6 giờ trước</p>
+                                </div>
+                        </li>
+                </li>
+
+                <li class="dropdown-footer">
+                    <a href="#">Tất cả tin nhắn</a>
+                </li>
+
+            </ul>
+            </li>
+            <li class="nav-item dropdown pe-3">
+
+                <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                    <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2">ThaoHT</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                    <li class="dropdown-header">
+                        <h6>Thao Thu Hoang</h6>
+                        <span>Nhà phát triển web</span>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                            <i class="bi bi-person"></i>
+                            <span>Thông tin cá nhân</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                            <i class="bi bi-gear"></i>
+                            <span>Chỉnh sửa tài khoản</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="faq.html">
+                            <i class="bi bi-question-circle"></i>
+                            <span>Bạn cần giúp đỡ?</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Đăng xuất</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+            </ul>
+        </nav>
+    </header>
+    <aside id="sidebar" class="sidebar">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="index.html">
+                    <i class="bi bi-grid"></i>
+                    <span>Trang chủ</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-globe-asia-australia"></i><span>Quản lý chuyến đi</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="tour-managerment.html">
+                            <i class="bi bi-circle"></i><span>Quản lý thông tin chuyến đi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tour-category.html">
+                            <i class="bi bi-circle"></i><span>Quản lý danh mục chuyến đi</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="order.html">
+                    <i class="bi bi-cash-coin"></i><span> Quản lý đơn hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="users.html">
+                    <i class="bi bi-people"></i><span>Quản lý khách hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="charts.html">
+                    <i class="bi bi-bar-chart"></i><span>Thống kê</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="employees.html">
+                    <i class="bi bi-person-check-fill"></i><span>Quản lý nhân viên</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="promotion.html">
+                    <i class="bi bi-gift"></i><span>Quản lý khuyến mãi</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="content.html">
+                    <i class="bi bi-file-earmark-richtext"></i><span>Quản lý nội dung</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="settings.html">
+                    <i class="bi bi-gear"></i><span>Cài đặt</span>
+                </a>
+            </li>
+            <li class="nav-heading">Pages</li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="faq.html">
+                    <i class="bi bi-question-circle"></i>
+                    <span>F.A.Q</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>Quản lý nhân viên</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                    <li class="breadcrumb-item active"><a href="employees.html">Quản lý nhân viên</a></li>
+                </ol>
+            </nav>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-primary" id="addEmployeeBtn">
+                <i class="bi bi-person-plus"></i> Thêm nhân viên
+            </button>
+        </div>
+        <br>
+        <section class="section">
+            <div class="card">
+
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2 pt-3">
+                        <h5 class="card-title mb-0 pt-0">Danh sách nhân viên</h5>
+
+                        <div class="col-md-3">
+                            <select id="statusFilter" class="form-select">
+                                <option selected value="all">Tất cả trạng thái</option>
+                                <option value="active">Hoạt động</option>
+                                <option value="expired">Khóa</option>
+                            </select>
+                        </div>
+                    </div>
+                    <table class="table datatable" id="employeeTable">
+                        <thead>
+                            <tr>
+                                <th>Mã NV</th>
+                                <th>Tên nhân viên</th>
+                                <th>Email</th>
+                                <th>Quyền</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-status="active">
+                                <td>NV001</td>
+                                <td>Nguyễn Văn A</td>
+                                <td>nguyenvana@email.com</td>
+                                <td>Quản lý tour, Quản lý đơn</td>
+                                <td><span class="badge bg-success">Hoạt động</span></td>
+                            </tr>
+                            <tr data-status="expired">
+                                <td>NV002</td>
+                                <td>Trần Thị B</td>
+                                <td>tranthib@email.com</td>
+                                <td>Quản lý khách hàng</td>
+                                <td><span class="badge bg-secondary">Khóa</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </section>
+        <style>
+            #employeeTable tbody tr:hover {
+                cursor: pointer;
+            }
+        </style>
+
+
+    </main>
+    <div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="employeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <form id="employeeForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="employeeModalLabel">Thêm nhân viên mới</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <ul class="nav nav-tabs mb-3" id="employeeTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="info-tab" data-bs-toggle="tab"
+                                    data-bs-target="#infoTab" type="button" role="tab">Thông tin cơ bản</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="role-tab" data-bs-toggle="tab" data-bs-target="#roleTab"
+                                    type="button" role="tab">Phân quyền</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="employeeTabContent">
+                            <div class="tab-pane fade show active" id="infoTab" role="tabpanel">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Họ và tên</label>
+                                        <input type="text" class="form-control" id="employeeName" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="employeeEmail" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Chức vụ</label>
+                                        <select class="form-select" id="employeePosition">
+                                            <option>Chọn chức vụ</option>
+                                            <option>Accountant</option>
+                                            <option>Manager</option>
+                                            <option>Staff</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Phòng ban</label>
+                                        <select class="form-select" id="employeeDepartment">
+                                            <option>Chọn phòng ban</option>
+                                            <option>Kế toán</option>
+                                            <option>Kinh doanh</option>
+                                            <option>CSKH</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Trạng thái</label>
+                                        <select class="form-select" id="employeeStatus">
+                                            <option value="active">Hoạt động</option>
+                                            <option value="expired">Khóa</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6" id="passwordGroup">
+                                        <label class="form-label">Mật khẩu tạm thời</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" id="employeePassword">
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                id="resetPasswordBtn">Đặt lại mật khẩu</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="roleTab" role="tabpanel">
+                                <div class="row g-3">
+                                    <div class="col-12 d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="fw-bold">Quản lý tour</div>
+                                            <div class="text-muted small">Thêm, sửa, xóa tour</div>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="roleTour">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="fw-bold">Quản lý đơn đặt tour</div>
+                                            <div class="text-muted small">Xem và xử lý đơn đặt</div>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="roleOrder">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="fw-bold">Quản lý khách hàng</div>
+                                            <div class="text-muted small">Xem thông tin khách hàng</div>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="roleCustomer">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="fw-bold">Quản lý thanh toán</div>
+                                            <div class="text-muted small">Xử lý thanh toán và hóa đơn</div>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="rolePayment">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="fw-bold">Xem báo cáo</div>
+                                            <div class="text-muted small">Truy cập thống kê và báo cáo</div>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="roleReport">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <div class="fw-bold">Quản lý nội dung</div>
+                                            <div class="text-muted small">Quản lý tin tức, banner</div>
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="roleContent">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger me-auto d-none" id="deleteEmployeeBtn">Xóa nhân
+                            viên</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer id="footer" class="footer">
+        <div class="copyright">
+            &copy; Copyright <strong><span>Nhóm 5</span></strong>. Mọi quyền được bảo lưu
+        </div>
+        <div class="credits">
+            Thiết kế bởi <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+    </footer>
+    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="assets/vendor/echarts/echarts.min.js"></script>
+    <script src="assets/vendor/quill/quill.js"></script>
+    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const modalEl = document.getElementById('employeeModal');
+            const employeeModal = new bootstrap.Modal(modalEl);
+            const addBtn = document.getElementById('addEmployeeBtn');
+            const form = document.getElementById('employeeForm');
+            const deleteBtn = document.getElementById('deleteEmployeeBtn');
+            const modalLabel = document.getElementById('employeeModalLabel');
+
+            let isEditing = false;
+            let editingRow = null;
+
+            const generatePassword = (len = 8) => {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                let s = '';
+                for (let i = 0; i < len; i++) s += chars.charAt(Math.floor(Math.random() * chars.length));
+                return s;
+            }
+
+            const ensureToggleButton = (passwordInput) => {
+                const group = passwordInput.closest('.input-group');
+                if (!group) return;
+                let toggle = group.querySelector('#togglePwdBtn');
+                if (!toggle) {
+                    toggle = document.createElement('button');
+                    toggle.type = 'button';
+                    toggle.id = 'togglePwdBtn';
+                    toggle.className = 'btn btn-outline-secondary';
+                    toggle.innerHTML = '<i class="bi bi-eye"></i>';
+
+                    const resetBtn = group.querySelector('#resetPasswordBtn');
+                    group.insertBefore(toggle, resetBtn.nextSibling);
+
+                    toggle.addEventListener('click', () => {
+                        if (passwordInput.type === 'password') {
+                            passwordInput.type = 'text';
+                            toggle.querySelector('i').className = 'bi bi-eye-slash';
+                        } else {
+                            passwordInput.type = 'password';
+                            toggle.querySelector('i').className = 'bi bi-eye';
+                        }
+                    });
+                }
+            }
+
+            const showModalForAdd = () => {
+                isEditing = false;
+                editingRow = null;
+                form.reset();
+                modalLabel.textContent = 'Thêm nhân viên mới';
+                deleteBtn.classList.add('d-none');
+                document.getElementById('passwordGroup').classList.add('d-none');
+                document.getElementById('employeeStatus').value = 'active';
+                employeeModal.show();
+            };
+
+            const showModalForEdit = (row) => {
+                isEditing = true;
+                editingRow = row;
+                form.reset();
+                const cells = row.getElementsByTagName('td');
+
+                document.getElementById('employeeName').value = cells[1].textContent.trim();
+                document.getElementById('employeeEmail').value = cells[2].textContent.trim();
+
+                const statusText = cells[4].textContent.trim();
+                document.getElementById('employeeStatus').value = statusText === 'Hoạt động' ? 'active' : 'expired';
+
+                const rolesText = cells[3] ? cells[3].textContent.trim() : '';
+                const roles = rolesText ? rolesText.split(',').map(r => r.trim()) : [];
+                document.getElementById('roleTour').checked = roles.includes('Quản lý tour');
+                document.getElementById('roleOrder').checked = roles.includes('Quản lý đơn');
+                document.getElementById('roleCustomer').checked = roles.includes('Quản lý khách hàng');
+                document.getElementById('rolePayment').checked = roles.includes('Quản lý thanh toán');
+                document.getElementById('roleReport').checked = roles.includes('Xem báo cáo');
+                document.getElementById('roleContent').checked = roles.includes('Quản lý nội dung');
+
+                const pwdGroup = document.getElementById('passwordGroup');
+                pwdGroup.classList.remove('d-none');
+                const pwdInput = document.getElementById('employeePassword');
+                pwdInput.value = '';
+                pwdInput.type = 'password';
+
+                ensureToggleButton(pwdInput);
+
+                document.getElementById('resetPasswordBtn').onclick = () => {
+                    const newPwd = generatePassword(10);
+                    pwdInput.value = newPwd;
+                    pwdInput.type = 'text';
+                    const toggleIcon = pwdGroup.querySelector('#togglePwdBtn i');
+                    if (toggleIcon) toggleIcon.className = 'bi bi-eye-slash';
+                };
+
+                modalLabel.textContent = 'Chỉnh sửa thông tin nhân viên';
+                deleteBtn.classList.remove('d-none');
+                employeeModal.show();
+            };
+
+            addBtn.addEventListener('click', showModalForAdd);
+
+            document.querySelector('#employeeTable tbody').addEventListener('click', (e) => {
+                const row = e.target.closest('tr');
+                if (row) {
+                    showModalForEdit(row);
+                }
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Đã lưu thông tin nhân viên!');
+                employeeModal.hide();
+                setTimeout(() => window.location.reload(), 300);
+            });
+
+            deleteBtn.addEventListener('click', () => {
+                if (confirm('Bạn có chắc chắn muốn xóa nhân viên này không?')) {
+                    alert('Đã xóa nhân viên!');
+                    employeeModal.hide();
+                    setTimeout(() => window.location.reload(), 300);
+                }
+            });
+
+            const statusFilter = document.getElementById('statusFilter');
+            const tableRows = document.querySelectorAll('#employeeTable tbody tr');
+            statusFilter.addEventListener('change', function () {
+                const selectedStatus = this.value;
+                tableRows.forEach(row => {
+                    row.style.display = (selectedStatus === 'all' || row.dataset.status === selectedStatus) ? '' : 'none';
+                });
+            });
+        });
+    </script>
+    <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

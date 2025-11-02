@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Quản lý danh mục tour - TravelAdmin</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+
+    <style>
+        .datatable tbody tr {
+            cursor: pointer;
+        }
+
+        .datatable tbody tr:hover {
+            background-color: #f6f9ff !important;
+        }
+
+        /* Alert góc phải */
+        #alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1080;
+            width: 320px;
+        }
+
+        .alert {
+            animation: fadeIn 0.4s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+            <a href="index.html" class="logo d-flex align-items-center">
+                <img src="assets/img/logo.png" alt="">
+                <span class="d-none d-lg-block">TravelAdmin</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div>
+        <div class="search-bar">
+            <form class="search-form d-flex align-items-center" method="POST" action="#">
+                <input type="text" name="query" placeholder="Nhập điều kiện tìm kiếm" title="Enter search keyword">
+                <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+            </form>
+        </div>
+        <nav class="header-nav ms-auto">
+            <ul class="d-flex align-items-center">
+
+                <li class="nav-item d-block d-lg-none">
+                    <a class="nav-link nav-icon search-bar-toggle " href="#">
+                        <i class="bi bi-search"></i>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-bell"></i>
+                        <span class="badge bg-primary badge-number">3</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                        <li class="dropdown-header">
+                            Bạn có 3 thông báo mới
+                            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">Xem tất cả</span></a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="notification-item">
+                            <i class="bi bi-exclamation-circle text-warning"></i>
+                            <div>
+                                <h4>Tour Đà Lạt sắp khởi hành</h4>
+                                <p>Vui lòng kiểm tra lại thông tin vé và lịch trình trước khi đi.</p>
+                                <p>30 phút trước</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="notification-item">
+                            <i class="bi bi-x-circle text-danger"></i>
+                            <div>
+                                <h4>Thanh toán thất bại</h4>
+                                <p>Giao dịch đặt tour Nha Trang chưa được hoàn tất. Vui lòng thử lại.</p>
+                                <p>1 giờ trước</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="notification-item">
+                            <i class="bi bi-info-circle text-primary"></i>
+                            <div>
+                                <h4>Ưu đãi mới dành cho bạn</h4>
+                                <p>Giảm ngay 15% cho tour Đà Nẵng nếu đặt trong hôm nay!</p>
+                                <p>4 giờ trước</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="dropdown-footer">
+                            <a href="#">Xem tất cả</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-chat-left-text"></i>
+                        <span class="badge bg-success badge-number">3</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                        <li class="dropdown-header">
+                            Bạn có 3 tin nhắn mới
+                            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">Xem tất cả</span></a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="message-item">
+                            <a href="#">
+                                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
+                                <div>
+                                    <h4>Mai Tran</h4>
+                                    <p>Chuyến đi thật tuyệt vời! Dịch vụ chu đáo, hướng dẫn viên thân thiện và lịch
+                                        trình
+                                        rất hợp lý.</p>
+                                    <p>4 giờ trước</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="message-item">
+                            <a href="#">
+                                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
+                                <div>
+                                    <h4>John Doe</h4>
+                                    <p>Tôi rất hài lòng với chuyến du lịch vừa rồi. Mọi thứ đều được tổ chức chuyên
+                                        nghiệp
+                                        và
+                                        tôi đã có những trải nghiệm tuyệt vời.</p>
+                                    <p>6 giờ trước</p>
+                                </div>
+                        </li>
+
+                        <li class="dropdown-footer">
+                            <a href="#">Tất cả tin nhắn</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="nav-item dropdown pe-3">
+
+                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                        <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                        <span class="d-none d-md-block dropdown-toggle ps-2">ThaoHT</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                        <li class="dropdown-header">
+                            <h6>Thao Thu Hoang</h6>
+                            <span>Nhà phát triển web</span>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                <i class="bi bi-person"></i>
+                                <span>Thông tin cá nhân</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                <i class="bi bi-gear"></i>
+                                <span>Chỉnh sửa tài khoản</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="faq.html">
+                                <i class="bi bi-question-circle"></i>
+                                <span>Bạn cần giúp đỡ?</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Đăng xuất</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <aside id="sidebar" class="sidebar">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="index.html">
+                    <i class="bi bi-grid"></i>
+                    <span>Trang chủ</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-globe-asia-australia"></i><span>Quản lý chuyến đi</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="components-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="tour-managerment.html">
+                            <i class="bi bi-circle"></i><span>Quản lý thông tin chuyến đi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tour-category.html" class="active">
+                            <i class="bi bi-circle"></i><span>Quản lý danh mục chuyến đi</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="order.html">
+                    <i class="bi bi-cash-coin"></i><span> Quản lý đơn hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="users.html">
+                    <i class="bi bi-people"></i><span>Quản lý khách hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="charts.html">
+                    <i class="bi bi-bar-chart"></i><span>Thống kê</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="employees.html">
+                    <i class="bi bi-person-check-fill"></i><span>Quản lý nhân viên</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="promotion.html">
+                    <i class="bi bi-gift"></i><span>Quản lý khuyến mãi</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="content.html">
+                    <i class="bi bi-file-earmark-richtext"></i><span>Quản lý nội dung</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="settings.html">
+                    <i class="bi bi-gear"></i><span>Cài đặt</span>
+                </a>
+            </li>
+            <li class="nav-heading">Pages</li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="faq.html">
+                    <i class="bi bi-question-circle"></i>
+                    <span>F.A.Q</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>Quản lý thông tin danh mục chuyến đi</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                    <li class="breadcrumb-item">Quản lý chuyến đi</li>
+                    <li class="breadcrumb-item active"><a href="tour-category.html">Quản lý danh mục chuyến đi</a></li>
+                </ol>
+            </nav>
+        </div>
+        <section class="section dashboard">
+            <div class="row">
+                <div class="col-xxl-4 col-md-6">
+                    <div class="card info-card tour-card">
+                        <div class="card-body">
+                            <h5 class="card-title"> Tổng số danh mục</h5>
+
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-folder-fill"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6 id="totalCategories">1232</h6>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xxl-4 col-md-6">
+                    <div class="card info-card tour-active-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Trung bình chuyến đi/ danh mục</h5>
+
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-calculator"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>1222</h6>
+                                    <i class="bi bi-graph-up-arrow"></i>
+                                    <span class="text-success small pt-1 fw-bold">8%</span> <span
+                                        class="text-muted small pt-2 ps-1">Tăng</span>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                                    <h5 class="card-title mb-0">Danh sách danh mục chuyến đi</h5>
+                                    <button type="button" class="btn btn-primary btn-sm shadow-sm"
+                                        data-bs-toggle="modal" data-bs-target="#addTourModal"> <i
+                                            class="bi bi-plus-circle me-1"></i> Thêm danh mục mới
+                                    </button>
+                                </div>
+                                <div id="bulkActionBar"
+                                    class="d-none bg-light border rounded p-2 mb-3 d-flex align-items-center justify-content-between">
+                                    <button class="btn btn-danger btn-sm" id="deleteSelectedBtn">
+                                        <i class="bi bi-trash"></i> Xóa danh mục đã chọn
+                                    </button>
+                                </div>
+                                <table id="categoryTable" class="table datatable">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 40px;">
+                                                <input type="checkbox" id="selectAll">
+                                            </th>
+                                            <th>Mã danh mục</th>
+                                            <th>Tên danh mục</th>
+                                            <th>Mô tả</th>
+                                            <th>Số chuyến đi</th>
+                                            <th> Ngày tạo</th>
+                                            <th>Trạng thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="text-center py-3 text-muted">Đang tải dữ liệu...</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>T001</td>
+                                            <td>Tour đi biển</td>
+                                            <td>Các tour du lịch biển đảo, nghỉ dưỡng tại các bãi biển đẹp</td>
+                                            <td>15</td>
+                                            <td>2024/10/20</td>
+                                            <td><span class="badge bg-success">Hoạt động</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>T001</td>
+                                            <td>Tour khám phá núi rừng</td>
+                                            <td>Các tour trekking, leo núi, khám phá thiên nhiên hoang dã</td>
+                                            <td>10</td>
+                                            <td>2024/11/05</td>
+                                            <td><span class="badge bg-success">Hoạt động</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>T001</td>
+                                            <td>Tour du lịch văn hóa</td>
+                                            <td>Các tour tham quan di tích lịch sử, văn hóa, lễ hội truyền thống</td>
+                                            <td>8</td>
+                                            <td>2024/09/15</td>
+                                            <td><span class="badge bg-danger">Bị ẩn</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>T001</td>
+                                            <td>Tour ẩm thực</td>
+                                            <td>Các tour khám phá ẩm thực địa phương, trải nghiệm nấu ăn</td>
+                                            <td>12</td>
+                                            <td>2024/10/30</td>
+                                            <td><span class="badge bg-success">Hoạt động</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>T001</td>
+                                            <td>Tour du lịch gia đình</td>
+                                            <td>Các tour phù hợp cho cả gia đình, có hoạt động cho trẻ em</td>
+                                            <td>20</td>
+                                            <td>2024/11/10</td>
+                                            <td><span class="badge bg-success">Hoạt động</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer id="footer" class="footer">
+        <div class="copyright">
+            &copy; Copyright <strong><span>Nhóm 5</span></strong>. Mọi quyền được bảo lưu
+        </div>
+        <div class="credits">
+            Thiết kế bởi <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+    </footer>
+    <div class="modal fade" id="addTourModal" tabindex="-1" aria-labelledby="addTourModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="addTourModalLabel">Thêm danh mục tour mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted mb-4">Tạo danh mục chuyến đi với thông tin chi tiết </p>
+                    <form id="addTourForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Tên Danh mục</label>
+                                <input type="text" name="categoryName" class="form-control"
+                                    placeholder="Nhập tên danh mục" maxlength="254" required
+                                    oninput="limitText(this, 254)">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Trạng thái</label>
+                                <select name="status" class="form-select" required>
+                                    <option value="">-- Chọn trạng thái --</option>
+                                    <option value="active">Hoạt động</option>
+                                    <option value="hidden"> Ẩn</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold mb-2">Mô tả</label>
+                                <div id="quillEditor" class="border rounded shadow-sm" style="height: 150px;"></div>
+                                <textarea name="description" id="description" hidden></textarea>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold mb-2">Ảnh danh mục</label>
+
+                                <!-- Input chọn ảnh -->
+                                <div id="uploadContainer">
+                                    <input type="file" id="tourImage" name="tourImage" class="form-control"
+                                        accept="image/*" required>
+                                </div>
+
+                                <!-- Ảnh xem trước -->
+                                <div class="mt-3 p-2 border rounded" id="imagePreviewContainer" style="display:none;">
+                                    <img id="imagePreview" src="#" alt="Ảnh xem trước" class="img-fluid rounded"
+                                        style="max-height: 200px; object-fit: cover;">
+                                    <div class="mt-2 text-end">
+                                        <button type="button" id="changeImageBtn"
+                                            class="btn btn-sm btn-outline-primary">Thay ảnh</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="deleteTourBtn" style="display:none;">Xóa danh
+                        mục</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu danh mục</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="alert-container"></div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- 1. CẤU HÌNH VÀ DOM ELEMENTS ---
+            const API_URL = 'http://localhost:8080/api/v1/categories';
+
+            let dataTable = null; // Biến giữ thể hiện của DataTables
+            const modalEl = document.getElementById('addTourModal');
+            const modal = new bootstrap.Modal(modalEl);
+            const form = document.getElementById('addTourForm');
+            const modalTitle = document.getElementById('addTourModalLabel');
+            const modalDescriptionEl = modalEl.querySelector('p.text-muted');
+            const deleteBtn = document.getElementById('deleteTourBtn');
+            const categoryTable = document.getElementById('categoryTable'); // Thẻ <table>
+            const categoryTableBody = document.querySelector('.datatable tbody');
+            const descriptionInput = document.getElementById('description');
+            const addButton = document.querySelector('[data-bs-target="#addTourModal"]');
+
+            // Phần tử cho Preview ảnh
+            const uploadContainer = document.getElementById('uploadContainer'); // DOM cho vùng input file
+            const imageInput = document.getElementById('tourImage');
+            const previewImg = document.getElementById('imagePreview');
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            const changeImageBtn = document.getElementById('changeImageBtn'); // Nút "Thay ảnh"
+            const selectAll = document.getElementById('selectAll'); // Checkbox chọn tất cả
+            const bulkBar = document.getElementById('bulkActionBar'); // Action bar hàng loạt
+            const deleteSelectedBtn = document.getElementById('deleteSelectedBtn'); // Nút xóa hàng loạt
+            const countEl = document.getElementById('selectedCount'); // Số lượng đã chọn
+
+            const quill = new Quill('#quillEditor', { theme: 'snow' });
+            let currentId = null;
+            let currentImageUrl = null;
+            let selectedIds = new Set(); // Set để lưu ID các hàng đã chọn
+
+            // --- 2. CÁC HÀM HỖ TRỢ CHUNG ---
+            // 🧩 Giới hạn số ký tự nhập
+            function limitText(input, maxLength) {
+                if (input.value.length > maxLength) {
+                    input.value = input.value.slice(0, maxLength);
+                    showAlert(`⚠️ Tên danh mục chỉ được tối đa ${maxLength} ký tự`, 'warning');
+                }
+            }
+
+            // 🔔 Alert góc phải
+            function showAlert(message, type = 'success') {
+                const container = document.getElementById('alert-container');
+                const icons = { success: 'bi-check-circle-fill', info: 'bi-info-circle-fill', warning: 'bi-exclamation-triangle-fill', danger: 'bi-x-circle-fill' };
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type} bg-${type} text-light alert-dismissible fade show mb-2`;
+                alert.innerHTML = `<i class="bi ${icons[type]} me-2"></i>${message}
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>`;
+                container.appendChild(alert);
+                setTimeout(() => alert.remove(), 3000);
+            }
+
+            /**
+             * 🖼 Thiết lập chức năng xem trước ảnh.
+             */
+            function setupImagePreview(file, initialUrl = null) {
+                if (file) {
+                    previewImg.src = URL.createObjectURL(file);
+                    previewContainer.style.display = 'block';
+                    uploadContainer.style.display = 'none';
+                } else if (initialUrl) {
+                    previewImg.src = initialUrl;
+                    previewContainer.style.display = 'block';
+                    uploadContainer.style.display = 'none';
+                } else {
+                    previewImg.src = '#';
+                    previewContainer.style.display = 'none';
+                    uploadContainer.style.display = 'block';
+                }
+            }
+
+            // 🔁 Reset modal
+            function resetModalToDefault() {
+                currentId = null;
+                currentImageUrl = null;
+                modalTitle.textContent = 'Thêm danh mục tour mới';
+                modalDescriptionEl.style.display = 'block';
+                deleteBtn.style.display = 'none';
+                form.reset();
+                quill.setText('');
+                imageInput.value = ''; // Reset input file
+                setupImagePreview(null); // Reset ảnh preview
+            }
+
+            // --- LOGIC CHECKBOX VÀ HÀNH ĐỘNG HÀNG LOẠT (Đã sửa lỗi DataTables) ---
+
+            // Cập nhật thanh hành động hàng loạt
+            function toggleBulkBar() {
+                // countEl.textContent = selectedIds.size; // Đã thêm span#selectedCount vào HTML
+                bulkBar.classList.toggle('d-none', selectedIds.size === 0);
+            }
+
+            function highlightRow(cb, checked) {
+                const tr = cb.closest('tr');
+                if (checked) tr.classList.add('table-active');
+                else tr.classList.remove('table-active');
+            }
+
+            /**
+             * 🧩 Gắn sự kiện checkbox cho các hàng MỚI (chạy sau mỗi lần DataTables vẽ lại)
+             */
+            function attachCheckboxEvents() {
+                // Đảm bảo checkbox "Chọn tất cả" được reset về trạng thái ban đầu
+                if (selectAll) selectAll.checked = false;
+
+                const rowCheckboxes = document.querySelectorAll('#categoryTable .row-checkbox');
+
+                // --- A. Chọn tất cả ---
+                if (selectAll) {
+                    selectAll.onchange = e => {
+                        const checked = e.target.checked;
+                        selectedIds.clear(); // Xóa tất cả trước khi thêm mới
+                        rowCheckboxes.forEach(cb => {
+                            cb.checked = checked;
+                            const id = cb.dataset.id;
+                            if (checked) selectedIds.add(id);
+                            highlightRow(cb, checked);
+                        });
+                        toggleBulkBar();
+                    };
+                }
+
+                // --- B. Chọn từng dòng ---
+                rowCheckboxes.forEach(cb => {
+                    const id = cb.dataset.id;
+                    cb.checked = selectedIds.has(id);
+                    highlightRow(cb, selectedIds.has(id));
+                    cb.onchange = e => {
+                        const checked = e.target.checked;
+                        if (checked) selectedIds.add(id);
+                        else selectedIds.delete(id);
+
+                        highlightRow(cb, checked);
+                        toggleBulkBar();
+
+                        // 🧠 Nếu bỏ chọn 1 dòng => bỏ check "Chọn tất cả"
+                        if (!checked && selectAll) {
+                            selectAll.checked = false;
+                        }
+                        // ✅ Nếu tất cả checkbox đều được chọn => tự check lại "Chọn tất cả"
+                        const allChecked = [...document.querySelectorAll('#categoryTable .row-checkbox')]
+                            .every(cb => cb.checked);
+                        selectAll.checked = allChecked;
+                    };
+
+                });
+                toggleBulkBar();
+            }
+
+            // --- 3. CÁC HÀM API CRUD ---
+            function loadCategories() {
+                if ($.fn.DataTable.isDataTable('#categoryTable')) {
+                    $('#categoryTable').DataTable().ajax.reload(attachCheckboxEvents, false);
+                    return;
+                }
+
+                $(document).ready(function () {
+                    dataTable = $('#categoryTable').DataTable({
+                        serverSide: true,
+                        processing: true,
+                        searching: true,
+                        lengthChange: true,
+                        pageLength: 5,
+                        lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tất cả"]],
+                        order: [[1, 'asc']],
+                        columnDefs: [
+                            { targets: 0, orderable: false, searchable: false }],
+                        ajax: function (data, callback) {
+                            const page = Math.floor(data.start / data.length);
+                            const size = data.length;
+                            const searchValue = data.search.value ? data.search.value : '';
+                            const sortColIndex = data.order.length > 0 ? data.order[0].column : 1;
+                            const columnMap = ['id', 'categoryId', 'categoryName', 'description', 'createdAt', 'status'];
+                            const sortColName = columnMap[sortColIndex] || 'categoryId';
+                            const sortDir = data.order.length > 0 ? data.order[0].dir : 'asc';
+
+                            const url = `${API_URL}?page=${page}&size=${size}&sort=${sortColName},${sortDir}&keyword=${encodeURIComponent(searchValue)}`;
+
+                            fetch(url)
+                                .then(res => res.json())
+                                .then(json => {
+                                    // Cập nhật tổng số danh mục trên thẻ card
+                                    document.getElementById('totalCategories').textContent = json.totalElements;
+
+                                    // Gửi dữ liệu về cho DataTables
+                                    callback({
+                                        recordsTotal: json.totalElements,
+                                        recordsFiltered: json.totalElements,
+                                        data: json.content
+                                    });
+                                })
+                                .catch(err => {
+                                    console.error("Lỗi tải dữ liệu:", err);
+                                    showAlert('Lỗi tải danh mục: ' + err.message, 'danger');
+                                    callback({ data: [], recordsTotal: 0, recordsFiltered: 0 });
+                                });
+                        },
+                        columns: [
+                            { // Cột Checkbox
+                                data: null,
+                                orderable: false,
+                                searchable: false,
+                                render: (data, type, row) => {
+                                    // Đã sửa lỗi: Dùng row.id (hoặc categoryId) để gán cho data-id
+                                    return `<input type="checkbox" class="row-checkbox" data-id="${row.id || row.categoryId}">`;
+                                }
+                            },
+                            { data: 'id', title: 'Mã danh mục' },
+                            { // Cột Ảnh
+                                data: 'imageUrl',
+                                title: 'Ảnh',
+                                orderable: false,
+                                render: url => url ? `<img src="${url}" width="60" height="40" style="object-fit:cover;border-radius:4px;">` : '-'
+                            },
+                            { data: 'categoryName', title: 'Tên danh mục' },
+                            {
+                                data: 'description',
+                                title: 'Mô tả',
+                                render: data => data ? new DOMParser().parseFromString(data, 'text/html').body.textContent.substring(0, 50) + '...' : '-'
+                            },
+                            { // Cột Ngày tạo (Sử dụng data: 'createdAt' nếu API trả về)
+                                data: 'createdAt',
+                                title: 'Ngày tạo',
+                                render: data => data ? data.split('T')[0] : ''
+                            },
+                            { // Cột Trạng thái
+                                data: 'status',
+                                title: 'Trạng thái',
+                                render: s => s ? '<span class="badge bg-success">Hoạt động</span>' : '<span class="badge bg-danger">Ẩn</span>'
+                            }
+                        ],
+                        language: {
+                            searchPlaceholder: "🔎 Tìm kiếm...",
+                            search: "",
+                            lengthMenu: "_MENU_ / dòng",
+                            info: "Hiển thị _START_–_END_ trong tổng _TOTAL_ danh mục",
+                            infoEmpty: "Không có dữ liệu",
+                            infoFiltered: "(lọc từ _MAX_ bản ghi)",
+                            zeroRecords: "Không tìm thấy kết quả phù hợp",
+                            loadingRecords: "Đang tải dữ liệu...",
+                            emptyTable: "Không có dữ liệu",
+                            paginate: {
+                                previous: "← Trước",
+                                next: "Tiếp →"
+                            }
+                        }
+                    });
+
+                    // Gắn sự kiện sau khi DataTables vẽ lại (Draw)
+                    $('#categoryTable').on('draw.dt', function () {
+                        attachCheckboxEvents();
+                    });
+                });
+            }
+
+            /** ✏️ Setup modal khi edit (Read Single) */
+            async function setupModalForEdit(categoryId) {
+                try {
+                    const res = await fetch(`${API_URL}/${categoryId}`);
+                    if (!res.ok) throw new Error('Category not found');
+                    const cat = await res.json();
+
+                    currentId = categoryId;
+                    currentImageUrl = cat.imageUrl || null;
+                    modalTitle.textContent = `Chỉnh sửa danh mục #${categoryId}`;
+                    modalDescriptionEl.style.display = 'none';
+                    deleteBtn.style.display = 'block';
+
+                    imageInput.removeAttribute('required');
+
+                    const categoryName = cat.categoryName || cat.name || '';
+                    form.querySelector('[name="categoryName"]').value = categoryName;
+                    quill.root.innerHTML = cat.description || '';
+                    form.querySelector('[name="status"]').value = (cat.status == 1 || cat.status === true) ? 'active' : 'hidden';
+
+                    setupImagePreview(null, currentImageUrl);
+
+                    imageInput.value = null;
+                    modal.show();
+                } catch (err) {
+                    showAlert('Không thể tải chi tiết danh mục: ' + err.message, 'danger');
+                }
+            }
+
+            /** Thêm/Cập nhật danh mục (Create/Update logic) */
+            async function saveCategory(categoryData, id = null) {
+                const method = id ? 'PUT' : 'POST';
+                const url = id ? `${API_URL}/${id}` : API_URL;
+
+                const res = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(categoryData)
+                });
+                if (!res.ok) throw new Error(`Lỗi khi ${id ? 'cập nhật' : 'tạo mới'} danh mục: ${res.statusText}`);
+                return res.json();
+            }
+
+            /** Xóa danh mục (Delete) */
+            async function deleteCategory(id) {
+                const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+                if (!res.ok) throw new Error('Lỗi khi xóa danh mục: ' + res.statusText);
+            }
+
+
+            // --- 4. XỬ LÝ SỰ KIỆN UI/CRUD ---
+
+            // 🖼 Lắng nghe sự kiện thay đổi file để preview ảnh
+            imageInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                setupImagePreview(file);
+            });
+
+            // Khi người dùng bấm “Thay ảnh”
+            if (changeImageBtn) {
+                changeImageBtn.addEventListener('click', () => {
+                    imageInput.click();
+                });
+            }
+
+            // 💾 Submit form (Thêm mới/Cập nhật)
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                descriptionInput.value = quill.root.innerHTML;
+
+                const imageFile = imageInput.files[0];
+                let finalImageUrl = currentImageUrl; // Khởi tạo bằng URL ảnh cũ
+
+                try {
+                    // 🖼 1️⃣ Upload ảnh: Chỉ upload nếu có file mới
+                    if (imageFile) {
+                        const uploadData = new FormData();
+                        uploadData.append('file', imageFile);
+
+                        showAlert('Đang upload ảnh...', 'info');
+
+                        const uploadRes = await fetch('http://localhost:8080/api/v1/categories/upload', {
+                            method: 'POST',
+                            body: uploadData
+                        });
+
+                        if (!uploadRes.ok) throw new Error('Upload ảnh thất bại!');
+                        const uploadResult = await uploadRes.json();
+                        finalImageUrl = uploadResult.url; // Ghi đè bằng URL mới
+                    }
+
+                    // 🗂 2️⃣ Gửi dữ liệu danh mục
+                    const formData = new FormData(form);
+                    const category = {
+                        categoryName: formData.get('categoryName'),
+                        description: formData.get('description'),
+                        status: formData.get('status') === 'active' ? 1 : 0,
+                        imageUrl: finalImageUrl
+                    };
+
+                    await saveCategory(category, currentId);
+
+                    modal.hide();
+                    showAlert(
+                        currentId ? 'Cập nhật danh mục thành công!' : 'Thêm danh mục mới thành công!',
+                        'success'
+                    );
+
+                    // 🔥 RELOAD TRANG THEO YÊU CẦU:
+                    setTimeout(() => window.location.reload(), 800);
+
+                } catch (err) {
+                    console.error(err);
+                    showAlert('❌ ' + err.message, 'danger');
+                }
+            });
+
+
+            // 🗑 Xóa danh mục
+            deleteBtn.addEventListener('click', async () => {
+                if (!currentId) return;
+                if (confirm(`Bạn có chắc muốn xóa danh mục #${currentId}?`)) {
+                    try {
+                        await deleteCategory(currentId);
+                        modal.hide();
+                        showAlert('Xóa danh mục thành công!', 'danger');
+
+                        // 🔥 RELOAD TRANG THEO YÊU CẦU:
+                        setTimeout(() => window.location.reload(), 800);
+
+                    } catch (err) {
+                        showAlert('Lỗi khi xóa: ' + err.message, 'danger');
+                    }
+                }
+            });
+
+            // 🗑️ Xóa hàng loạt
+            if (deleteSelectedBtn) {
+                deleteSelectedBtn.addEventListener('click', async () => {
+                    if (selectedIds.size === 0) return;
+                    if (!confirm(`Bạn có chắc muốn xóa ${selectedIds.size} danh mục đã chọn?`)) return;
+
+                    try {
+                        const res = await fetch(`${API_URL}/bulk-delete`, {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify([...selectedIds])
+                        });
+                        if (!res.ok) throw new Error('Không thể xóa danh mục');
+                        showAlert(`Đã xóa ${selectedIds.size} danh mục`, 'success');
+
+                        // 🔥 RELOAD TRANG THEO YÊU CẦU:
+                        setTimeout(() => window.location.reload(), 800);
+
+                    } catch (err) {
+                        showAlert(err.message, 'danger');
+                    }
+                });
+            }
+
+
+            // ⚡ Gắn sự kiện UI khác
+            addButton.addEventListener('click', resetModalToDefault);
+
+            // Sự kiện click vào hàng của DataTables (phải gắn trên body để hoạt động sau khi draw)
+            $('#categoryTable tbody').on('click', 'tr', function (e) {
+                // Bỏ qua nếu click vào checkbox
+                if ($(e.target).is('input[type="checkbox"]')) return;
+
+                // Lấy data của dòng này
+                const data = $('#categoryTable').DataTable().row(this).data();
+
+                // Kiểm tra dữ liệu hợp lệ
+                if (!data) return;
+
+                const categoryId = data.categoryId || data.id;
+
+                if (categoryId) {
+                    console.log('🟢 Click vào dòng:', categoryId, data); // debug
+                    setupModalForEdit(categoryId);
+                }
+            });
+
+            modalEl.addEventListener('hidden.bs.modal', resetModalToDefault);
+
+            // 🚀 Tải dữ liệu ban đầu
+            loadCategories();
+        });
+
+    </script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js" defer></script>
+    <!-- <script src="assets/vendor/simple-datatables/simple-datatables.js" defer></script> -->
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+</body>
+
+</html>

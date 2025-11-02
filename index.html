@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Trang chủ - TravelAdmin</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Updated: Apr 20 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <!-- ======= Header ======= -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="assets/img/logo.png" alt="">
+        <span class="d-none d-lg-block">TravelAdmin</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#">
+        <input type="text" name="query" placeholder="Nhập điều kiện tìm kiếm" title="Enter search keyword">
+        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+      </form>
+    </div><!-- End Search Bar -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+
+        <li class="nav-item d-block d-lg-none">
+          <a class="nav-link nav-icon search-bar-toggle " href="#">
+            <i class="bi bi-search"></i>
+          </a>
+        </li><!-- End Search Icon-->
+
+        <li class="nav-item dropdown">
+
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-bell"></i>
+            <span class="badge bg-primary badge-number">3</span>
+          </a><!-- End Notification Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+            <li class="dropdown-header">
+              Bạn có 3 thông báo mới
+              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">Xem tất cả</span></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="notification-item">
+              <i class="bi bi-exclamation-circle text-warning"></i>
+              <div>
+                <h4>Tour Đà Lạt sắp khởi hành</h4>
+                <p>Vui lòng kiểm tra lại thông tin vé và lịch trình trước khi đi.</p>
+                <p>30 phút trước</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-x-circle text-danger"></i>
+              <div>
+                <h4>Thanh toán thất bại</h4>
+                <p>Giao dịch đặt tour Nha Trang chưa được hoàn tất. Vui lòng thử lại.</p>
+                <p>1 giờ trước</p>
+              </div>
+            </li>
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="notification-item">
+              <i class="bi bi-info-circle text-primary"></i>
+              <div>
+                <h4>Ưu đãi mới dành cho bạn</h4>
+                <p>Giảm ngay 15% cho tour Đà Nẵng nếu đặt trong hôm nay!</p>
+                <p>4 giờ trước</p>
+              </div>
+            </li>
+
+
+
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="dropdown-footer">
+              <a href="#">Xem tất cả</a>
+            </li>
+
+          </ul><!-- End Notification Dropdown Items -->
+
+        </li><!-- End Notification Nav -->
+
+        <li class="nav-item dropdown">
+
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+            <i class="bi bi-chat-left-text"></i>
+            <span class="badge bg-success badge-number">3</span>
+          </a><!-- End Messages Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+            <li class="dropdown-header">
+              Bạn có 3 tin nhắn mới
+              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">Xem tất cả</span></a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+
+            <li class="message-item">
+              <a href="#">
+                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
+                <div>
+                  <h4>Mai Tran</h4>
+                  <p>Chuyến đi thật tuyệt vời! Dịch vụ chu đáo, hướng dẫn viên thân thiện và lịch trình
+                    rất hợp lý.</p>
+                  <p>4 giờ trước</p>
+                </div>
+              </a>
+            </li>
+            <li>
+            <li class="message-item">
+              <a href="#">
+                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
+                <div>
+                  <h4>John Doe</h4>
+                  <p>Tôi rất hài lòng với chuyến du lịch vừa rồi. Mọi thứ đều được tổ chức chuyên nghiệp
+                    và
+                    tôi đã có những trải nghiệm tuyệt vời.</p>
+                  <p>6 giờ trước</p>
+                </div>
+            </li>
+        </li>
+
+        <li class="dropdown-footer">
+          <a href="#">Tất cả tin nhắn</a>
+        </li>
+
+      </ul><!-- End Messages Dropdown Items -->
+
+      </li><!-- End Messages Nav -->
+
+      <li class="nav-item dropdown pe-3">
+
+        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+          <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+          <span class="d-none d-md-block dropdown-toggle ps-2">ThaoHT</span>
+        </a><!-- End Profile Iamge Icon -->
+
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+          <li class="dropdown-header">
+            <h6>Thao Thu Hoang</h6>
+            <span>Nhà phát triển web</span>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+              <i class="bi bi-person"></i>
+              <span>Thông tin cá nhân</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+              <i class="bi bi-gear"></i>
+              <span>Chỉnh sửa tài khoản</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="faq.html">
+              <i class="bi bi-question-circle"></i>
+              <span>Bạn cần giúp đỡ?</span>
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Đăng xuất</span>
+            </a>
+          </li>
+
+        </ul><!-- End Profile Dropdown Items -->
+      </li><!-- End Profile Nav -->
+
+      </ul>
+    </nav><!-- End Icons Navigation -->
+
+  </header><!-- End Header -->
+
+  <!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link " href="index.html">
+          <i class="bi bi-grid"></i>
+          <span>Trang chủ</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-globe-asia-australia"></i><span>Quản lý chuyến đi</span><i
+            class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a href="tour-managerment.html">
+              <i class="bi bi-circle"></i><span>Quản lý thông tin chuyến đi</span>
+            </a>
+          </li>
+          <li>
+            <a href="tour-category.html">
+              <i class="bi bi-circle"></i><span>Quản lý danh mục chuyến đi</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <!-- End managerment tour -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="order.html">
+          <i class="bi bi-cash-coin"></i><span> Quản lý đơn hàng</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="users.html">
+          <i class="bi bi-people"></i><span>Quản lý khách hàng</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="charts.html">
+          <i class="bi bi-bar-chart"></i><span>Thống kê</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="employees.html">
+          <i class="bi bi-person-check-fill"></i><span>Quản lý nhân viên</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="promotion.html">
+          <i class="bi bi-gift"></i><span>Quản lý khuyến mãi</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="content.html">
+          <i class="bi bi-file-earmark-richtext"></i><span>Quản lý nội dung</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="settings.html">
+          <i class="bi bi-gear"></i><span>Cài đặt</span>
+        </a>
+      </li>
+      <li class="nav-heading">Pages</li>
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="faq.html">
+          <i class="bi bi-question-circle"></i>
+          <span>F.A.Q</span>
+        </a>
+      </li><!-- End F.A.Q Page Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Đăng xuất</span>
+        </a>
+      </li><!-- End Login Page Nav -->
+
+      <!-- End Dashboard Nav -->
+    </ul>
+  </aside>
+
+  <!-- End Sidebar-->
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Trang chủ</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+          <li class="breadcrumb-item active">Bảng điều khiển</li>
+
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+          <div class="row">
+
+            <!-- Sales Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card sales-card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Bộ lọc</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
+                    <li><a class="dropdown-item" href="#">Tháng này</a></li>
+                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Doanh số <span>| Hôm nay</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-cart"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>145</h6>
+                      <i class="bi bi-graph-up-arrow"></i>
+                      <span class="text-success small pt-1 fw-bold">12%</span> <span
+                        class="text-muted small pt-2 ps-1">tăng</span>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Sales Card -->
+
+            <!-- Revenue Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card revenue-card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Bộ lọc</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
+                    <li><a class="dropdown-item" href="#">Tháng nay</a></li>
+                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Doanh thu <span>| Tháng này</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-cash-stack"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>13620004</h6>
+                      <i class="bi bi-graph-up-arrow"></i>
+                      <span class="text-success small pt-1 fw-bold">8%</span> <span
+                        class="text-muted small pt-2 ps-1">Tăng</span>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Revenue Card -->
+
+            <!-- Customers Card -->
+            <div class="col-xxl-4 col-xl-12">
+
+              <div class="card info-card customers-card">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Bộ lọc</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
+                    <li><a class="dropdown-item" href="#">Tháng này</a></li>
+                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Khách hàng <span>| Năm nay</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-people"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>1244</h6>
+                      <i class="bi bi-graph-down-arrow"></i>
+                      <span class="text-danger small pt-1 fw-bold"> 12%</span> <span
+                        class="text-muted small pt-2 ps-1">Giảm</span>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div><!-- End Customers Card -->
+
+            <!-- Reports -->
+            <div class="col-12">
+              <div class="card">
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Bộ lọc</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
+                    <li><a class="dropdown-item" href="#">Tháng này</a></li>
+                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
+                  </ul>
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">Báo cáo <span>/Hôm nay</span></h5>
+
+                  <!-- Line Chart -->
+                  <div id="reportsChart"></div>
+
+                  <script>
+                    document.addEventListener("DOMContentLoaded", () => {
+                      new ApexCharts(document.querySelector("#reportsChart"), {
+                        series: [{
+                          name: 'Doanh số',
+                          data: [31, 40, 28, 51, 42, 82, 56],
+                        }, {
+                          name: 'Doanh Thu',
+                          data: [11, 32, 45, 32, 34, 52, 41]
+                        }, {
+                          name: 'Khách hàng',
+                          data: [15, 11, 32, 18, 9, 24, 11]
+                        }],
+                        chart: {
+                          height: 350,
+                          type: 'area',
+                          toolbar: {
+                            show: false
+                          },
+                        },
+                        markers: {
+                          size: 4
+                        },
+                        colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                        fill: {
+                          type: "gradient",
+                          gradient: {
+                            shadeIntensity: 1,
+                            opacityFrom: 0.3,
+                            opacityTo: 0.4,
+                            stops: [0, 90, 100]
+                          }
+                        },
+                        dataLabels: {
+                          enabled: false
+                        },
+                        stroke: {
+                          curve: 'smooth',
+                          width: 2
+                        },
+                        xaxis: {
+                          type: 'datetime',
+                          categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+                        },
+                        tooltip: {
+                          x: {
+                            format: 'dd/MM/yy HH:mm'
+                          },
+                        }
+                      }).render();
+                    });
+                  </script>
+                  <!-- End Line Chart -->
+
+                </div>
+
+              </div>
+            </div><!-- End Reports -->
+
+            <!-- Recent Sales -->
+            <div class="col-12">
+              <div class="card recent-sales overflow-auto">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Bộ lọc</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
+                    <li><a class="dropdown-item" href="#">Tháng này</a></li>
+                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Đơn hàng gần đây<span>| Hôm nay</span></h5>
+
+                  <table class="table table-borderless datatable">
+                    <thead>
+                      <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Khách hàng</th>
+                        <th scope="col">Chuyến đi</th>
+                        <th scope="col">Giá (VND)</th>
+                        <th scope="col">Trạng thái</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row"><a href="#">#1</a></th>
+                        <td>ThaoHT</td>
+                        <td><a href="#" class="text-primary">Tháp Eiffel - Paris - Pháp</a></td>
+                        <td>6.400.000</td>
+                        <td><span class="badge bg-success">Đã đi</span></td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#">#2</a></th>
+                        <td>MinhNT</td>
+                        <td><a href="#" class="text-primary">Quảng trường Thời Đại - New York - Mỹ</a></td>
+                        <td>6.500</td>
+                        <td><span class="badge bg-warning">Đang chờ</span></td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#">#3</a></th>
+                        <td>LanPT</td>
+                        <td><a href="#" class="text-primary">Cầu Cổng Vàng - San Francisco - Mỹ</a></td>
+                        <td>6.800</td>
+                        <td><span class="badge bg-success">Đã đi</span></td>
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div>
+            </div><!-- End Recent Sales -->
+
+            <!-- Top Selling -->
+            <div class="col-12">
+              <div class="card top-selling overflow-auto">
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Bộ lọc</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
+                    <li><a class="dropdown-item" href="#">Tháng này</a></li>
+                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body pb-0">
+                  <h5 class="card-title">Chuyến đi bán chạy <span>| Hôm nay</span></h5>
+
+                  <table class="table table-borderless">
+                    <thead>
+                      <tr>
+                        <th scope="col">Hình ảnh</th>
+                        <th scope="col">Tên chuyến đi</th>
+                        <th scope="col">Giá (VND)</th>
+                        <th scope="col">Số lượng</th>
+                        <th scope="col">Doanh thu (VND)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-1.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Đi Sapa 3N2Đ có ăn sáng dịch vụ đưa đón</a></td>
+                        <td>4.000.000</td>
+                        <td class="fw-bold">124</td>
+                        <td>1.123.000.000</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-2.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Tour du lịch Đà Nẵng 4N3Đ giá rẻ</a></td>
+                        <td>3.500.000</td>
+                        <td class="fw-bold">98</td>
+                        <td>343.000.000</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-3.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Tour du lịch Nha Trang 3N2Đ giá rẻ</a></td>
+                        <td>2.800.000</td>
+                        <td class="fw-bold">76</td>
+                        <td>212.800.000</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div>
+            </div><!-- End Top Selling -->
+
+          </div>
+        </div><!-- End Left side columns -->
+
+        <!-- Right side columns -->
+        <div class="col-lg-4">
+
+          <!-- Recent Activity -->
+          <div class="card">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Bộ lọc</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Hôm nay</a></li>
+                <li><a class="dropdown-item" href="#">Tháng này</a></li>
+                <li><a class="dropdown-item" href="#">Năm nay</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body">
+              <h5 class="card-title">Hoạt động gần đây<span>| Hôm </span></h5>
+
+              <div class="activity">
+
+                <div class="activity-item d-flex">
+                  <div class="activite-label">32 phút</div>
+                  <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                  <div class="activity-content">
+                    Những <a href="#" class="fw-bold text-dark">yêu cầu cần xử lý</a> đã được cập nhật
+                  </div>
+                </div><!-- End activity item-->
+                <div class="activity-item d-flex">
+                  <div class="activite-label">56 phút</div>
+                  <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
+                  <div class="activity-content">
+                    Đơn hàng mới <a href="#" class="fw-bold text-dark">#123456</a> đã được tạo
+                  </div>
+
+                </div><!-- End activity item-->
+                <div class="activity-item d-flex">
+                  <div class="activite-label">2 giờ</div>
+                  <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
+                  <div class="activity-content">
+                    Chuyến đi <a href="#" class="fw-bold text-dark">Tour du lịch Đà Nẵng 4N3Đ giá rẻ</a> đã được đặt
+                  </div>
+                </div><!-- End activity item-->
+                <div class="activity-item d-flex">
+                  <div class="activite-label">1 ngày</div>
+                  <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
+                  <div class="activity-content">
+                    Khách hàng mới <a href="#" class="fw-bold text-dark">Nguyễn Văn A</a> đã đăng ký
+                  </div>
+                </div><!-- End activity item-->
+                <div class="activity-item d-flex">
+                  <div class="activite-label">2 ngày</div>
+                  <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
+                  <div class="activity-content">
+                    Đơn hàng <a href="#" class="fw-bold text-dark">#123457</a> đã bị hủy
+                  </div>
+                </div><!-- End activity item-->
+              </div>
+
+            </div>
+          </div><!-- End Recent Activity -->
+
+          <!-- Budget Report -->
+          <!-- <div class="card">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Bộ lọc</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Hôm nay</a></li>
+                <li><a class="dropdown-item" href="#">Tháng này</a></li>
+                <li><a class="dropdown-item" href="#">Năm nay</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body pb-0 ">
+              <h5 class="card-title">Báo cáo ngân sách<span>| Tháng này</span></h5>
+
+              <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  var budgetChart = echarts.init(document.querySelector("#budgetChart")).setOption({
+                    legend: {
+                      data: ['Ngân sách đã chi', 'Chi tiêu thực tế']
+                    },
+                    radar: {
+                      // shape: 'circle',
+                      indicator: [{
+                        name: 'Doanh số',
+                        max: 6500
+                      },
+                      {
+                        name: 'Dịch vụ',
+                        max: 16000
+                      },
+                      {
+                        name: 'Tour',
+                        max: 30000
+                      },
+                      {
+                        name: 'Khách hàng',
+                        max: 38000
+                      },
+                      {
+                        name: 'Thu nhập',
+                        max: 52000
+                      },
+                      {
+                        name: 'Lợi nhuận',
+                        max: 25000
+                      }
+                      ]
+                    },
+                    series: [{
+                      name: 'Budget vs spending',
+                      type: 'radar',
+                      data: [{
+                        value: [4200, 3000, 20000, 35000, 50000, 18000],
+                        name: 'Ngân sách đã chi'
+                      },
+                      {
+                        value: [5000, 14000, 28000, 26000, 42000, 21000],
+                        name: 'Chi tiêu thực tế'
+                      }
+                      ]
+                    }]
+                  });
+                });
+              </script>
+
+            </div>
+          </div>End Budget Report -->
+
+          <!-- Website Traffic -->
+          <!-- <div class="card">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Filter</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Today</a></li>
+                <li><a class="dropdown-item" href="#">This Month</a></li>
+                <li><a class="dropdown-item" href="#">This Year</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body pb-0">
+              <h5 class="card-title">Website Traffic <span>| Today</span></h5>
+
+              <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  echarts.init(document.querySelector("#trafficChart")).setOption({
+                    tooltip: {
+                      trigger: 'item'
+                    },
+                    legend: {
+                      top: '5%',
+                      left: 'center'
+                    },
+                    series: [{
+                      name: 'Access From',
+                      type: 'pie',
+                      radius: ['40%', '70%'],
+                      avoidLabelOverlap: false,
+                      label: {
+                        show: false,
+                        position: 'center'
+                      },
+                      emphasis: {
+                        label: {
+                          show: true,
+                          fontSize: '18',
+                          fontWeight: 'bold'
+                        }
+                      },
+                      labelLine: {
+                        show: false
+                      },
+                      data: [{
+                        value: 1048,
+                        name: 'Search Engine'
+                      },
+                      {
+                        value: 735,
+                        name: 'Direct'
+                      },
+                      {
+                        value: 580,
+                        name: 'Email'
+                      },
+                      {
+                        value: 484,
+                        name: 'Union Ads'
+                      },
+                      {
+                        value: 300,
+                        name: 'Video Ads'
+                      }
+                      ]
+                    }]
+                  });
+                });
+              </script>
+
+            </div>
+          </div>End Website Traffic -->
+
+          <!-- News & Updates Traffic -->
+          <div class="card">
+            <div class="filter">
+              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                <li class="dropdown-header text-start">
+                  <h6>Bộ lọc</h6>
+                </li>
+
+                <li><a class="dropdown-item" href="#">Hôm nay</a></li>
+                <li><a class="dropdown-item" href="#">Tháng này</a></li>
+                <li><a class="dropdown-item" href="#">Năm nay</a></li>
+              </ul>
+            </div>
+
+            <div class="card-body pb-0">
+              <h5 class="card-title">Tin tức mới nhất <span>| Hôm nay</span></h5>
+
+              <div class="news">
+                <div class="post-item clearfix">
+                  <img src="assets/img/news-1.jpg" alt="">
+                  <h4><a href="#">Khám phá vẻ đẹp kỳ diệu của Phú Quốc</a></h4>
+                  <p>Trải nghiệm chuyến du lịch nghỉ dưỡng tuyệt vời với biển xanh, cát trắng và những hoạt động thú vị
+                    dành cho cả gia đình.</p>
+                </div>
+                <div class="post-item clearfix">
+                  <img src="assets/img/news-2.jpg" alt="">
+                  <h4><a href="#">Hành trình khám phá văn hóa Nhật Bản</a></h4>
+                  <p>Tham gia tour du lịch Nhật Bản để trải nghiệm nền văn hóa độc đáo, ẩm thực phong phú và cảnh quan
+                    tuyệt đẹp từ núi Phú Sĩ đến các thành phố hiện đại.</p>
+                </div>
+                <div class="post-item clearfix">
+                  <img src="assets/img/news-3.jpg" alt="">
+                  <h4><a href="#">Trải nghiệm châu Âu cổ kính</a></h4>
+                  <p>Khám phá các thành phố lịch sử như Paris, Rome và Barcelona với các di tích văn hóa, kiến trúc
+                    ấn tượng và nghệ thuật đỉnh cao.</p>
+
+                </div><!-- End sidebar recent posts-->
+
+              </div>
+            </div><!-- End News & Updates -->
+
+          </div><!-- End Right side columns -->
+
+        </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Nhóm 5</span></strong>. Mọi quyền được bảo lưu
+    </div>
+    <div class="credits">
+      <!-- All the links in the footer should remain intact. -->
+      <!-- You can delete the links only if you purchased the pro version. -->
+      <!-- Licensing information: https://bootstrapmade.com/license/ -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+      Thiết kế bởi <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+  </footer><!-- End Footer --> <!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

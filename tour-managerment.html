@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Quản lý tour - TravelAdmin</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+    <style>
+        .datatable tbody tr {
+            cursor: pointer;
+            /* Biến con trỏ thành hình bàn tay khi di chuột qua */
+        }
+
+        .datatable tbody tr:hover {
+            background-color: #f6f9ff !important;
+            /* Thêm màu nền nhạt khi di chuột qua */
+        }
+    </style>
+</head>
+
+<body>
+
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+            <a href="index.html" class="logo d-flex align-items-center">
+                <img src="assets/img/logo.png" alt="">
+                <span class="d-none d-lg-block">TravelAdmin</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div>
+        <div class="search-bar">
+            <form class="search-form d-flex align-items-center" method="POST" action="#">
+                <input type="text" name="query" placeholder="Nhập điều kiện tìm kiếm" title="Enter search keyword">
+                <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+            </form>
+        </div>
+        <nav class="header-nav ms-auto">
+            <ul class="d-flex align-items-center">
+
+                <li class="nav-item d-block d-lg-none">
+                    <a class="nav-link nav-icon search-bar-toggle " href="#">
+                        <i class="bi bi-search"></i>
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-bell"></i>
+                        <span class="badge bg-primary badge-number">3</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+                        <li class="dropdown-header">
+                            Bạn có 3 thông báo mới
+                            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">Xem tất cả</span></a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="notification-item">
+                            <i class="bi bi-exclamation-circle text-warning"></i>
+                            <div>
+                                <h4>Tour Đà Lạt sắp khởi hành</h4>
+                                <p>Vui lòng kiểm tra lại thông tin vé và lịch trình trước khi đi.</p>
+                                <p>30 phút trước</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="notification-item">
+                            <i class="bi bi-x-circle text-danger"></i>
+                            <div>
+                                <h4>Thanh toán thất bại</h4>
+                                <p>Giao dịch đặt tour Nha Trang chưa được hoàn tất. Vui lòng thử lại.</p>
+                                <p>1 giờ trước</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="notification-item">
+                            <i class="bi bi-info-circle text-primary"></i>
+                            <div>
+                                <h4>Ưu đãi mới dành cho bạn</h4>
+                                <p>Giảm ngay 15% cho tour Đà Nẵng nếu đặt trong hôm nay!</p>
+                                <p>4 giờ trước</p>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="dropdown-footer">
+                            <a href="#">Xem tất cả</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
+                        <i class="bi bi-chat-left-text"></i>
+                        <span class="badge bg-success badge-number">3</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+                        <li class="dropdown-header">
+                            Bạn có 3 tin nhắn mới
+                            <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">Xem tất cả</span></a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li class="message-item">
+                            <a href="#">
+                                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
+                                <div>
+                                    <h4>Mai Tran</h4>
+                                    <p>Chuyến đi thật tuyệt vời! Dịch vụ chu đáo, hướng dẫn viên thân thiện và lịch
+                                        trình
+                                        rất hợp lý.</p>
+                                    <p>4 giờ trước</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="message-item">
+                            <a href="#">
+                                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
+                                <div>
+                                    <h4>John Doe</h4>
+                                    <p>Tôi rất hài lòng với chuyến du lịch vừa rồi. Mọi thứ đều được tổ chức chuyên
+                                        nghiệp
+                                        và
+                                        tôi đã có những trải nghiệm tuyệt vời.</p>
+                                    <p>6 giờ trước</p>
+                                </div>
+                        </li>
+
+                        <li class="dropdown-footer">
+                            <a href="#">Tất cả tin nhắn</a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="nav-item dropdown pe-3">
+
+                    <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                        <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                        <span class="d-none d-md-block dropdown-toggle ps-2">ThaoHT</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                        <li class="dropdown-header">
+                            <h6>Thao Thu Hoang</h6>
+                            <span>Nhà phát triển web</span>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                <i class="bi bi-person"></i>
+                                <span>Thông tin cá nhân</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+                                <i class="bi bi-gear"></i>
+                                <span>Chỉnh sửa tài khoản</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="faq.html">
+                                <i class="bi bi-question-circle"></i>
+                                <span>Bạn cần giúp đỡ?</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <i class="bi bi-box-arrow-right"></i>
+                                <span>Đăng xuất</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <aside id="sidebar" class="sidebar">
+
+        <ul class="sidebar-nav" id="sidebar-nav">
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="index.html">
+                    <i class="bi bi-grid"></i>
+                    <span>Trang chủ</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-globe-asia-australia"></i><span>Quản lý chuyến đi</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="components-nav" class="nav-content collapse show" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="tour-managerment.html" class="active">
+                            <i class="bi bi-circle"></i><span>Quản lý thông tin chuyến đi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tour-category.html">
+                            <i class="bi bi-circle"></i><span>Quản lý danh mục chuyến đi</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="order.html">
+                    <i class="bi bi-cash-coin"></i><span> Quản lý đơn hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="users.html">
+                    <i class="bi bi-people"></i><span>Quản lý khách hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="charts.html">
+                    <i class="bi bi-bar-chart"></i><span>Thống kê</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="employees.html">
+                    <i class="bi bi-person-check-fill"></i><span>Quản lý nhân viên</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="promotion.html">
+                    <i class="bi bi-gift"></i><span>Quản lý khuyến mãi</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="content.html">
+                    <i class="bi bi-file-earmark-richtext"></i><span>Quản lý nội dung</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="settings.html">
+                    <i class="bi bi-gear"></i><span>Cài đặt</span>
+                </a>
+            </li>
+            <li class="nav-heading">Pages</li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="faq.html">
+                    <i class="bi bi-question-circle"></i>
+                    <span>F.A.Q</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <main id="main" class="main">
+        <div class="pagetitle">
+            <h1>Quản lý thông tin chuyến đi</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+                    <li class="breadcrumb-item">Quản lý chuyến đi</li>
+                    <li class="breadcrumb-item active"><a href="tour-managerment.html">Quản lý thông tin chuyến đi</a>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+        <section class="section dashboard">
+            <div class="row">
+                <div class="col-xxl-4 col-md-6">
+                    <div class="card info-card tour-card">
+                        <div class="card-body">
+                            <h5 class="card-title"> Tổng số tour</h5>
+
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>1232</h6>
+                                    <i class="bi bi-graph-up-arrow"></i>
+                                    <span class="text-success small pt-1 fw-bold">8%</span> <span
+                                        class="text-muted small pt-2 ps-1">Tăng</span>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xxl-4 col-md-6">
+                    <div class="card info-card tour-active-card">
+                        <div class="card-body">
+                            <h5 class="card-title"> Tổng số tour đang hoạt động</h5>
+
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-airplane-fill"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>1222</h6>
+                                    <i class="bi bi-graph-up-arrow"></i>
+                                    <span class="text-success small pt-1 fw-bold">8%</span> <span
+                                        class="text-muted small pt-2 ps-1">Tăng</span>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                                    <h5 class="card-title mb-0">Danh sách chuyến đi</h5>
+                                    <button type="button" class="btn btn-primary btn-sm shadow-sm"
+                                        data-bs-toggle="modal" data-bs-target="#addTourModal"> <i
+                                            class="bi bi-plus-circle me-1"></i> Thêm chuyến đi mới
+                                    </button>
+                                </div>
+                                <table class="table datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã chuyến đi</th>
+                                            <th>Tên chuyến đi</th>
+                                            <th>Điểm đến</th>
+                                            <th data-type="date" data-format="YYYY/DD/MM">Thời gian</th>
+                                            <th>Giá (VND) </th>
+                                            <th>Người hướng dẫn</th>
+                                            <th>Trạng thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>T001</td>
+                                            <td>Khám phá Đà Nẵng</td>
+                                            <td>Đà Nẵng</td>
+                                            <td>2024/10/15 - 2024/10/20</td>
+                                            <td>5,000,000</td>
+                                            <td>Nguyễn Văn A</td>
+                                            <td><span class="badge bg-success">Hoạt động</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>T001</td>
+                                            <td>Hành trình Hà Nội - Hạ Long</td>
+                                            <td>Hà Nội, Hạ Long</td>
+                                            <td>2024/11/01 - 2024/11/05</td>
+                                            <td>4,500,000</td>
+                                            <td>Trần Thị B</td>
+                                            <td><span class="badge bg-success">Hoạt động</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>T001</td>
+                                            <td>Tour du lịch Nha Trang</td>
+                                            <td>Nha Trang</td>
+                                            <td>2024/12/10 - 2024/12/15</td>
+                                            <td>6,000,000</td>
+                                            <td>Phạm Văn C</td>
+                                            <td><span class="badge bg-danger">Hủy</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>T001</td>
+                                            <td>Khám phá Phú Quốc</td>
+                                            <td>Phú Quốc</td>
+                                            <td>2025/01/05 - 2025/01/10</td>
+                                            <td>7,000,000</td>
+                                            <td>Đỗ Thị D</td>
+                                            <td><span class="badge bg-primary">Đang đi</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>T001</td>
+                                            <td>Tour du lịch Sapa</td>
+                                            <td>Sapa</td>
+                                            <td>2025/02/15 - 2025/02/20</td>
+                                            <td>5,500,000</td>
+                                            <td>Hoàng Văn E</td>
+                                            <td><span class="badge bg-success">Hoạt động</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>T001</td>
+                                            <td>Hành trình Cần Thơ - Châu Đốc</td>
+                                            <td>Cần Thơ, Châu Đốc</td>
+                                            <td>2025/03/10 - 2025/03/15</td>
+                                            <td>4,800,000</td>
+                                            <td>Lê Thị F</td>
+                                            <td><span class="badge bg-danger">Hủy</span></td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+        </section>
+    </main>
+    <footer id="footer" class="footer">
+        <div class="copyright">
+            &copy; Copyright <strong><span>Nhóm 5</span></strong>. Mọi quyền được bảo lưu
+        </div>
+        <div class="credits">
+            Thiết kế bởi <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+    </footer>
+    <div class="modal fade" id="addTourModal" tabindex="-1" aria-labelledby="addTourModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="addTourModalLabel">Thêm tour mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted mb-4">Tạo tour du lịch mới với thông tin chi tiết</p>
+                    <form id="addTourForm">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Danh mục tour</label>
+                                <select name="category" class="form-select" required>
+                                    <option value="">-- Chọn danh mục tour --</option>
+                                    <option value="TrongNuoc">Tour trong nước</option>
+                                    <option value="QuocTe">Tour quốc tế</option>
+                                    <option value="GiaDinh">Tour gia đình</option>
+                                    <option value="CapDoi">Tour cặp đôi</option>
+                                    <option value="DoanhNghiep">Tour doanh nghiệp</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Tên tour</label>
+                                <input type="text" name="name" class="form-control" placeholder="Nhập tên tour"
+                                    required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Điểm đến</label>
+                                <input type="text" name="destination" class="form-control" placeholder="Nhập điểm đến"
+                                    required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Thời gian</label>
+                                <input type="text" name="duration" class="form-control" placeholder="VD: 3N2Đ" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Giá (VND)</label>
+                                <input type="number" name="price" class="form-control" placeholder="VD: 5000000"
+                                    required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Số vé</label>
+                                <input type="number" name="tickets" class="form-control" placeholder="VD: 20" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Ngày bắt đầu</label>
+                                <input type="date" name="startDate" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Ngày kết thúc</label>
+                                <input type="date" name="endDate" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Trạng thái</label>
+                                <select name="status" class="form-select" required>
+                                    <option value="">-- Chọn trạng thái --</option>
+                                    <option value="active">Hoạt động</option>
+                                    <option value="ongoing">Đang đi</option>
+                                    <option value="cancel">Hủy</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Hướng dẫn viên</label>
+                                <select name="guide" class="form-select" required>
+                                    <option value="">-- Chọn hướng dẫn viên --</option>
+                                    <option value="NguyenVanA">Nguyễn Văn A</option>
+                                    <option value="TranThiB">Trần Thị B</option>
+                                    <option value="PhamVanC">Phạm Văn C</option>
+                                    <option value="DoThiD">Đỗ Thị D</option>
+                                    <option value="LeVanE">Lê Văn E</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold mb-2">Mô tả</label>
+                                <div id="quillEditor" class="border rounded shadow-sm" style="height: 150px;"></div>
+                                <textarea name="description" id="description" hidden></textarea>
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold mb-2">Ảnh tour</label>
+                                <input type="file" name="tourImage" class="form-control" accept="image/*" required>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="deleteTourBtn" style="display:none;">Xóa chuyến
+                        đi</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary"> Lưu chuyến đi</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/chart.js/chart.umd.js"></script>
+    <script src="assets/vendor/echarts/echarts.min.js"></script>
+    <script src="assets/vendor/quill/quill.js"></script>
+    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+    <script src="assets/vendor/php-email-form/validate.js"></script>
+
+    <script src="assets/js/main.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // --- 1. LƯU CÁC THÀNH PHẦN DOM VÀ KHỞI TẠO ---
+            const modalThemTourEl = document.getElementById('addTourModal');
+            const modalThemTour = new bootstrap.Modal(modalThemTourEl);
+            const form = document.getElementById('addTourForm');
+            const tieuDeModal = document.getElementById('addTourModalLabel');
+            const doanVanMoTaModal = modalThemTourEl.querySelector('p.text-muted');
+            const nutXoaTour = document.getElementById('deleteTourBtn');
+            const bangDanhSachTour = document.querySelector('.datatable');
+
+            const truongNgayBatDau = form.querySelector('input[name="startDate"]');
+            const truongNgayKetThuc = form.querySelector('input[name="endDate"]');
+            const truongMoTa = document.getElementById('description');
+
+            const quill = new Quill('#quillEditor', {
+                theme: 'snow'
+            });
+
+
+            function khoiTaoLaiModalVaForm() {
+                tieuDeModal.textContent = 'Thêm tour mới';
+                doanVanMoTaModal.style.display = 'block';
+                nutXoaTour.style.display = 'none';
+                form.reset();
+                quill.setText('');
+                khoiTaoCacTruongNgay();
+            }
+
+            function thietLapModalDeXemChiTiet(maTour) {
+                if (modalThemTourEl.classList.contains('show')) {
+                    return;
+                }
+                tieuDeModal.textContent = `Thông tin chi tiết tour ${maTour}`;
+                doanVanMoTaModal.style.display = 'none';
+                nutXoaTour.style.display = 'block';
+                modalThemTour.show();
+            }
+
+            function khoiTaoCacTruongNgay() {
+                const homNay = new Date().toISOString().split('T')[0];
+                truongNgayBatDau.setAttribute('min', homNay);
+                truongNgayKetThuc.setAttribute('min', homNay);
+            }
+
+            function capNhatMinNgayKetThuc() {
+                const ngayBatDauDaChon = truongNgayBatDau.value;
+                if (ngayBatDauDaChon) {
+                    truongNgayKetThuc.setAttribute('min', ngayBatDauDaChon);
+                    if (truongNgayKetThuc.value && truongNgayKetThuc.value < ngayBatDauDaChon) {
+                        truongNgayKetThuc.value = '';
+                    }
+                } else {
+                    khoiTaoCacTruongNgay();
+                }
+            }
+
+
+            function xuLySubmitForm(e) {
+                e.preventDefault();
+                truongMoTa.value = quill.root.innerHTML;
+                const formData = new FormData(form);
+                const duLieuTour = Object.fromEntries(formData.entries());
+                console.log("Dữ liệu tour:", duLieuTour);
+                alert("Lưu tour thành công!");
+                modalThemTour.hide();
+            }
+
+            function xuLyXoaTour() {
+                const tieuDe = tieuDeModal.textContent;
+                const maTour = tieuDe.replace('Thông tin chi tiết tour ', '').trim();
+                if (confirm(`Bạn có chắc muốn xóa chuyến đi ${maTour} không?`)) {
+                    alert(`Đã xóa chuyến đi ${maTour}`);
+                    modalThemTour.hide();
+                }
+            }
+
+            function xuLyClickTrongBang(e) {
+                const clickedRow = e.target.closest('tbody tr');
+                if (clickedRow) {
+                    // SỬA Ở ĐÂY: Lấy trực tiếp ô đầu tiên, không cần tìm thẻ <a> nữa
+                    const firstCell = clickedRow.querySelector('td:first-child');
+                    if (firstCell) {
+                        const maTour = firstCell.textContent.trim(); // Lấy nội dung text của ô đó
+                        if (maTour) { // Kiểm tra xem ô có nội dung không
+                            thietLapModalDeXemChiTiet(maTour);
+                        }
+                    }
+                }
+            }
+
+            // --- 4. GẮN CÁC BỘ LẮNG NGHE SỰ KIỆN ---
+
+            form.addEventListener('submit', xuLySubmitForm);
+
+            document.querySelector('[data-bs-target="#addTourModal"]').addEventListener('click', function () {
+                // Đảm bảo modal được reset hoàn toàn khi nhấn nút "Thêm mới"
+                khoiTaoLaiModalVaForm();
+            });
+
+            if (bangDanhSachTour) {
+                bangDanhSachTour.addEventListener('click', xuLyClickTrongBang);
+            }
+
+            nutXoaTour.addEventListener('click', xuLyXoaTour);
+            truongNgayBatDau.addEventListener('change', capNhatMinNgayKetThuc);
+
+            modalThemTourEl.addEventListener('hidden.bs.modal', function () {
+                // Reset form khi modal đóng bằng bất kỳ cách nào (nút X, nút Hủy, phím Esc)
+                khoiTaoLaiModalVaForm();
+            });
+
+            // --- 5. KHỞI TẠO BAN ĐẦU ---
+            khoiTaoCacTruongNgay();
+        });
+    </script>
+</body>
+
+</html>

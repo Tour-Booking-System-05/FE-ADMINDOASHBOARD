@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Thông tin cá nhân - TravelAdmin</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <style>
+    .password-wrapper {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #6c757d;
+    }
+
+    .profile-image-container .profile-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    #image-cropper-container {
+      width: 100%;
+      max-width: 500px;
+      /* Giới hạn chiều rộng ảnh gốc */
+      height: 400px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="d-flex align-items-center justify-content-between"> <a href="index.html"
+        class="logo d-flex align-items-center"> <img src="assets/img/logo.png" alt=""> <span
+          class="d-none d-lg-block">TravelAdmin</span> </a> <i class="bi bi-list toggle-sidebar-btn"></i></div>
+    <div class="search-bar">
+      <form class="search-form d-flex align-items-center" method="POST" action="#"> <input type="text" name="query"
+          placeholder="Nhập điều kiện tìm kiếm" title="Enter search keyword"> <button type="submit" title="Search"><i
+            class="bi bi-search"></i></button></form>
+    </div>
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+        <li class="nav-item d-block d-lg-none"> <a class="nav-link nav-icon search-bar-toggle " href="#"> <i
+              class="bi bi-search"></i> </a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown"> <i class="bi bi-bell"></i> <span
+              class="badge bg-primary badge-number">3</span> </a>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+            <li class="dropdown-header"> Bạn có 3 thông báo mới <a href="#"><span
+                  class="badge rounded-pill bg-primary p-2 ms-2">Xem tất cả</span></a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="notification-item">
+              <i class="bi bi-exclamation-circle text-warning"></i>
+              <div>
+                <h4>Tour Đà Lạt sắp khởi hành</h4>
+                <p>Vui lòng kiểm tra lại thông tin vé và lịch trình trước khi đi.</p>
+                <p>30 phút trước</p>
+              </div>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="notification-item">
+              <i class="bi bi-x-circle text-danger"></i>
+              <div>
+                <h4>Thanh toán thất bại</h4>
+                <p>Giao dịch đặt tour Nha Trang chưa được hoàn tất. Vui lòng thử lại.</p>
+                <p>1 giờ trước</p>
+              </div>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="notification-item">
+              <i class="bi bi-info-circle text-primary"></i>
+              <div>
+                <h4>Ưu đãi mới dành cho bạn</h4>
+                <p>Giảm ngay 15% cho tour Đà Nẵng nếu đặt trong hôm nay!</p>
+                <p>4 giờ trước</p>
+              </div>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="dropdown-footer"> <a href="#">Xem tất cả</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown"> <i class="bi bi-chat-left-text"></i> <span
+              class="badge bg-success badge-number">3</span> </a>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
+            <li class="dropdown-header"> Bạn có 3 tin nhắn mới <a href="#"><span
+                  class="badge rounded-pill bg-primary p-2 ms-2">Xem tất cả</span></a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="message-item">
+              <a href="#">
+                <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
+                <div>
+                  <h4>Mai Tran</h4>
+                  <p>Chuyến đi thật tuyệt vời! Dịch vụ chu đáo, hướng dẫn viên thân thiện...</p>
+                  <p>4 giờ trước</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="message-item">
+              <a href="#">
+                <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
+                <div>
+                  <h4>John Doe</h4>
+                  <p>Tôi rất hài lòng với chuyến du lịch vừa rồi. Mọi thứ đều được tổ chức chuyên nghiệp...</p>
+                  <p>6 giờ trước</p>
+                </div>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li class="dropdown-footer"> <a href="#">Tất cả tin nhắn</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown pe-3">
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown"> <img
+              src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle" id="headerProfileImage"> <span
+              class="d-none d-md-block dropdown-toggle ps-2">ThaoHT</span> </a>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6>Hoàng Thu Thảo</h6>
+              <span>Nhà phát triển web</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li> <a class="dropdown-item d-flex align-items-center" href="users-profile.html"> <i
+                  class="bi bi-person"></i> <span>Thông tin cá nhân</span> </a> </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li> <a class="dropdown-item d-flex align-items-center" href="users-profile.html"> <i
+                  class="bi bi-gear"></i> <span>Chỉnh sửa tài khoản</span> </a> </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li> <a class="dropdown-item d-flex align-items-center" href="faq.html"> <i
+                  class="bi bi-question-circle"></i> <span>Bạn cần giúp đỡ?</span> </a> </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li> <a class="dropdown-item d-flex align-items-center" href="#"> <i class="bi bi-box-arrow-right"></i>
+                <span>Đăng xuất</span> </a> </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <aside id="sidebar" class="sidebar">
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="nav-item"> <a class="nav-link collapsed" href="index.html"> <i class="bi bi-grid"></i> <span>Trang
+            chủ</span> </a> </li>
+      <li class="nav-item"> <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse"
+          href="#"> <i class="bi bi-globe-asia-australia"></i><span>Quản lý chuyến đi</span><i
+            class="bi bi-chevron-down ms-auto"></i> </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li> <a href="tour-managerment.html"> <i class="bi bi-circle"></i><span>Quản lý thông tin chuyến đi</span>
+            </a> </li>
+          <li> <a href="tour-category.html"> <i class="bi bi-circle"></i><span>Quản lý danh mục chuyến đi</span> </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item"> <a class="nav-link collapsed" href="order.html"> <i class="bi bi-cash-coin"></i><span> Quản
+            lý đơn hàng</span> </a> </li>
+      <li class="nav-item"> <a class="nav-link collapsed" href="users.html"> <i class="bi bi-people"></i><span>Quản lý
+            khách hàng</span> </a> </li>
+      <li class="nav-item"> <a class="nav-link collapsed" href="charts.html"> <i class="bi bi-bar-chart"></i><span>Thống
+            kê</span> </a> </li>
+      <li class="nav-item"> <a class="nav-link collapsed" href="employees.html"> <i
+            class="bi bi-person-check-fill"></i><span>Quản lý nhân viên</span> </a> </li>
+      <li class="nav-item"> <a class="nav-link collapsed" href="promotion.html"> <i class="bi bi-gift"></i><span>Quản lý
+            khuyến mãi</span> </a> </li>
+      <li class="nav-item"> <a class="nav-link collapsed" href="content.html"> <i
+            class="bi bi-file-earmark-richtext"></i><span>Quản lý nội dung</span> </a> </li>
+      <li class="nav-item"> <a class="nav-link collapsed" href="settings.html"> <i class="bi bi-gear"></i><span>Cài
+            đặt</span> </a> </li>
+      <li class="nav-heading">Trang</li>
+      <li class="nav-item"> <a class="nav-link collapsed" href="faq.html"> <i class="bi bi-question-circle"></i>
+          <span>Hỏi đáp</span> </a> </li>
+      <li class="nav-item"> <a class="nav-link collapsed" href="#"> <i class="bi bi-box-arrow-in-right"></i> <span>Đăng
+            xuất</span> </a> </li>
+    </ul>
+  </aside>
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Trang cá nhân</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Trang chủ</a></li>
+          <li class="breadcrumb-item active">Thông tin cá nhân</li>
+        </ol>
+      </nav>
+    </div>
+    <section class="section profile">
+      <div class="row">
+        <div class="col-xl-4">
+
+          <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+              <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle" id="mainProfileImage">
+              <h2>Hoàng Thu Thảo</h2>
+              <h3>Nhà Phát Triển Web</h3>
+              <div class="social-links mt-2">
+                <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-xl-8">
+
+          <div class="card">
+            <div class="card-body pt-3">
+              <ul class="nav nav-tabs nav-tabs-bordered">
+                <li class="nav-item"> <button class="nav-link active" data-bs-toggle="tab"
+                    data-bs-target="#profile-overview">Tổng quan</button> </li>
+                <li class="nav-item"> <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Chỉnh
+                    sửa Hồ sơ</button> </li>
+                <!-- <li class="nav-item"> <button class="nav-link" data-bs-toggle="tab"
+                    data-bs-target="#profile-settings">Cài đặt</button> </li> -->
+                <li class="nav-item"> <button class="nav-link" data-bs-toggle="tab"
+                    data-bs-target="#profile-change-password">Đổi Mật khẩu</button> </li>
+              </ul>
+              <div class="tab-content pt-2">
+
+                <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                  <h5 class="card-title">Giới thiệu</h5>
+                  <p class="small fst-italic">Là một nhà phát triển web đam mê sáng tạo, luôn tìm kiếm các giải pháp tối
+                    ưu để xây dựng những sản phẩm chất lượng và mang lại trải nghiệm tốt nhất cho người dùng.</p>
+                  <h5 class="card-title">Chi tiết Hồ sơ</h5>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label ">Họ và Tên</div>
+                    <div class="col-lg-9 col-md-8">Hoàng Thu Thảo</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Công ty</div>
+                    <div class="col-lg-9 col-md-8">Công ty Cổ phần FPT</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Chức vụ</div>
+                    <div class="col-lg-9 col-md-8">Nhà Phát Triển Web</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Quốc gia</div>
+                    <div class="col-lg-9 col-md-8">Việt Nam</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Địa chỉ</div>
+                    <div class="col-lg-9 col-md-8">17 Duy Tân, Cầu Giấy, Hà Nội</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Điện thoại</div>
+                    <div class="col-lg-9 col-md-8">(+84) 987 654 321</div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 label">Email</div>
+                    <div class="col-lg-9 col-md-8">thao.ht@example.com</div>
+                  </div>
+                </div>
+
+                <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                  <form id="profileEditForm">
+                    <div class="row mb-3">
+                      <label class="col-md-4 col-lg-3 col-form-label">Ảnh đại diện</label>
+                      <div class="col-md-8 col-lg-9">
+                        <img src="assets/img/profile-img.jpg" alt="Profile" id="profileImagePreview"
+                          class="profile-img">
+                        <div class="pt-2">
+                          <label for="profileImageInput" class="btn btn-primary btn-sm" title="Tải lên ảnh mới">
+                            <i class="bi bi-upload"></i>
+                          </label>
+                          <input type="file" id="profileImageInput" class="d-none" accept="image/*">
+                          <a href="#" class="btn btn-danger btn-sm" title="Xóa ảnh đại diện" id="deleteProfileImageBtn">
+                            <i class="bi bi-trash"></i>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row mb-3"> <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Họ và
+                        Tên</label>
+                      <div class="col-md-8 col-lg-9"> <input name="fullName" type="text" class="form-control"
+                          id="fullName" value="Hoàng Thu Thảo"> </div>
+                    </div>
+                    <div class="row mb-3"> <label for="about" class="col-md-4 col-lg-3 col-form-label">Giới
+                        thiệu</label>
+                      <div class="col-md-8 col-lg-9"> <textarea name="about" class="form-control" id="about"
+                          style="height: 100px">Là một nhà phát triển web đam mê sáng tạo, luôn tìm kiếm các giải pháp tối ưu để xây dựng những sản phẩm chất lượng và mang lại trải nghiệm tốt nhất cho người dùng.</textarea>
+                      </div>
+                    </div>
+                    <div class="row mb-3"> <label for="company" class="col-md-4 col-lg-3 col-form-label">Công ty</label>
+                      <div class="col-md-8 col-lg-9"> <input name="company" type="text" class="form-control"
+                          id="company" value="Công ty Cổ phần FPT"> </div>
+                    </div>
+                    <div class="row mb-3"> <label for="Job" class="col-md-4 col-lg-3 col-form-label">Chức vụ</label>
+                      <div class="col-md-8 col-lg-9"> <input name="job" type="text" class="form-control" id="Job"
+                          value="Nhà Phát Triển Web"> </div>
+                    </div>
+                    <div class="row mb-3"> <label for="Country" class="col-md-4 col-lg-3 col-form-label">Quốc
+                        gia</label>
+                      <div class="col-md-8 col-lg-9"> <input name="country" type="text" class="form-control"
+                          id="Country" value="Việt Nam"> </div>
+                    </div>
+                    <div class="row mb-3"> <label for="Address" class="col-md-4 col-lg-3 col-form-label">Địa chỉ</label>
+                      <div class="col-md-8 col-lg-9"> <input name="address" type="text" class="form-control"
+                          id="Address" value="17 Duy Tân, Cầu Giấy, Hà Nội"> </div>
+                    </div>
+                    <div class="row mb-3"> <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Điện
+                        thoại</label>
+                      <div class="col-md-8 col-lg-9"> <input name="phone" type="text" class="form-control" id="Phone"
+                          value="(+84) 987 654 321"> </div>
+                    </div>
+                    <div class="row mb-3"> <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                      <div class="col-md-8 col-lg-9"> <input name="email" type="email" class="form-control" id="Email"
+                          value="thao.ht@example.com"> </div>
+                    </div>
+                    <div class="row mb-3"> <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter</label>
+                      <div class="col-md-8 col-lg-9"> <input name="twitter" type="text" class="form-control"
+                          id="Twitter" value="https://twitter.com/#"> </div>
+                    </div>
+                    <div class="row mb-3"> <label for="Facebook"
+                        class="col-md-4 col-lg-3 col-form-label">Facebook</label>
+                      <div class="col-md-8 col-lg-9"> <input name="facebook" type="text" class="form-control"
+                          id="Facebook" value="https://facebook.com/#"> </div>
+                    </div>
+                    <div class="row mb-3"> <label for="Instagram"
+                        class="col-md-4 col-lg-3 col-form-label">Instagram</label>
+                      <div class="col-md-8 col-lg-9"> <input name="instagram" type="text" class="form-control"
+                          id="Instagram" value="https://instagram.com/#"> </div>
+                    </div>
+                    <div class="row mb-3"> <label for="Linkedin"
+                        class="col-md-4 col-lg-3 col-form-label">Linkedin</label>
+                      <div class="col-md-8 col-lg-9"> <input name="linkedin" type="text" class="form-control"
+                          id="Linkedin" value="https://linkedin.com/#"> </div>
+                    </div>
+
+                    <div class="text-center">
+                      <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                    </div>
+                  </form>
+                </div>
+
+                <!-- <div class="tab-pane fade pt-3" id="profile-settings">
+                  <form id="settingsForm">
+                    <div class="row mb-3">
+                      <label class="col-md-4 col-lg-3 col-form-label">Thông báo qua Email</label>
+                      <div class="col-md-8 col-lg-9">
+                        <div class="form-check"> <input class="form-check-input" type="checkbox" id="changesMade"
+                            checked> <label class="form-check-label" for="changesMade"> Các thay đổi trên tài khoản của
+                            bạn </label> </div>
+                        <div class="form-check"> <input class="form-check-input" type="checkbox" id="newProducts"
+                            checked> <label class="form-check-label" for="newProducts"> Thông tin về sản phẩm và dịch vụ
+                            mới </label> </div>
+                        <div class="form-check"> <input class="form-check-input" type="checkbox" id="proOffers"> <label
+                            class="form-check-label" for="proOffers"> Ưu đãi tiếp thị và khuyến mãi </label> </div>
+                        <div class="form-check"> <input class="form-check-input" type="checkbox" id="securityNotify"
+                            checked disabled> <label class="form-check-label" for="securityNotify"> Cảnh báo bảo mật
+                          </label> </div>
+                      </div>
+                    </div>
+                    <div class="text-center"> <button type="submit" class="btn btn-primary">Lưu thay đổi</button> </div>
+                  </form>
+                </div> -->
+
+                <div class="tab-pane fade pt-3" id="profile-change-password">
+                  <form id="changePasswordForm">
+                    <div class="row mb-3">
+                      <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Mật khẩu hiện tại</label>
+                      <div class="col-md-8 col-lg-9 password-wrapper">
+                        <input name="password" type="password" class="form-control" id="currentPassword">
+                        <i class="bi bi-eye-slash toggle-password"></i>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Mật khẩu mới</label>
+                      <div class="col-md-8 col-lg-9 password-wrapper">
+                        <input name="newpassword" type="password" class="form-control" id="newPassword">
+                        <i class="bi bi-eye-slash toggle-password"></i>
+                      </div>
+                    </div>
+                    <div class="row mb-3">
+                      <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Nhập lại mật khẩu mới</label>
+                      <div class="col-md-8 col-lg-9 password-wrapper">
+                        <input name="renewpassword" type="password" class="form-control" id="renewPassword">
+                        <i class="bi bi-eye-slash toggle-password"></i>
+                      </div>
+                    </div>
+                    <div class="text-center"> <button type="submit" class="btn btn-primary">Đổi Mật khẩu</button> </div>
+                  </form>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Bản quyền <strong><span>Nhóm 5</span></strong>. Đã đăng ký bản quyền
+    </div>
+    <div class="credits">
+      Thiết kế bởi <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+  </footer>
+  <div class="modal fade" id="cropperModal" tabindex="-1" aria-labelledby="cropperModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="cropperModalLabel">Cắt ảnh đại diện</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+        </div>
+        <div class="modal-body">
+          <div id="image-cropper-container">
+            <img id="imageToCrop" src="" alt="Source Image">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="button" class="btn btn-primary" id="cropImageBtn">Cắt và Lưu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/chart.js/chart.umd.js"></script>
+  <script src="assets/vendor/echarts/echarts.min.js"></script>
+  <script src="assets/vendor/quill/quill.js"></script>
+  <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+  <script src="assets/js/main.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // --- KHAI BÁO BIẾN ---
+      const cropperModalEl = document.getElementById('cropperModal');
+      const cropperModal = new bootstrap.Modal(cropperModalEl);
+      const imageToCrop = document.getElementById('imageToCrop');
+      const profileImageInput = document.getElementById('profileImageInput');
+      const profileImagePreview = document.getElementById('profileImagePreview');
+      const mainProfileImage = document.getElementById('mainProfileImage');
+      const headerProfileImage = document.getElementById('headerProfileImage');
+      const cropImageBtn = document.getElementById('cropImageBtn');
+      const deleteProfileImageBtn = document.getElementById('deleteProfileImageBtn');
+      const defaultImageSrc = 'assets/img/profile-img.jpg';
+      let cropper;
+
+      // --- XỬ LÝ UPLOAD, CẮT, XÓA ẢNH ---
+
+      // 1. Khi người dùng chọn file ảnh
+      profileImageInput.addEventListener('change', function (e) {
+        const files = e.target.files;
+        if (files && files.length > 0) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            imageToCrop.src = event.target.result;
+            cropperModal.show();
+          };
+          reader.readAsDataURL(files[0]);
+        }
+        // Reset input để có thể chọn lại cùng 1 file
+        e.target.value = '';
+      });
+
+      // 2. Khi modal chứa ảnh gốc được hiển thị, khởi tạo Cropper.js
+      cropperModalEl.addEventListener('shown.bs.modal', function () {
+        cropper = new Cropper(imageToCrop, {
+          aspectRatio: 1, viewMode: 1, dragMode: 'move',
+          autoCropArea: 0.8, cropBoxResizable: false, cropBoxMovable: false,
+          toggleDragModeOnDblclick: false,
+          ready: function () {
+            // Bắt buộc vùng cắt là hình tròn
+            document.querySelector('.cropper-view-box').style.borderRadius = '50%';
+            document.querySelector('.cropper-face').style.borderRadius = '50%';
+          }
+        });
+      });
+
+      // 3. Khi modal bị ẩn, hủy cropper
+      cropperModalEl.addEventListener('hidden.bs.modal', function () {
+        if (cropper) {
+          cropper.destroy();
+          cropper = null;
+        }
+      });
+
+      // 4. Khi nhấn nút "Cắt và Lưu"
+      cropImageBtn.addEventListener('click', function () {
+        if (cropper) {
+          const canvas = cropper.getCroppedCanvas({ width: 120, height: 120 });
+          const croppedImageUrl = canvas.toDataURL();
+
+          // Cập nhật tất cả các ảnh đại diện trên trang
+          profileImagePreview.src = croppedImageUrl;
+          mainProfileImage.src = croppedImageUrl;
+          headerProfileImage.src = croppedImageUrl; // Cập nhật ảnh trên header
+
+          cropperModal.hide();
+        }
+      });
+
+      // 5. [MỚI] Khi nhấn nút "Xóa ảnh"
+      deleteProfileImageBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (confirm('Bạn có chắc muốn xóa ảnh đại diện và quay về ảnh mặc định?')) {
+          profileImagePreview.src = defaultImageSrc;
+          mainProfileImage.src = defaultImageSrc;
+          headerProfileImage.src = defaultImageSrc;
+        }
+      });
+
+
+      // --- XỬ LÝ ẨN/HIỆN MẬT KHẨU ---
+      document.querySelectorAll('.toggle-password').forEach(icon => {
+        icon.addEventListener('click', function () {
+          const passwordInput = this.previousElementSibling;
+          const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+          passwordInput.setAttribute('type', type);
+          this.classList.toggle('bi-eye');
+          this.classList.toggle('bi-eye-slash');
+        });
+      });
+
+      // --- XỬ LÝ SUBMIT CÁC FORM (VÍ DỤ) ---
+      document.getElementById('profileEditForm')?.addEventListener('submit', e => {
+        e.preventDefault();
+        alert('Đã cập nhật thông tin hồ sơ!');
+      });
+      // document.getElementById('settingsForm')?.addEventListener('submit', e => {
+      //   e.preventDefault();
+      //   alert('Đã lưu cài đặt thông báo!');
+      // });
+      document.getElementById('changePasswordForm')?.addEventListener('submit', e => {
+        e.preventDefault();
+        // (Có thể thêm logic validate mật khẩu ở đây)
+        alert('Đổi mật khẩu thành công!');
+        e.target.reset();
+      });
+    });
+  </script>
+</body>
+
+</html>
