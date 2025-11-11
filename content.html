@@ -40,6 +40,119 @@
         .ql-toolbar.ql-snow {
             overflow: visible;
         }
+
+        /* Ẩn chữ “No file chosen” */
+        input[type="file"] {
+            color: transparent;
+        }
+
+        input[type="file"]::file-selector-button {
+            color: #000;
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background-color: #e2e6ea;
+        }
+
+        /* Ảnh preview đẹp hơn */
+        #imagePreviewContainer {
+            transition: 0.3s ease-in-out;
+        }
+
+        /* ==== HOVER DÒNG TRONG DATATABLE ==== */
+        .datatable tbody tr {
+            cursor: pointer;
+        }
+
+        .datatable tbody tr:hover {
+            background-color: #f6f9ff !important;
+        }
+
+        /* ==== ALERT GÓC PHẢI ==== */
+        #alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1080;
+            width: 320px;
+        }
+
+        .alert {
+            animation: fadeIn 0.4s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        #bulkActionBar {
+            margin-bottom: 10px;
+        }
+
+        /* Giữ cho bảng cuộn mượt và không tràn ở mọi kích thước */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Tự động điều chỉnh bố cục trên màn hình nhỏ */
+        @media (max-width: 992px) {
+            #contentTable img {
+                height: 40px;
+                width: 60px;
+            }
+
+            #contentTable th,
+            #contentTable td {
+                white-space: nowrap;
+                vertical-align: middle;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            /* Cho phép bảng cuộn ngang khi cột nhiều */
+            #contentTable {
+                width: 100%;
+                display: block;
+                overflow-x: auto;
+            }
+
+            /* Ẩn một số cột phụ nếu quá hẹp (tùy chọn) */
+            #contentTable th:nth-child(5),
+            #contentTable td:nth-child(5) {
+                display: none;
+                /* Ẩn cột “Ngày tạo” */
+            }
+
+            /* Giảm padding & font size cho di động */
+            #contentTable th,
+            #contentTable td {
+                padding: 6px 8px;
+                font-size: 14px;
+            }
+        }
+
+        .card-body {
+            overflow-x: auto;
+            padding: 1rem;
+        }
     </style>
 </head>
 
@@ -278,44 +391,31 @@
                                     <i class="bi bi-plus-circle me-1"></i> Thêm nội dung mới
                                 </button>
                             </div>
-                            <table class="table datatable" id="contentTable">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Mã nội dung</th>
-                                        <th scope="col">Tiêu đề</th>
-                                        <th scope="col">Loại nội dung</th>
-                                        <th scope="col">Ngày tạo</th>
-                                        <th scope="col">Trạng thái</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>ND001</td>
-                                        <td>Khám phá vẻ đẹp thiên nhiên Việt Nam</td>
-                                        <td>Bài viết</td>
-                                        <td>01/05/2024</td>
-                                        <td><span class="badge bg-success">Đang hiển thị</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ND002</td>
-                                        <td>Top 5 bãi biển đẹp nhất miền Trung</td>
-                                        <td>Tin tức</td>
-                                        <td>15/04/2024</td>
-                                        <td><span class="badge bg-danger">Đã ẩn</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>ND003</td>
-                                        <td>Hướng dẫn đặt tour du lịch online</td>
-                                        <td>Hướng dẫn</td>
-                                        <td>10/03/2024</td>
-                                        <td><span class="badge bg-success">Đang hiển thị</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div id="bulkActionBar"
+                                class="d-none bg-light border rounded p-2 mb-3 d-flex align-items-center justify-content-between">
+                                <button class="btn btn-danger btn-sm" id="deleteSelectedBtn">
+                                    <i class="bi bi-trash"></i> Xóa bài đăng đã chọn
+                                </button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table datatable" id="contentTable">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 40px;">
+                                                <input type="checkbox" id="selectAll">
+                                            </th>
+                                            <th scope="col">Mã nội dung</th>
+                                            <th scope="col">Tiêu đề</th>
+                                            <th scope="col">Ảnh nội dung</th>
+                                            <th scope="col">Ngày tạo</th>
+                                            <th scope="col">Trạng thái</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </section>
     </main>
 
@@ -344,39 +444,44 @@
                                 <input type="text" class="form-control" id="contentTitle" name="title"
                                     placeholder="Nhập tiêu đề nội dung" required>
                             </div>
-
                             <div class="col-md-6">
-                                <label for="contentType" class="form-label">Loại nội dung</label>
-                                <select id="contentType" name="type" class="form-select" required>
-                                    <option value="" selected>-- Chọn loại nội dung --</option>
-                                    <option value="Bài viết">Bài viết</option>
-                                    <option value="Tin tức">Tin tức</option>
-                                    <option value="Hướng dẫn">Hướng dẫn</option>
-                                </select>
+                                <label for="authorName" class="form-label">Tên người đăng</label>
+                                <input type="text" class="form-control bg-light" id="authorName" name="employeeName"
+                                    placeholder="Đang tải..." readonly>
                             </div>
+
 
                             <div class="col-md-6">
                                 <label for="contentStatus" class="form-label">Trạng thái</label>
                                 <select id="contentStatus" name="status" class="form-select" required>
                                     <option value="" selected>-- Chọn trạng thái --</option>
-                                    <option value="Đang hiển thị">Đang hiển thị</option>
-                                    <option value="Đã ẩn">Đã ẩn</option>
+                                    <option value="0">Đã xuất bản</option>
+                                    <option value="1">Nháp</option>
+                                    <option value="2">Ẩn</option>
                                 </select>
                             </div>
 
                             <div class="col-12">
                                 <label for="contentImage" class="form-label">Ảnh đại diện</label>
-                                <input class="form-control" type="file" id="contentImage" name="image" accept="image/*">
+                                <div id="uploadContainer">
+                                    <input class="form-control" type="file" id="contentImage" name="image"
+                                        accept="image/*">
+                                </div>
+
+                                <!-- Vùng xem trước ảnh -->
+                                <div class="mt-3 p-2 border rounded" id="imagePreviewContainer" style="display:none;">
+                                    <img id="imagePreview" src="#" alt="Ảnh xem trước" class="img-fluid rounded"
+                                        style="max-height:200px;object-fit:cover;">
+                                    <div class="mt-2 text-end">
+                                        <button type="button" id="changeImageBtn"
+                                            class="btn btn-sm btn-outline-primary">Thay ảnh</button>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="col-12">
                                 <label class="form-label fw-bold mb-2">Nội dung chi tiết</label>
-                                <div id="quillEditorContainer">
-                                    <div id="quillEditor" style="height: 250px;">
-                                        <p>Hello World!</p>
-                                        <p>Đây là trình soạn thảo <strong>Quill phiên bản đầy đủ</strong>.</p>
-                                    </div>
-                                </div>
+                                <div id="quillEditor" style="height: 250px;"></div>
                                 <textarea name="detail" id="detailContent" class="d-none"></textarea>
                             </div>
                         </div>
@@ -384,139 +489,23 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger me-auto" id="deleteBtn"
-                        style="display: none;">Xóa</button>
+                        style="display:none;">Xóa</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                     <button type="submit" class="btn btn-primary" form="contentForm">Lưu nội dung</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
+    <div id="alert-container"></div>
+    <script src="assets/js/content.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js" defer></script>
+    <!-- <script src="assets/vendor/simple-datatables/simple-datatables.js" defer></script> -->
+    <script src="assets/js/main.js" defer></script>
     <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
-
-    <script src="assets/js/main.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-
-            // --- 1. KHỞI TẠO VÀ LƯU TRỮ BIẾN ---
-            const modalEl = document.getElementById('contentModal');
-            const modal = new bootstrap.Modal(modalEl);
-            const form = document.getElementById('contentForm');
-            const modalTitle = document.getElementById('contentModalLabel');
-            const modalDescription = modalEl.querySelector('p.text-muted');
-            const deleteBtn = document.getElementById('deleteBtn');
-            const contentTable = document.getElementById('contentTable');
-            const detailContentInput = document.getElementById('detailContent');
-
-            // [MỚI] Cấu hình Toolbar đầy đủ cho Quill Editor
-            const toolbarOptions = [
-                [{ 'font': [] }],
-                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                ['blockquote', 'code-block'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                [{ 'script': 'sub' }, { 'script': 'super' }],
-                [{ 'indent': '-1' }, { 'indent': '+1' }],
-                [{ 'direction': 'rtl' }],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'align': [] }],
-                ['link', 'image', 'video'],
-                ['clean']
-            ];
-
-            const quill = new Quill('#quillEditor', {
-                modules: {
-                    toolbar: toolbarOptions
-                },
-                theme: 'snow',
-                placeholder: 'Soạn thảo nội dung chi tiết tại đây...'
-            });
-
-            // --- 2. CÁC HÀM HỖ TRỢ ---
-
-            function resetModalToDefault() {
-                modalTitle.textContent = 'Thêm nội dung mới';
-                modalDescription.style.display = 'block';
-                deleteBtn.style.display = 'none';
-                form.reset();
-                quill.setText('');
-            }
-
-            function setupModalForEdit(contentRow) {
-                if (modalEl.classList.contains('show')) return;
-
-                const id = contentRow.cells[0].textContent;
-                const title = contentRow.cells[1].textContent;
-                const type = contentRow.cells[2].textContent;
-                const statusText = contentRow.cells[4].querySelector('span').textContent;
-
-                modalTitle.textContent = `Chi tiết nội dung ${id}`;
-                modalDescription.style.display = 'none';
-                deleteBtn.style.display = 'block';
-
-                form.querySelector('[name="title"]').value = title;
-                form.querySelector('[name="type"]').value = type;
-                form.querySelector('[name="status"]').value = statusText;
-
-                quill.root.innerHTML = `<p>Đây là nội dung chi tiết cho <strong>${title}</strong>. Nội dung này sẽ được tải từ database.</p>`;
-
-                modal.show();
-            }
-
-            // --- 3. CÁC HÀM XỬ LÝ SỰ KIỆN ---
-
-            function handleFormSubmit(e) {
-                e.preventDefault();
-                detailContentInput.value = quill.root.innerHTML;
-
-                const formData = new FormData(form);
-                const contentData = Object.fromEntries(formData.entries());
-
-                // [MỚI] Lấy thông tin file ảnh
-                const imageFile = formData.get('image');
-
-                console.log("Dữ liệu nội dung:", contentData);
-                console.log("File ảnh đã chọn:", imageFile);
-                alert("Lưu nội dung thành công!");
-                modal.hide();
-            }
-
-            function handleDeleteClick() {
-                const id = modalTitle.textContent.replace('Chi tiết nội dung ', '').trim();
-                if (confirm(`Bạn có chắc chắn muốn xóa nội dung ${id} không?`)) {
-                    alert(`Đã xóa thành công nội dung ${id}.`);
-                    modal.hide();
-                }
-            }
-
-            function handleTableClick(e) {
-                const clickedRow = e.target.closest('tbody tr');
-                if (clickedRow) {
-                    setupModalForEdit(clickedRow);
-                }
-            }
-
-            // --- 4. GẮN CÁC BỘ LẮNG NGHE SỰ KIỆN ---
-
-            document.querySelector('[data-bs-target="#contentModal"]').addEventListener('click', resetModalToDefault);
-
-            if (contentTable) {
-                contentTable.addEventListener('click', handleTableClick);
-            }
-
-            form.addEventListener('submit', handleFormSubmit);
-            deleteBtn.addEventListener('click', handleDeleteClick);
-            modalEl.addEventListener('hidden.bs.modal', resetModalToDefault);
-        });
-    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 </body>
 
 </html>

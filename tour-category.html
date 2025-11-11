@@ -64,6 +64,27 @@
                 transform: translateX(0);
             }
         }
+
+        /* Ẩn phần text "No file chosen" (hoặc tương đương trong ngôn ngữ khác) */
+        input[type="file"] {
+            color: transparent;
+            /* ẩn chữ “No file chosen” */
+        }
+
+        /* Giữ lại nút “Choose Files” bình thường */
+        input[type="file"]::file-selector-button {
+            color: #000;
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background-color: #e2e6ea;
+        }
     </style>
 </head>
 

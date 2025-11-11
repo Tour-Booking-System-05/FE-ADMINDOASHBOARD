@@ -97,6 +97,40 @@
                 transform: translateX(0);
             }
         }
+
+        select[disabled] {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        .pointer-events-none {
+            pointer-events: none !important;
+        }
+
+        .opacity-50 {
+            opacity: 0.6 !important;
+        }
+
+        /* Ẩn phần text "No file chosen" (hoặc tương đương trong ngôn ngữ khác) */
+        input[type="file"] {
+            color: transparent;
+            /* ẩn chữ “No file chosen” */
+        }
+
+        /* Giữ lại nút “Choose Files” bình thường */
+        input[type="file"]::file-selector-button {
+            color: #000;
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background-color: #e2e6ea;
+        }
     </style>
 </head>
 
@@ -555,16 +589,18 @@
                             </div> -->
                             <div class="col-md-4">
                                 <label class="form-label">Giá (VND)</label>
-                                <input type="number" name="price" class="form-control" placeholder="VD: 5000000"
-                                    required>
+                                <input type="number" name="price" class="form-control" placeholder="VD: 5000000" min="0"
+                                    max="1000000000" required>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Giá so sánh (VND)</label>
-                                <input type="number" name="comparePrice" class="form-control" placeholder="VD: 7000000">
+                                <input type="number" name="comparePrice" class="form-control" placeholder="VD: 7000000"
+                                    min="0" max="1000000000">
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Số vé</label>
-                                <input type="number" name="tickets" class="form-control" placeholder="VD: 20" required>
+                                <input type="number" name="tickets" class="form-control" placeholder="VD: 20" required
+                                    min="0" max="300">
                             </div>
 
                             <div class="col-md-6">
@@ -579,7 +615,7 @@
                             <div class="col-md-6">
                                 <label class="form-label">Loại xe / Phương tiện</label>
                                 <input type="text" name="vehicle" id="vehicle" class="form-control mt-2"
-                                    placeholder="Nhập loại xe ">
+                                    placeholder="Nhập loại xe " required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Trạng thái</label>
@@ -629,9 +665,12 @@
                             </div>
                         </div>
                         <div class="modal-footer">
+
                             <button type="button" class="btn btn-danger" id="deleteTourBtn" style="display:none;">Xóa
-                                chuyến
-                                đi</button>
+                                chuyến đi</button>
+                            <button type="button" class="btn btn-warning" id="cloneTourBtn" style="display:none;">
+                                Sao chép chuyến đi
+                            </button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                             <button type="submit" class="btn btn-primary"> Lưu chuyến đi</button>
                         </div>

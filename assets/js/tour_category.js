@@ -32,15 +32,14 @@ document.addEventListener('DOMContentLoaded', function () {
     let selectedIds = new Set(); // Set để lưu ID các hàng đã chọn
 
     // --- 2. CÁC HÀM HỖ TRỢ CHUNG ---
-    // 🧩 Giới hạn số ký tự nhập
+    // Giới hạn số ký tự nhập
     function limitText(input, maxLength) {
         if (input.value.length > maxLength) {
             input.value = input.value.slice(0, maxLength);
             showAlert(`⚠️ Tên danh mục chỉ được tối đa ${maxLength} ký tự`, 'warning');
         }
     }
-
-    // 🔔 Alert góc phải
+    // Alert góc phải
     function showAlert(message, type = 'success') {
         const container = document.getElementById('alert-container');
         const icons = { success: 'bi-check-circle-fill', info: 'bi-info-circle-fill', warning: 'bi-exclamation-triangle-fill', danger: 'bi-x-circle-fill' };
@@ -53,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /**
-     * 🖼 Thiết lập chức năng xem trước ảnh.
+     * Thiết lập chức năng xem trước ảnh.
      */
     function setupImagePreview(file, initialUrl = null) {
         if (file) {
@@ -71,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // 🔁 Reset modal
+    // Reset modal
     function resetModalToDefault() {
         currentId = null;
         currentImageUrl = null;
@@ -99,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /**
-     * 🧩 Gắn sự kiện checkbox cho các hàng MỚI (chạy sau mỗi lần DataTables vẽ lại)
+     * Gắn sự kiện checkbox cho các hàng MỚI (chạy sau mỗi lần DataTables vẽ lại)
      */
     function attachCheckboxEvents() {
         // Đảm bảo checkbox "Chọn tất cả" được reset về trạng thái ban đầu
@@ -135,11 +134,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 highlightRow(cb, checked);
                 toggleBulkBar();
 
-                // 🧠 Nếu bỏ chọn 1 dòng => bỏ check "Chọn tất cả"
+                // Nếu bỏ chọn 1 dòng => bỏ check "Chọn tất cả"
                 if (!checked && selectAll) {
                     selectAll.checked = false;
                 }
-                // ✅ Nếu tất cả checkbox đều được chọn => tự check lại "Chọn tất cả"
+                // Nếu tất cả checkbox đều được chọn => tự check lại "Chọn tất cả"
                 const allChecked = [...document.querySelectorAll('#categoryTable .row-checkbox')]
                     .every(cb => cb.checked);
                 selectAll.checked = allChecked;
@@ -165,8 +164,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 scrollX: true,
                 lengthChange: true,
                 pageLength: 5,
-                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tất cả"]],
-                order: [[1, 'asc']],
+                lengthMenu: [[5, 10, 25, 50], [5, 10, 25, 50]],
+                order: [[1, 'desc']],
                 columnDefs: [
                     { targets: 0, orderable: false, searchable: false }],
                 ajax: function (data, callback) {
@@ -176,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const sortColIndex = data.order.length > 0 ? data.order[0].column : 1;
                     const columnMap = ['id', 'categoryId', 'categoryName', 'description', 'createdAt', 'status'];
                     const sortColName = columnMap[sortColIndex] || 'categoryId';
-                    const sortDir = data.order.length > 0 ? data.order[0].dir : 'asc';
+                    const sortDir = data.order.length > 0 ? data.order[0].dir : 'desc';
 
                     const url = `${API_URL}?page=${page}&size=${size}&sort=${sortColName},${sortDir}&keyword=${encodeURIComponent(searchValue)}`;
 
@@ -248,8 +247,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     loadingRecords: "Đang tải dữ liệu...",
                     emptyTable: "Không có dữ liệu",
                     paginate: {
-                        previous: "← Trước",
-                        next: "Tiếp →"
+                        previous: "←",
+                        next: "→"
                     }
                 }
             });
@@ -307,13 +306,15 @@ document.addEventListener('DOMContentLoaded', function () {
     /** Xóa danh mục (Delete) */
     async function deleteCategory(id) {
         const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-        if (!res.ok) throw new Error('Lỗi khi xóa danh mục: ' + res.statusText);
+
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => ({}));
+            const msg = errorData.message || 'Không thể xóa danh mục này';
+            throw new Error(msg); // 
+        }
+
+        return true; // Thành công
     }
-
-
-    // --- 4. XỬ LÝ SỰ KIỆN UI/CRUD ---
-
-    // 🖼 Lắng nghe sự kiện thay đổi file để preview ảnh
     imageInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
         setupImagePreview(file);
@@ -326,7 +327,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 💾 Submit form (Thêm mới/Cập nhật)
+    // Submit form (Thêm mới/Cập nhật)
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         descriptionInput.value = quill.root.innerHTML;
@@ -335,7 +336,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let finalImageUrl = currentImageUrl; // Khởi tạo bằng URL ảnh cũ
 
         try {
-            // 🖼 1️⃣ Upload ảnh: Chỉ upload nếu có file mới
+            //  Upload ảnh: Chỉ upload nếu có file mới
             if (imageFile) {
                 const uploadData = new FormData();
                 uploadData.append('file', imageFile);
@@ -352,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 finalImageUrl = uploadResult.url; // Ghi đè bằng URL mới
             }
 
-            // 🗂 2️⃣ Gửi dữ liệu danh mục
+            // Gửi dữ liệu danh mục
             const formData = new FormData(form);
             const category = {
                 categoryName: formData.get('categoryName'),
@@ -369,60 +370,83 @@ document.addEventListener('DOMContentLoaded', function () {
                 'success'
             );
 
-            // 🔥 RELOAD TRANG THEO YÊU CẦU:
+            //  RELOAD TRANG THEO YÊU CẦU:
             setTimeout(() => window.location.reload(), 800);
 
         } catch (err) {
             console.error(err);
-            showAlert('❌ ' + err.message, 'danger');
+            showAlert(err.message, 'danger');
         }
     });
 
 
-    // 🗑 Xóa danh mục
+    // Xóa danh mục
     deleteBtn.addEventListener('click', async () => {
         if (!currentId) return;
         if (confirm(`Bạn có chắc muốn xóa danh mục #${currentId}?`)) {
             try {
                 await deleteCategory(currentId);
                 modal.hide();
-                showAlert('Xóa danh mục thành công!', 'danger');
-
-                // 🔥 RELOAD TRANG THEO YÊU CẦU:
+                showAlert(' Xóa danh mục thành công!', 'success');
                 setTimeout(() => window.location.reload(), 800);
-
             } catch (err) {
-                showAlert('Lỗi khi xóa: ' + err.message, 'danger');
+                // Hiển thị 1 alert duy nhất, gọn gàng
+                showAlert(err.message, 'danger');
             }
         }
     });
 
-    // 🗑️ Xóa hàng loạt
+
+    // Xóa hàng loạt
     if (deleteSelectedBtn) {
         deleteSelectedBtn.addEventListener('click', async () => {
             if (selectedIds.size === 0) return;
             if (!confirm(`Bạn có chắc muốn xóa ${selectedIds.size} danh mục đã chọn?`)) return;
 
             try {
-                const res = await fetch(`${API_URL}/bulk-delete`, {
+                const response = await fetch(`${API_URL}/bulk-delete`, {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify([...selectedIds])
                 });
-                if (!res.ok) throw new Error('Không thể xóa danh mục');
-                showAlert(`Đã xóa ${selectedIds.size} danh mục`, 'success');
 
-                // 🔥 RELOAD TRANG THEO YÊU CẦU:
-                setTimeout(() => window.location.reload(), 800);
+                // Lấy nội dung trả về (message từ backend)
+                const data = await response.json();
+
+                // Hiển thị cảnh báo hoặc thành công
+                if (response.ok) {
+                    if (data.message && (
+                        data.message.includes('không thể') ||
+                        data.message.includes('liên kết')
+                    )) {
+                        showAlert(data.message, 'danger');
+                    } else if (data.message && data.message.includes('một số danh mục')) {
+                        showAlert(data.message, 'warning');
+                    } else {
+                        showAlert(data.message || 'Xóa danh mục thành công!', 'success');
+                    }
+                } else {
+                    showAlert(data.message || 'Lỗi khi xóa danh mục!', 'danger');
+                }
+
+
+                // Reset lại danh sách chọn
+                selectedIds.clear();
+                toggleBulkBar();
+
+                // Reload lại bảng sau khi xử lý xong
+                await loadCategories();
 
             } catch (err) {
-                showAlert(err.message, 'danger');
+                console.error(' Lỗi xóa danh mục:', err);
+                showAlert('Không thể kết nối đến máy chủ!', 'danger');
             }
         });
     }
 
 
-    // ⚡ Gắn sự kiện UI khác
+
+    // Gắn sự kiện UI khác
     addButton.addEventListener('click', resetModalToDefault);
 
     // Sự kiện click vào hàng của DataTables (phải gắn trên body để hoạt động sau khi draw)
@@ -439,19 +463,18 @@ document.addEventListener('DOMContentLoaded', function () {
         const categoryId = data.categoryId || data.id;
 
         if (categoryId) {
-            console.log('🟢 Click vào dòng:', categoryId, data); // debug
             setupModalForEdit(categoryId);
         }
     });
 
     modalEl.addEventListener('hidden.bs.modal', resetModalToDefault);
 
-    // 🚀 Tải dữ liệu ban đầu
+    //  Tải dữ liệu ban đầu
     loadCategories();
     // ====== ĐẾM TỔNG SỐ DANH MỤC HOẠT ĐỘNG ======
     async function countActiveCategories() {
         try {
-            const res = await fetch(`${API_URL}?page=0&size=1000&sort=categoryId,asc`);
+            const res = await fetch(`${API_URL}?page=0&size=1000&sort=categoryId,desc`);
             if (!res.ok) throw new Error("Không thể tải danh sách danh mục");
             const data = await res.json();
 
