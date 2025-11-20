@@ -33,12 +33,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- 2. CÁC HÀM HỖ TRỢ CHUNG ---
     // Giới hạn số ký tự nhập
-    function limitText(input, maxLength) {
-        if (input.value.length > maxLength) {
-            input.value = input.value.slice(0, maxLength);
-            showAlert(`⚠️ Tên danh mục chỉ được tối đa ${maxLength} ký tự`, 'warning');
-        }
+    function setupCategoryTitleHandler() {
+        const input = document.getElementById("categoryTitleInput");
+        const counter = document.getElementById("categoryTitleCount");
+        const MAX = 255;
+
+        if (!input || !counter) return;
+
+        // Hiển thị ngay số ký tự hiện tại
+        counter.innerText = `${input.value.length} / ${MAX}`;
+
+        // Xóa event cũ để tránh đăng ký trùng
+        input.oninput = null;
+        input.onblur = null;
+
+        // Đếm khi nhập
+        input.addEventListener("input", function () {
+            let value = this.value.replace(/^\s+/, "");
+            if (value.length > MAX) value = value.substring(0, MAX);
+
+            this.value = value;
+            counter.innerText = `${value.length} / ${MAX}`;
+        });
+
+        // Trim cuối khi blur
+        input.addEventListener("blur", function () {
+            this.value = this.value.trim();
+            counter.innerText = `${this.value.length} / ${MAX}`;
+        });
     }
+
+
     // Alert góc phải
     function showAlert(message, type = 'success') {
         const container = document.getElementById('alert-container');
@@ -83,7 +108,6 @@ document.addEventListener('DOMContentLoaded', function () {
         setupImagePreview(null); // Reset ảnh preview
     }
 
-    // --- LOGIC CHECKBOX VÀ HÀNH ĐỘNG HÀNG LOẠT (Đã sửa lỗi DataTables) ---
 
     // Cập nhật thanh hành động hàng loạt
     function toggleBulkBar() {
@@ -279,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function () {
             form.querySelector('[name="categoryName"]').value = categoryName;
             quill.root.innerHTML = cat.description || '';
             form.querySelector('[name="status"]').value = (cat.status == 1 || cat.status === true) ? 'active' : 'hidden';
-
+            setupCategoryTitleHandler();
             setupImagePreview(null, currentImageUrl);
 
             imageInput.value = null;
@@ -447,7 +471,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // Gắn sự kiện UI khác
-    addButton.addEventListener('click', resetModalToDefault);
+    addButton.addEventListener('click', () => {
+        resetModalToDefault();
+        setupCategoryTitleHandler(); // Gắn lại event đếm ký tự
+    });
 
     // Sự kiện click vào hàng của DataTables (phải gắn trên body để hoạt động sau khi draw)
     $('#categoryTable tbody').on('click', 'tr', function (e) {

@@ -178,14 +178,46 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     truongNgayBatDau.addEventListener('change', capNhatMinNgayKetThuc);
-    function limitText(input, maxLength) {
-        if (input.value.length > maxLength) {
-            input.value = input.value.slice(0, maxLength);
-            showAlert(`Tên chuyến đi chỉ được tối đa ${maxLength} ký tự`, 'warning');
-        }
+    function setupTourTitleHandler() {
+        const input = document.getElementById("tourTitleInput");
+        const counter = document.getElementById("tourTitleCount");
+        const MAX = 255;
+
+        if (!input || !counter) return;
+
+        // Cập nhật counter theo giá trị hiện tại (QUAN TRỌNG)
+        counter.innerText = `${input.value.length} / ${MAX}`;
+
+        // Gắn lại sự kiện mỗi lần mở modal
+        input.oninput = function () {
+            let value = input.value;
+
+            value = value.replace(/^\s+/, ""); // Trim đầu
+
+            if (value.length > MAX) {
+                value = value.substring(0, MAX);
+                showAlert(`Tên chuyến đi tối đa ${MAX} ký tự`, "warning");
+            }
+
+            input.value = value;
+            counter.innerText = `${value.length} / ${MAX}`;
+        };
+
+        input.onblur = function () {
+            input.value = input.value.trim();
+            counter.innerText = `${input.value.length} / ${MAX}`;
+        };
     }
+
     // ====== RESET MODAL ======
     function resetModal() {
+        // Reset counter về 0 khi thêm mới
+        document.getElementById("tourTitleInput").value = "";
+        document.getElementById("tourTitleCount").innerText = "0 / 255";
+
+        // Gắn lại sự kiện input/blur
+        setupTourTitleHandler();
+
         // Reset biến và dữ liệu
         currentId = null;
         selectedFiles = [];
@@ -485,6 +517,7 @@ document.addEventListener('DOMContentLoaded', function () {
         form.querySelector('[name="endDate"]').value = item.dateEndTour || '';
         form.querySelector('[name="guide"]').value = item.guiderId || '';
         quill.root.innerHTML = item.description || '';
+        setupTourTitleHandler();
 
         // ====== XỬ LÝ TRẠNG THÁI ======
         const statusSelect = form.querySelector('[name="status"]');
@@ -593,7 +626,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         modal.show();
     }
-
+   
     // ====== SUBMIT FORM ======
     form.addEventListener('submit', async e => {
         e.preventDefault();

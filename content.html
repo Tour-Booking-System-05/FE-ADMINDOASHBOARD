@@ -28,6 +28,12 @@
     <link href="assets/css/style.css" rel="stylesheet">
 
     <style>
+        .table-active,
+        .row-selected {
+            background-color: #f5f6f8 !important;
+            transition: background-color 0.2s ease;
+        }
+
         #contentTable tbody tr {
             cursor: pointer;
         }
@@ -443,6 +449,7 @@
                                 <label for="contentTitle" class="form-label">Tiêu đề</label>
                                 <input type="text" class="form-control" id="contentTitle" name="title"
                                     placeholder="Nhập tiêu đề nội dung" required>
+                                <small id="titleCount" class="text-muted">0 / 255</small>
                             </div>
                             <div class="col-md-6">
                                 <label for="authorName" class="form-label">Tên người đăng</label>

@@ -573,10 +573,11 @@
 
                             <div class="col-md-6">
                                 <label class="form-label">Tên chuyến đi</label>
-                                <input type="text" name="categoryName" class="form-control"
-                                    placeholder="Nhập tên chuyến đi" maxlength="254" required
-                                    oninput="limitText(this, 254)">
+                                <input type="text" name="categoryName" id="tourTitleInput" class="form-control"
+                                    placeholder="Nhập tên chuyến đi" required>
+                                <small id="tourTitleCount" class="text-muted">0 / 255</small>
                             </div>
+
                             <div class="col-md-6">
                                 <label class="form-label">Điểm đến</label>
                                 <input type="text" name="destination" class="form-control" placeholder="Nhập điểm đến"

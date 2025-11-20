@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ====== ALERT ======
-    // ====== HÀM ALERT GIỐNG TRANG TOUR ======
     function showAlert(msg, type = 'success') {
         const icons = {
             success: 'bi-check-circle-fill',
@@ -101,6 +100,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (currentEmployee)
             document.getElementById('authorName').value = currentEmployee.fullName;
+        // Reset tiêu đề và counter
+        document.getElementById("contentTitle").value = "";
+        document.getElementById("titleCount").innerText = "0 / 255";
+
+        // Gắn lại handler
+        applyContentTitleHandler();
+
     }
 
 
@@ -205,8 +211,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        $('#contentTable').on('draw.dt', attachCheckboxEvents);
-
+        $('#contentTable').on('draw.dt', function () {
+            attachCheckboxEvents();
+        });
         // Click từng dòng
         $('#contentTable tbody').on('click', 'tr', async function (e) {
             if ($(e.target).is('input[type="checkbox"]')) return;
@@ -220,33 +227,59 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ====== CHECKBOX & BULK DELETE ======
     function toggleBulkBar() {
-        bulkBar?.classList.toggle('d-none', selectedIds.size === 0);
+        bulkBar.classList.toggle('d-none', selectedIds.size === 0);
     }
-
+    function highlightRow(cb, checked) {
+        const tr = cb.closest('tr');
+        if (checked) tr.classList.add('table-active');
+        else tr.classList.remove('table-active');
+    }
     function attachCheckboxEvents() {
         const rowCheckboxes = document.querySelectorAll('#contentTable .row-checkbox');
+
+        // Highlight lại theo các checkbox hiện đang checked
+        rowCheckboxes.forEach(cb => {
+            highlightRow(cb, cb.checked);
+        });
+
+        // Sự kiện của selectAll
         if (selectAll) {
             selectAll.onchange = e => {
                 const checked = e.target.checked;
                 selectedIds.clear();
+
                 rowCheckboxes.forEach(cb => {
                     cb.checked = checked;
                     const id = cb.dataset.id;
                     if (checked) selectedIds.add(id);
+                    highlightRow(cb, checked);
                 });
                 toggleBulkBar();
             };
         }
 
+        // Sự kiện cho từng checkbox
         rowCheckboxes.forEach(cb => {
             const id = cb.dataset.id;
+            cb.checked = selectedIds.has(id);
+            highlightRow(cb, selectedIds.has(id));
             cb.onchange = e => {
-                if (e.target.checked) selectedIds.add(id);
+                const checked = e.target.checked;
+                if (checked) selectedIds.add(id);
                 else selectedIds.delete(id);
+
+                highlightRow(cb, checked);
                 toggleBulkBar();
+                if (!checked && selectAll) selectAll.checked = false;
+                const allChecked = [...document.querySelectorAll('#contentTable .row-checkbox')]
+                    .every(cb => cb.checked);
+                selectAll.checked = allChecked;
             };
         });
+        toggleBulkBar();
+
     }
+
 
     deleteSelectedBtn?.addEventListener('click', async () => {
         if (selectedIds.size === 0) {
@@ -318,6 +351,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         quill.root.innerHTML = data.content || '';
         setupImagePreview(null, data.imageUrl);
+        // Hiển thị lại số ký tự tiêu đề khi edit
+        const counter = document.getElementById("titleCount");
+        if (counter && data.title) {
+            counter.innerText = `${data.title.length} / 255`;
+        }
+
+        applyContentTitleHandler();
+
         modal.show();
     }
 
@@ -371,5 +412,42 @@ document.addEventListener('DOMContentLoaded', function () {
         modal.hide();
         $('#contentTable').DataTable().ajax.reload();
     });
+    // ====== HÀM GIỚI HẠN TIÊU ĐỀ (Tối đa 255 ký tự + tự trim + counter) ======
+    function applyContentTitleHandler() {
+        const input = document.getElementById("contentTitle");
+        const counter = document.getElementById("titleCount");
+        const MAX = 255;
+
+        if (!input || !counter) return;
+
+        // Reset counter theo giá trị hiện tại
+        counter.innerText = `${input.value.length} / ${MAX}`;
+
+        // Xóa sự kiện cũ (tránh bị add nhiều lần khi mở modal)
+        input.oninput = null;
+        input.onblur = null;
+
+        // Xử lý khi nhập
+        input.oninput = function () {
+            let value = input.value;
+
+            value = value.replace(/^\s+/, ""); // Trim đầu
+
+            if (value.length > MAX) {
+                value = value.substring(0, MAX);
+                showAlert(`Tiêu đề chỉ tối đa ${MAX} ký tự`, "warning");
+            }
+
+            input.value = value;
+            counter.innerText = `${value.length} / ${MAX}`;
+        };
+
+        // Khi blur: trim cuối + update count
+        input.onblur = function () {
+            input.value = input.value.trim();
+            counter.innerText = `${input.value.length} / ${MAX}`;
+        };
+    }
+
 
 });

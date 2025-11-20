@@ -506,10 +506,11 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Tên Danh mục</label>
-                                <input type="text" name="categoryName" class="form-control"
-                                    placeholder="Nhập tên danh mục" maxlength="254" required
-                                    oninput="limitText(this, 254)">
+                                <input type="text" name="categoryName" id="categoryTitleInput" class="form-control"
+                                    placeholder="Nhập tên danh mục" required>
+                                <small id="categoryTitleCount" class="text-muted">0 / 255</small>
                             </div>
+
                             <div class="col-md-6">
                                 <label class="form-label">Trạng thái</label>
                                 <select name="status" class="form-select" required>
