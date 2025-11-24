@@ -40,6 +40,52 @@
         .ql-toolbar.ql-snow {
             overflow: visible;
         }
+
+        /* ==== HOVER DÒNG TRONG DATATABLE ==== */
+        .datatable tbody tr {
+            cursor: pointer;
+        }
+
+        .datatable tbody tr:hover {
+            background-color: #f6f9ff !important;
+        }
+
+        /* ==== ALERT GÓC PHẢI ==== */
+        #alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1080;
+            width: 320px;
+        }
+
+        .alert {
+            animation: fadeIn 0.4s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        #bulkActionBar {
+            margin-bottom: 10px;
+        }
+
+        /* Giữ cho bảng cuộn mượt và không tràn ở mọi kích thước */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
     </style>
 </head>
 
@@ -278,9 +324,18 @@
                                     <i class="bi bi-plus-circle me-1"></i> Thêm khuyến mãi mới
                                 </button>
                             </div>
+                            <div id="bulkActionBar"
+                                class="d-none bg-light border rounded p-2 mb-3 d-flex align-items-center justify-content-between">
+                                <button class="btn btn-danger btn-sm" id="deleteSelectedBtn">
+                                    <i class="bi bi-trash"></i> Xóa khuyến mãi đã chọn
+                                </button>
+                            </div>
                             <table class="table datatable" id="promotionTable">
                                 <thead>
                                     <tr>
+                                        <th style="width: 40px;">
+                                            <input type="checkbox" id="selectAll">
+                                        </th>
                                         <th scope="col">Mã KM</th>
                                         <th scope="col">Tên khuyến mãi</th>
                                         <th scope="col">Mức giảm</th>
@@ -347,21 +402,29 @@
                                 <label for="promoName" class="form-label">Tên chương trình khuyến mãi</label>
                                 <input type="text" class="form-control" id="promoName" name="name" required
                                     placeholder="VD: Chào hè rực rỡ">
+                                <small id="titleCount" class="text-muted">0 / 255</small>
+
+                            </div>
+                            <div class="col-md-6">
+                                <label for="promoCode" class="form-label">Mã khuyến mãi</label>
+                                <input type="text" class="form-control" id="promoCode" required
+                                    placeholder="Nhập mã khuyến mãi VD KM15%">
+                                <small id="codeCount" class="text-muted">0 / 255</small>
+
                             </div>
 
                             <div class="col-md-6">
                                 <label for="promoType" class="form-label">Chọn danh mục khuyến mãi</label>
-                                <select id="promoType" name="type" class="form-select">
-                                    <option value="" selected>-- Chọn loại --</option>
-                                    <option value="">Biển</option>
-                                    <option value="">Sa mạc</option>
+                                <select id="promoType" class="form-select">
+                                    <option value="">-- Chọn loại --</option>
                                 </select>
+
                             </div>
 
                             <div class="col-md-6">
                                 <label for="promoValue" class="form-label">Mức giảm</label>
                                 <input type="number" class="form-control" id="promoValue" name="value" required
-                                    placeholder="Nhập số phần trăm hoặc số tiền">
+                                    placeholder="Nhập số phần trăm giảm giá từ 1 ~ 99" min="0" max=99>
                             </div>
 
                             <div class="col-md-6">
@@ -394,152 +457,18 @@
             </div>
         </div>
     </div>
+    <div id="alert-container"></div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script src="assets/vendor/apexcharts/apexcharts.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/chart.js/chart.umd.js"></script>
-    <script src="assets/vendor/echarts/echarts.min.js"></script>
-    <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
-    <script src="assets/vendor/tinymce/tinymce.min.js"></script>
-    <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/promotion.js"> </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-
-            // --- 1. KHỞI TẠO VÀ LƯU TRỮ BIẾN ---
-            const modalEl = document.getElementById('promotionModal');
-            const modal = new bootstrap.Modal(modalEl);
-            const form = document.getElementById('promotionForm');
-            const modalTitle = document.getElementById('promotionModalLabel');
-            const modalDescription = modalEl.querySelector('p.text-muted');
-            const deleteBtn = document.getElementById('deleteBtn');
-            const promotionTable = document.getElementById('promotionTable');
-            const descriptionContentInput = document.getElementById('descriptionContent');
-            const startDateInput = document.getElementById('promoStartDate');
-            const endDateInput = document.getElementById('promoEndDate');
-
-            // Cấu hình Toolbar đầy đủ cho Quill Editor
-            const toolbarOptions = [
-                [{ 'font': [] }],
-                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                ['blockquote', 'code-block'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                [{ 'script': 'sub' }, { 'script': 'super' }],
-                [{ 'indent': '-1' }, { 'indent': '+1' }],
-                [{ 'direction': 'rtl' }],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'align': [] }],
-                ['link', 'image', 'video'],
-                ['clean']
-            ];
-
-            const quill = new Quill('#quillEditor', {
-                modules: {
-                    toolbar: toolbarOptions
-                },
-                theme: 'snow'
-            });
-
-            // --- 2. CÁC HÀM HỖ TRỢ ---
-
-            function resetModalToDefault() {
-                modalTitle.textContent = 'Thêm khuyến mãi mới';
-                modalDescription.style.display = 'block';
-                deleteBtn.style.display = 'none';
-                form.reset();
-                quill.setText('');
-                initializeDateInputs();
-            }
-
-            function setupModalForEdit(promoRow) {
-                if (modalEl.classList.contains('show')) return;
-
-                const id = promoRow.cells[0].textContent;
-                const name = promoRow.cells[1].textContent;
-
-                modalTitle.textContent = `Chi tiết khuyến mãi ${id}`;
-                modalDescription.style.display = 'none';
-                deleteBtn.style.display = 'block';
-
-                form.querySelector('[name="name"]').value = name;
-                // Giả lập dữ liệu cho các trường khác
-                form.querySelector('[name="type"]').value = "percent";
-                form.querySelector('[name="value"]').value = "20";
-                startDateInput.value = "2024-06-01";
-                endDateInput.value = "2024-06-30";
-
-                quill.root.innerHTML = `<p>Đây là mô tả chi tiết cho chương trình <strong>${name}</strong>.</p>`;
-
-                modal.show();
-            }
-
-            function initializeDateInputs() {
-                const today = new Date().toISOString().split('T')[0];
-                startDateInput.setAttribute('min', today);
-                endDateInput.setAttribute('min', today);
-            }
-
-            function updateEndDateMin() {
-                if (startDateInput.value) {
-                    endDateInput.setAttribute('min', startDateInput.value);
-                    if (endDateInput.value && endDateInput.value < startDateInput.value) {
-                        endDateInput.value = '';
-                    }
-                } else {
-                    initializeDateInputs();
-                }
-            }
-
-            // --- 3. CÁC HÀM XỬ LÝ SỰ KIỆN ---
-
-            function handleFormSubmit(e) {
-                e.preventDefault();
-                descriptionContentInput.value = quill.root.innerHTML;
-
-                const formData = new FormData(form);
-                const promoData = Object.fromEntries(formData.entries());
-
-                console.log("Dữ liệu khuyến mãi đã lưu:", promoData);
-                alert("Lưu khuyến mãi thành công!");
-                modal.hide();
-            }
-
-            function handleDeleteClick() {
-                const id = modalTitle.textContent.replace('Chi tiết khuyến mãi ', '').trim();
-                if (confirm(`Bạn có chắc muốn xóa khuyến mãi ${id} không?`)) {
-                    alert(`Đã xóa thành công khuyến mãi ${id}.`);
-                    modal.hide();
-                }
-            }
-
-            function handleTableClick(e) {
-                const clickedRow = e.target.closest('tbody tr');
-                if (clickedRow) {
-                    setupModalForEdit(clickedRow);
-                }
-            }
-
-            // --- 4. GẮN CÁC BỘ LẮNG NGHE SỰ KIỆN ---
-
-            document.querySelector('[data-bs-target="#promotionModal"]').addEventListener('click', resetModalToDefault);
-
-            if (promotionTable) {
-                promotionTable.addEventListener('click', handleTableClick);
-            }
-
-            form.addEventListener('submit', handleFormSubmit);
-            deleteBtn.addEventListener('click', handleDeleteClick);
-            startDateInput.addEventListener('change', updateEndDateMin);
-            modalEl.addEventListener('hidden.bs.modal', resetModalToDefault);
-
-            // --- 5. KHỞI TẠO BAN ĐẦU ---
-            initializeDateInputs();
-        });
-    </script>
 </body>
 
 </html>
