@@ -55,12 +55,13 @@ document.addEventListener('DOMContentLoaded', function () {
             window.location.href = "login.html";
             return Promise.reject("Không có token. Chuyển về trang đăng nhập.");
         }
+        const isFormData = options.body instanceof FormData;
 
         // Thêm Authorization Header
         options.headers = {
             ...options.headers,
             "Authorization": "Bearer " + token,
-            "Content-Type": options.headers?.["Content-Type"] || "application/json"
+            ...(isFormData ? {} : { "Content-Type": "application/json" })
         };
 
         return fetch(url, options)
@@ -81,6 +82,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw err;
             });
     }
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Xóa token khỏi sessionStorage
+            sessionStorage.removeItem("token");
+
+            // (Tuỳ chọn) Gọi API logout để server trả response chuẩn
+            fetch("http://localhost:8080/api/v1/auth/logout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            })
+                .catch(() => { }) // Dù lỗi vẫn logout
+                .finally(() => {
+                    // Chuyển về trang login
+                    window.location.href = "login.html";
+                });
+        });
+    }
+
     // ====== ALERT ======
     function showAlert(msg, type = 'success') {
         const icons = {
@@ -149,15 +172,21 @@ document.addEventListener('DOMContentLoaded', function () {
     // ====== LOAD NHÂN VIÊN HIỆN TẠI ======
     async function loadCurrentEmployee() {
         try {
-            const res = await authFetch(`${EMPLOYEE_API}/1`);
-            if (!res.ok) throw new Error('Không thể tải thông tin nhân viên');
-            currentEmployee = await res.json();
-            document.getElementById('authorName').value = currentEmployee.fullName;
+            const res = await authFetch("http://localhost:8080/api/v1/auth/me");
+
+            if (!res.ok) throw new Error("Không thể tải nhân viên đăng nhập");
+
+            const api = await res.json();
+            currentEmployee = api.data;
+
+            document.getElementById("authorName").value = currentEmployee.fullName;
+
         } catch (err) {
-            console.error('Lỗi lấy nhân viên:', err);
-            document.getElementById('authorName').value = 'Không xác định';
+            console.error("Lỗi load nhân viên:", err);
+            document.getElementById("authorName").value = "Không xác định";
         }
     }
+
     loadCurrentEmployee();
 
     // ====== LOAD DANH SÁCH NỘI DUNG ======
@@ -423,7 +452,7 @@ document.addEventListener('DOMContentLoaded', function () {
             content: detailContentInput.value,
             status: parseInt(form.status.value),
             imageUrl: imageUrl,
-            employeeId: currentEmployee ? currentEmployee.employeeId : 1
+            employeeId: currentEmployee.employeeId
         };
         if (currentId && payload.status === 0) {
             payload.publishedAt = new Date().toISOString(); // gửi dạng ISO cho backend

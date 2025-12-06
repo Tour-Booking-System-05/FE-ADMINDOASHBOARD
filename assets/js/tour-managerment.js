@@ -50,12 +50,15 @@ document.addEventListener('DOMContentLoaded', function () {
             return Promise.reject("Không có token. Chuyển về trang đăng nhập.");
         }
 
+        const isFormData = options.body instanceof FormData;
+
         // Thêm Authorization Header
         options.headers = {
             ...options.headers,
             "Authorization": "Bearer " + token,
-            "Content-Type": options.headers?.["Content-Type"] || "application/json"
+            ...(isFormData ? {} : { "Content-Type": "application/json" })
         };
+
 
         return fetch(url, options)
             .then(response => {
@@ -75,6 +78,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw err;
             });
     }
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Xóa token khỏi sessionStorage
+            sessionStorage.removeItem("token");
+
+            // (Tuỳ chọn) Gọi API logout để server trả response chuẩn
+            fetch("http://localhost:8080/api/v1/auth/logout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            })
+                .catch(() => { }) // Dù lỗi vẫn logout
+                .finally(() => {
+                    // Chuyển về trang login
+                    window.location.href = "login.html";
+                });
+        });
+    }
+
     // Xem trước nhiều ảnh
     function previewMultipleImages(files = [], urls = []) {
         // Nếu có ảnh từ server (URL cũ)

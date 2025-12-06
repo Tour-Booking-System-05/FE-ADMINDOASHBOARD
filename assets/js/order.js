@@ -2,6 +2,7 @@ const API_URL = "http://localhost:8080/api/v1/orders";
 
 document.addEventListener('DOMContentLoaded', function () {
     loadOrders();
+
 });
 let currentOrderId = null;
 function authFetch(url, options = {}) {
@@ -13,12 +14,15 @@ function authFetch(url, options = {}) {
         return Promise.reject("Không có token. Chuyển về trang đăng nhập.");
     }
 
+    const isFormData = options.body instanceof FormData;
+
     // Thêm Authorization Header
     options.headers = {
         ...options.headers,
         "Authorization": "Bearer " + token,
-        "Content-Type": options.headers?.["Content-Type"] || "application/json"
+        ...(isFormData ? {} : { "Content-Type": "application/json" })
     };
+
 
     return fetch(url, options)
         .then(response => {
@@ -38,6 +42,8 @@ function authFetch(url, options = {}) {
             throw err;
         });
 }
+
+
 // Load danh sách đơn hàng
 function loadOrders() {
     if ($.fn.DataTable.isDataTable('#orderTable')) {
@@ -64,7 +70,7 @@ function loadOrders() {
             const sortDir = data.order.length > 0 ? data.order[0].dir : 'desc';
             const url = `${API_URL}?page=${page}&size=${size}&sort=${sortCol},${sortDir}&keyword=${encodeURIComponent(keyword)}`;
 
-            authFetch (url)
+            authFetch(url)
                 .then(res => res.json())
                 .then(json => {
                     document.getElementById('totalOrder').textContent = json.totalElements;
@@ -127,11 +133,33 @@ function loadOrders() {
             paginate: { previous: "←", next: "→" }
         }
     });
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Xóa token khỏi sessionStorage
+            sessionStorage.removeItem("token");
+
+            // (Tuỳ chọn) Gọi API logout để server trả response chuẩn
+            fetch("http://localhost:8080/api/v1/auth/logout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            })
+                .catch(() => { }) // Dù lỗi vẫn logout
+                .finally(() => {
+                    // Chuyển về trang login
+                    window.location.href = "login.html";
+                });
+        });
+    }
+
 }
 
 // Xem chi tiết đơn hàng
 function showOrderDetail(orderId) {
-    authFetch (`${API_URL}/${orderId}`)
+    authFetch(`${API_URL}/${orderId}`)
         .then(res => res.json())
         .then(data => {
             // Gán thông tin đơn hàng
@@ -188,7 +216,7 @@ function renderStatusBadge(status) {
 function cancelOrder(orderId, fromModal = false) {
     if (!confirm("Bạn có chắc muốn hủy đơn hàng này không?")) return;
 
-    authFetch (`${API_URL}/${orderId}`, {
+    authFetch(`${API_URL}/${orderId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: 3 })
@@ -212,7 +240,7 @@ function cancelOrder(orderId, fromModal = false) {
 // Tính tổng doanh thu
 async function updateTotalPayment() {
     try {
-        const res = await authFetch (`${API_URL}?page=0&size=1000&sort=orderId,desc`);
+        const res = await authFetch(`${API_URL}?page=0&size=1000&sort=orderId,desc`);
         if (!res.ok) throw new Error("Không thể tải dữ liệu đơn hàng");
 
         const data = await res.json();
@@ -235,7 +263,7 @@ async function updateTotalPayment() {
 
 updateTotalPayment();
 function printInvoice(orderId) {
-    authFetch (`${API_URL}/${orderId}`)
+    authFetch(`${API_URL}/${orderId}`)
         .then(res => res.json())
         .then(data => {
             const invoiceDiv = document.createElement("div");
@@ -310,5 +338,3 @@ function printInvoice(orderId) {
         })
         .catch(err => alert("Lỗi khi in hóa đơn: " + err.message));
 }
-
-
