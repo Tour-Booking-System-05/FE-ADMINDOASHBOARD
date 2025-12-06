@@ -16,6 +16,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const bulkActionBar = document.getElementById("bulkActionBar");
     const deleteSelectedBtn = document.getElementById("deleteSelectedBtn");
+    function authFetch(url, options = {}) {
+        const token = sessionStorage.getItem("token");
+
+        // Nếu không có token → đẩy về login
+        if (!token) {
+            window.location.href = "login.html";
+            return Promise.reject("Không có token. Chuyển về trang đăng nhập.");
+        }
+
+        // Thêm Authorization Header
+        options.headers = {
+            ...options.headers,
+            "Authorization": "Bearer " + token,
+            "Content-Type": options.headers?.["Content-Type"] || "application/json"
+        };
+
+        return fetch(url, options)
+            .then(response => {
+
+                // Nếu bị chặn 403 → token hết hạn hoặc sai → logout & về login
+                if (response.status === 403 || response.status === 401) {
+                    sessionStorage.clear(); // xoá token cũ
+                    alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                    window.location.href = "login.html";
+                    return Promise.reject("403 Forbidden - Redirect to login");
+                }
+
+                return response;
+            })
+            .catch(err => {
+                console.error("authFetch Error:", err);
+                throw err;
+            });
+    }
 
     // ==========================================
     // ALERT GÓC PHẢI
@@ -78,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const url = `${API_URL}?page=${page}&size=${size}&sort=${sortColumn},${sortDir}&keyword=${search}`;
 
-                fetch(url)
+                authFetch(url)
                     .then(r => r.json())
                     .then(json => {
                         callback({
@@ -184,7 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // HIỆN MODAL USER
     // ==========================================
     async function showModalForEdit(id) {
-        const res = await fetch(`${API_URL}/${id}`);
+        const res = await authFetch(`${API_URL}/${id}`);
         const user = await res.json();
 
         currentUser = user;
@@ -233,7 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
             accountId: currentUser.accountId
         };
 
-        const res = await fetch(`${API_URL}/${currentId}`, {
+        const res = await authFetch(`${API_URL}/${currentId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body)
@@ -252,7 +286,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // RESET PASSWORD
     // ==========================================
     resetPassBtn.addEventListener("click", async function () {
-        const res = await fetch(`${API_URL}/${currentId}/reset-password`, { method: "PUT" });
+        const res = await authFetch(`${API_URL}/${currentId}/reset-password`, { method: "PUT" });
 
         modal.hide(); // 🔥 đóng modal
         const text = await res.text();
@@ -266,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
     deleteBtn.addEventListener("click", async function () {
         if (!confirm("Bạn chắc chắn muốn xóa khách hàng này?")) return;
 
-        const res = await fetch(`${API_URL}/${currentId}`, { method: "DELETE" });
+        const res = await authFetch(`${API_URL}/${currentId}`, { method: "DELETE" });
 
         modal.hide(); // 🔥 đóng modal
         if (res.ok) {
@@ -284,7 +318,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!confirm(`Bạn có chắc muốn xóa ${selectedIds.size} người dùng đã chọn?`)) return;
 
         try {
-            const response = await fetch(`${API_URL}/bulk-delete`, {
+            const response = await authFetch(`${API_URL}/bulk-delete`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify([...selectedIds])

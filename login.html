@@ -160,11 +160,16 @@
                         })
                             .then(response => response.json())
                             .then(data => {
-                                if (data.message === 'Đăng nhập thành công!') {
-                                    console.log(data);
-                                    console.log('Đăng nhập thành công, đang chuyển hướng...');
-                                    alert('Đăng nhập thành công!'); // Bạn có thể bỏ dòng này nếu không muốn có thông báo
-                                    window.location.href = 'index.html'; // Chuyển hướng đến trang index.html
+                                if (data.message === 'Đăng nhập thành công') {
+                                    // ✅ LƯU JWT
+                                    sessionStorage.setItem('token', data.data.token);
+                                    sessionStorage.setItem('userEmail', data.data.email);
+                                    sessionStorage.setItem('userId', data.data.id);
+
+                                    console.log('JWT:', data.data.token);
+
+                                    alert('Đăng nhập thành công');
+                                    window.location.href = 'index.html';
                                 } else {
                                     alert('Đăng nhập thất bại: ' + data.message);
                                 }
