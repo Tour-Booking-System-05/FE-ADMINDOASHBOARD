@@ -41,6 +41,64 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('alert-container').appendChild(div);
         setTimeout(() => div.remove(), 3000);
     }
+    function authFetch(url, options = {}) {
+        const token = sessionStorage.getItem("token");
+
+        // Nếu không có token → đẩy về login
+        if (!token) {
+            window.location.href = "login.html";
+            return Promise.reject("Không có token. Chuyển về trang đăng nhập.");
+        }
+
+        const isFormData = options.body instanceof FormData;
+
+        // Thêm Authorization Header
+        options.headers = {
+            ...options.headers,
+            "Authorization": "Bearer " + token,
+            ...(isFormData ? {} : { "Content-Type": "application/json" })
+        };
+
+
+        return fetch(url, options)
+            .then(response => {
+
+                // Nếu bị chặn 403 → token hết hạn hoặc sai → logout & về login
+                if (response.status === 403 || response.status === 401) {
+                    sessionStorage.clear(); // xoá token cũ
+                    alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                    window.location.href = "login.html";
+                    return Promise.reject("403 Forbidden - Redirect to login");
+                }
+
+                return response;
+            })
+            .catch(err => {
+                console.error("authFetch Error:", err);
+                throw err;
+            });
+    }
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Xóa token khỏi sessionStorage
+            sessionStorage.removeItem("token");
+
+            // (Tuỳ chọn) Gọi API logout để server trả response chuẩn
+            fetch("http://localhost:8080/api/v1/auth/logout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            })
+                .catch(() => { }) // Dù lỗi vẫn logout
+                .finally(() => {
+                    // Chuyển về trang login
+                    window.location.href = "login.html";
+                });
+        });
+    }
 
     // Xem trước nhiều ảnh
     function previewMultipleImages(files = [], urls = []) {
@@ -341,7 +399,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         if (!confirm(`Bạn có chắc muốn xóa ${selectedIds.size} tour này không?`)) return;
         try {
-            const res = await fetch(`${API_URL}/bulk-delete`, {
+            const res = await authFetch(`${API_URL}/bulk-delete`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify([...selectedIds])
@@ -361,11 +419,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const cateSelect = form.querySelector('select[name="category"]');
             const guideSelect = form.querySelector('select[name="guide"]');
 
-            const cateRes = await fetch('http://localhost:8080/api/v1/categories/all');
+            const cateRes = await authFetch('http://localhost:8080/api/v1/categories/all');
             if (!cateRes.ok) throw new Error('Không thể tải danh mục');
             const categories = await cateRes.json();
 
-            const guideRes = await fetch('http://localhost:8080/api/v1/employees/guider');
+            const guideRes = await authFetch('http://localhost:8080/api/v1/employees/guider');
             if (!guideRes.ok) throw new Error('Không thể tải hướng dẫn viên');
             const guiders = await guideRes.json();
 
@@ -422,7 +480,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const sortDir = data.order.length > 0 ? data.order[0].dir : 'desc';
                 const url = `${API_URL}?page=${page}&size=${size}&sort=${sortCol},${sortDir}&keyword=${encodeURIComponent(keyword)}`;
 
-                fetch(url)
+                authFetch(url)
                     .then(res => res.json())
                     .then(json => {
                         document.getElementById('totalTours').textContent = json.totalElements;
@@ -488,7 +546,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ====== HÀM GỌI API GET TOUR BY ID ======
     async function getTourById(id) {
         try {
-            const res = await fetch(`${API_URL}/${id}`);
+            const res = await authFetch(`${API_URL}/${id}`);
             if (!res.ok) throw new Error(`Không tìm thấy tour ID ${id}`);
             return await res.json();
         } catch (err) {
@@ -606,7 +664,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!confirm("Bạn có chắc muốn sao chép chuyến đi này không?")) return;
 
                 try {
-                    const res = await fetch(`${API_URL}/${item.itemId}/clone`, { method: 'POST' });
+                    const res = await authFetch(`${API_URL}/${item.itemId}/clone`, { method: 'POST' });
                     if (!res.ok) throw new Error('Không thể sao chép chuyến đi');
                     const data = await res.json();
 
@@ -626,7 +684,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         modal.show();
     }
-   
+
     // ====== SUBMIT FORM ======
     form.addEventListener('submit', async e => {
         e.preventDefault();
@@ -670,7 +728,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const fd = new FormData();
                 fd.append('file', item.file);
-                const res = await fetch(`${API_URL}/upload`, { method: 'POST', body: fd });
+                const res = await authFetch(`${API_URL}/upload`, { method: 'POST', body: fd });
                 if (!res.ok) throw new Error('Upload ảnh thất bại');
                 const data = await res.json();
                 return data.url;
@@ -703,7 +761,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const method = currentId ? 'PUT' : 'POST';
             const url = currentId ? `${API_URL}/${currentId}` : API_URL;
-            await fetch(url, {
+            await authFetch(url, {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
@@ -724,7 +782,7 @@ document.addEventListener('DOMContentLoaded', function () {
     deleteBtn.addEventListener('click', async () => {
         if (!currentId) return;
         if (!confirm('Bạn có chắc muốn xóa tour này?')) return;
-        await fetch(`${API_URL}/${currentId}`, { method: 'DELETE' });
+        await authFetch(`${API_URL}/${currentId}`, { method: 'DELETE' });
         showAlert('Xóa tour thành công', 'danger');
         modal.hide();
         $('#tourTable').DataTable().ajax.reload();
@@ -738,7 +796,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ====== ĐẾM TỔNG SỐ TOUR ĐANG HOẠT ĐỘNG ======
     async function countActiveTours() {
         try {
-            const res = await fetch(`${API_URL}?page=0&size=1000&sort=itemId,desc`);
+            const res = await authFetch(`${API_URL}?page=0&size=1000&sort=itemId,desc`);
             if (!res.ok) throw new Error("Không thể tải danh sách tour");
             const data = await res.json();
 

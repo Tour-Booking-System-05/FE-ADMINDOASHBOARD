@@ -63,6 +63,63 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    function authFetch(url, options = {}) {
+        const token = sessionStorage.getItem("token");
+
+        // Nếu không có token → đẩy về login
+        if (!token) {
+            window.location.href = "login.html";
+            return Promise.reject("Không có token. Chuyển về trang đăng nhập.");
+        }
+        const isFormData = options.body instanceof FormData;
+
+        // Thêm Authorization Header
+        options.headers = {
+            ...options.headers,
+            "Authorization": "Bearer " + token,
+            ...(isFormData ? {} : { "Content-Type": "application/json" })
+        };
+
+
+        return fetch(url, options)
+            .then(response => {
+
+                // Nếu bị chặn 403 → token hết hạn hoặc sai → logout & về login
+                if (response.status === 403 || response.status === 401) {
+                    sessionStorage.clear(); // xoá token cũ
+                    alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                    window.location.href = "login.html";
+                    return Promise.reject("403 Forbidden - Redirect to login");
+                }
+
+                return response;
+            })
+            .catch(err => {
+                console.error("authFetch Error:", err);
+                throw err;
+            });
+    }
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Xóa token khỏi sessionStorage
+            sessionStorage.removeItem("token");
+
+            // (Tuỳ chọn) Gọi API logout để server trả response chuẩn
+            fetch("http://localhost:8080/api/v1/auth/logout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            })
+                .catch(() => { }) // Dù lỗi vẫn logout
+                .finally(() => {
+                    // Chuyển về trang login
+                    window.location.href = "login.html";
+                });
+        });
+    }
 
     // Alert góc phải
     function showAlert(message, type = 'success') {
@@ -203,7 +260,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     const url = `${API_URL}?page=${page}&size=${size}&sort=${sortColName},${sortDir}&keyword=${encodeURIComponent(searchValue)}`;
 
-                    fetch(url)
+                    authFetch(url)
+
                         .then(res => res.json())
                         .then(json => {
                             // Cập nhật tổng số danh mục trên thẻ card
@@ -287,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /** ✏️ Setup modal khi edit (Read Single) */
     async function setupModalForEdit(categoryId) {
         try {
-            const res = await fetch(`${API_URL}/${categoryId}`);
+            const res = await authFetch(`${API_URL}/${categoryId}`);
             if (!res.ok) throw new Error('Category not found');
             const cat = await res.json();
 
@@ -318,7 +376,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const method = id ? 'PUT' : 'POST';
         const url = id ? `${API_URL}/${id}` : API_URL;
 
-        const res = await fetch(url, {
+        const res = await authFetch(url, {
             method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(categoryData)
@@ -329,7 +387,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /** Xóa danh mục (Delete) */
     async function deleteCategory(id) {
-        const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        const res = await authFetch(`${API_URL}/${id}`, { method: 'DELETE' });
 
         if (!res.ok) {
             const errorData = await res.json().catch(() => ({}));
@@ -366,7 +424,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 uploadData.append('file', imageFile);
 
                 showAlert('Đang upload ảnh...', 'info');
-                const uploadRes = await fetch(`${API_URL}/upload`, {
+                const uploadRes = await authFetch(`${API_URL}/upload`, {
                     method: 'POST',
                     body: uploadData
                 });
@@ -428,7 +486,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!confirm(`Bạn có chắc muốn xóa ${selectedIds.size} danh mục đã chọn?`)) return;
 
             try {
-                const response = await fetch(`${API_URL}/bulk-delete`, {
+                const response = await authFetch(`${API_URL}/bulk-delete`, {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify([...selectedIds])
@@ -501,7 +559,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ====== ĐẾM TỔNG SỐ DANH MỤC HOẠT ĐỘNG ======
     async function countActiveCategories() {
         try {
-            const res = await fetch(`${API_URL}?page=0&size=1000&sort=categoryId,desc`);
+            const res = await authFetch(`${API_URL}?page=0&size=1000&sort=categoryId,desc`);
             if (!res.ok) throw new Error("Không thể tải danh sách danh mục");
             const data = await res.json();
 

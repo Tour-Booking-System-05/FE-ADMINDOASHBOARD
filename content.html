@@ -326,51 +326,91 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span>Đăng xuất</span>
-                            </a>
-                        </li>
+
                     </ul>
                 </li>
             </ul>
         </nav>
     </header>
 
+    <!-- ======= Sidebar ======= -->
     <aside id="sidebar" class="sidebar">
+
         <ul class="sidebar-nav" id="sidebar-nav">
-            <li class="nav-item"> <a class="nav-link collapsed" href="index.html"> <i class="bi bi-grid"></i>
-                    <span>Trang chủ</span> </a> </li>
-            <li class="nav-item"> <a class="nav-link collapsed" data-bs-target="#components-nav"
-                    data-bs-toggle="collapse" href="#"> <i class="bi bi-globe-asia-australia"></i><span>Quản lý chuyến
-                        đi</span><i class="bi bi-chevron-down ms-auto"></i> </a>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="index.html">
+                    <i class="bi bi-grid"></i>
+                    <span>Trang chủ</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-globe-asia-australia"></i><span>Quản lý chuyến đi</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
                 <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-                    <li> <a href="tour-managerment.html"> <i class="bi bi-circle"></i><span>Quản lý thông tin chuyến
-                                đi</span> </a> </li>
-                    <li> <a href="tour-category.html"> <i class="bi bi-circle"></i><span>Quản lý danh mục chuyến
-                                đi</span> </a> </li>
+                    <li>
+                        <a href="tour-managerment.html">
+                            <i class="bi bi-circle"></i><span>Quản lý thông tin chuyến đi</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tour-category.html">
+                            <i class="bi bi-circle"></i><span>Quản lý danh mục chuyến đi</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
-            <li class="nav-item"> <a class="nav-link collapsed" href="order.html"> <i class="bi bi-cash-coin"></i><span>
-                        Quản lý đơn hàng</span> </a> </li>
-            <li class="nav-item"> <a class="nav-link collapsed" href="users.html"> <i
-                        class="bi bi-people"></i><span>Quản lý khách hàng</span> </a> </li>
-            <li class="nav-item"> <a class="nav-link collapsed" href="charts.html"> <i
-                        class="bi bi-bar-chart"></i><span>Thống kê</span> </a> </li>
-            <li class="nav-item"> <a class="nav-link collapsed" href="employees.html"> <i
-                        class="bi bi-person-check-fill"></i><span>Quản lý nhân viên</span> </a> </li>
-            <li class="nav-item"> <a class="nav-link collapsed" href="promotion.html"> <i
-                        class="bi bi-gift"></i><span>Quản lý khuyến mãi</span> </a> </li>
-            <li class="nav-item"> <a class="nav-link " href="content.html"> <i
-                        class="bi bi-file-earmark-richtext"></i><span>Quản lý nội dung</span> </a> </li>
-            <li class="nav-item"> <a class="nav-link collapsed" href="settings.html"> <i
-                        class="bi bi-gear"></i><span>Cài đặt</span> </a> </li>
+            <!-- End managerment tour -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="order.html">
+                    <i class="bi bi-cash-coin"></i><span> Quản lý đơn hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="users.html">
+                    <i class="bi bi-people"></i><span>Quản lý khách hàng</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="charts.html">
+                    <i class="bi bi-bar-chart"></i><span>Thống kê</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="employees.html">
+                    <i class="bi bi-person-check-fill"></i><span>Quản lý nhân viên</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="promotion.html">
+                    <i class="bi bi-gift"></i><span>Quản lý khuyến mãi</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="content.html">
+                    <i class="bi bi-file-earmark-richtext"></i><span>Quản lý nội dung</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="settings.html">
+                    <i class="bi bi-gear"></i><span>Cài đặt</span>
+                </a>
+            </li>
             <li class="nav-heading">Pages</li>
-            <li class="nav-item"> <a class="nav-link collapsed" href="faq.html"> <i class="bi bi-question-circle"></i>
-                    <span>F.A.Q</span> </a> </li>
-            <li class="nav-item"> <a class="nav-link collapsed" href="#"> <i class="bi bi-box-arrow-in-right"></i>
-                    <span>Đăng xuất</span> </a> </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="faq.html">
+                    <i class="bi bi-question-circle"></i>
+                    <span>F.A.Q</span>
+                </a>
+            </li><!-- End F.A.Q Page Nav -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" id="logoutBtn">
+                    <i class="bi bi-box-arrow-in-right"></i>
+                    <span>Đăng xuất</span>
+                </a>
+            </li><!-- End Login Page Nav -->
         </ul>
     </aside>
 

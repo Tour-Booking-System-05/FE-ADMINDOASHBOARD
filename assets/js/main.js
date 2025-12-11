@@ -330,3 +330,24 @@
   }
 
 })();
+ const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Xóa token khỏi sessionStorage
+            sessionStorage.removeItem("token");
+
+            // (Tuỳ chọn) Gọi API logout để server trả response chuẩn
+            fetch("http://localhost:8080/api/v1/auth/logout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            })
+            .catch(() => {}) // Dù lỗi vẫn logout
+            .finally(() => {
+                // Chuyển về trang login
+                window.location.href = "login.html";
+            });
+        });
+    }

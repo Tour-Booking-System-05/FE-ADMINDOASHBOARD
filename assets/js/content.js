@@ -47,6 +47,62 @@ document.addEventListener('DOMContentLoaded', function () {
         theme: 'snow',
         placeholder: 'Soạn thảo nội dung chi tiết tại đây...'
     });
+    function authFetch(url, options = {}) {
+        const token = sessionStorage.getItem("token");
+
+        // Nếu không có token → đẩy về login
+        if (!token) {
+            window.location.href = "login.html";
+            return Promise.reject("Không có token. Chuyển về trang đăng nhập.");
+        }
+        const isFormData = options.body instanceof FormData;
+
+        // Thêm Authorization Header
+        options.headers = {
+            ...options.headers,
+            "Authorization": "Bearer " + token,
+            ...(isFormData ? {} : { "Content-Type": "application/json" })
+        };
+
+        return fetch(url, options)
+            .then(response => {
+
+                // Nếu bị chặn 403 → token hết hạn hoặc sai → logout & về login
+                if (response.status === 403 || response.status === 401) {
+                    sessionStorage.clear(); // xoá token cũ
+                    alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+                    window.location.href = "login.html";
+                    return Promise.reject("403 Forbidden - Redirect to login");
+                }
+
+                return response;
+            })
+            .catch(err => {
+                console.error("authFetch Error:", err);
+                throw err;
+            });
+    }
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Xóa token khỏi sessionStorage
+            sessionStorage.removeItem("token");
+
+            // (Tuỳ chọn) Gọi API logout để server trả response chuẩn
+            fetch("http://localhost:8080/api/v1/auth/logout", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" }
+            })
+                .catch(() => { }) // Dù lỗi vẫn logout
+                .finally(() => {
+                    // Chuyển về trang login
+                    window.location.href = "login.html";
+                });
+        });
+    }
 
     // ====== ALERT ======
     function showAlert(msg, type = 'success') {
@@ -116,15 +172,21 @@ document.addEventListener('DOMContentLoaded', function () {
     // ====== LOAD NHÂN VIÊN HIỆN TẠI ======
     async function loadCurrentEmployee() {
         try {
-            const res = await fetch(`${EMPLOYEE_API}/1`);
-            if (!res.ok) throw new Error('Không thể tải thông tin nhân viên');
-            currentEmployee = await res.json();
-            document.getElementById('authorName').value = currentEmployee.fullName;
+            const res = await authFetch("http://localhost:8080/api/v1/auth/me");
+
+            if (!res.ok) throw new Error("Không thể tải nhân viên đăng nhập");
+
+            const api = await res.json();
+            currentEmployee = api.data;
+
+            document.getElementById("authorName").value = currentEmployee.fullName;
+
         } catch (err) {
-            console.error('Lỗi lấy nhân viên:', err);
-            document.getElementById('authorName').value = 'Không xác định';
+            console.error("Lỗi load nhân viên:", err);
+            document.getElementById("authorName").value = "Không xác định";
         }
     }
+
     loadCurrentEmployee();
 
     // ====== LOAD DANH SÁCH NỘI DUNG ======
@@ -155,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const sortDir = data.order[0]?.dir || 'desc';
                 const url = `${API_URL}?page=${page}&size=${size}&sort=${sortCol},${sortDir}&keyword=${encodeURIComponent(keyword)}`;
 
-                fetch(url)
+                authFetch(url)
                     .then(res => res.json())
                     .then(json => {
                         callback({
@@ -289,7 +351,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!confirm(`Xóa ${selectedIds.size} nội dung đã chọn?`)) return;
 
         try {
-            const res = await fetch(`${API_URL}/bulk-delete`, {
+            const res = await authFetch(`${API_URL}/bulk-delete`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify([...selectedIds])
@@ -306,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ====== API CRUD ======
     async function getContentById(id) {
-        const res = await fetch(`${API_URL}/${id}`);
+        const res = await authFetch(`${API_URL}/${id}`);
         if (!res.ok) throw new Error('Không tìm thấy nội dung');
         return res.json();
     }
@@ -314,7 +376,7 @@ document.addEventListener('DOMContentLoaded', function () {
     async function uploadImage(file) {
         const fd = new FormData();
         fd.append('file', file);
-        const res = await fetch(`${API_URL}/upload`, { method: 'POST', body: fd });
+        const res = await authFetch(`${API_URL}/upload`, { method: 'POST', body: fd });
         if (!res.ok) throw new Error('Upload ảnh thất bại');
         return res.json();
     }
@@ -322,7 +384,7 @@ document.addEventListener('DOMContentLoaded', function () {
     async function saveContent(content, id = null) {
         const method = id ? 'PUT' : 'POST';
         const url = id ? `${API_URL}/${id}` : API_URL;
-        const res = await fetch(url, {
+        const res = await authFetch(url, {
             method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(content)
@@ -332,7 +394,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function deleteContent(id) {
-        const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        const res = await authFetch(`${API_URL}/${id}`, { method: 'DELETE' });
         if (!res.ok) throw new Error('Không thể xóa nội dung');
         return true;
     }
@@ -390,7 +452,7 @@ document.addEventListener('DOMContentLoaded', function () {
             content: detailContentInput.value,
             status: parseInt(form.status.value),
             imageUrl: imageUrl,
-            employeeId: currentEmployee ? currentEmployee.employeeId : 1
+            employeeId: currentEmployee.employeeId
         };
         if (currentId && payload.status === 0) {
             payload.publishedAt = new Date().toISOString(); // gửi dạng ISO cho backend
