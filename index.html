@@ -370,16 +370,16 @@
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">Doanh số <span>| Hôm nay</span></h5>
+                  <h5 class="card-title">Đơn hàng <span>| Hôm nay</span></h5>
 
                   <div class="d-flex align-items-center">
                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                       <i class="bi bi-cart"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>145</h6>
+                      <h6 id="order-total">0</h6>
                       <i class="bi bi-graph-up-arrow"></i>
-                      <span class="text-success small pt-1 fw-bold">12%</span> <span
+                      <span id="order-percent" class="text-success small pt-1 fw-bold">0%</span> <span
                         class="text-muted small pt-2 ps-1">tăng</span>
 
                     </div>
@@ -414,9 +414,9 @@
                       <i class="bi bi-cash-stack"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>13620004</h6>
+                      <h6 id="revenue-total">0</h6>
                       <i class="bi bi-graph-up-arrow"></i>
-                      <span class="text-success small pt-1 fw-bold">8%</span> <span
+                      <span id="revenue-percent" class="text-success small pt-1 fw-bold">0%</span> <span
                         class="text-muted small pt-2 ps-1">Tăng</span>
 
                     </div>
@@ -452,10 +452,10 @@
                       <i class="bi bi-people"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>1244</h6>
+                      <h6 id="customer-total">0</h6>
                       <i class="bi bi-graph-down-arrow"></i>
-                      <span class="text-danger small pt-1 fw-bold"> 12%</span> <span
-                        class="text-muted small pt-2 ps-1">Giảm</span>
+                      <span id="customer-percent" class="text-success small pt-1 fw-bold"> 0%</span> <span
+                        class="text-muted small pt-2 ps-1">Tăng</span>
 
                     </div>
                   </div>
@@ -488,54 +488,64 @@
 
                   <script>
                     document.addEventListener("DOMContentLoaded", () => {
-                      new ApexCharts(document.querySelector("#reportsChart"), {
-                        series: [{
-                          name: 'Doanh số',
-                          data: [31, 40, 28, 51, 42, 82, 56],
-                        }, {
-                          name: 'Doanh Thu',
-                          data: [11, 32, 45, 32, 34, 52, 41]
-                        }, {
-                          name: 'Khách hàng',
-                          data: [15, 11, 32, 18, 9, 24, 11]
-                        }],
-                        chart: {
-                          height: 350,
-                          type: 'area',
-                          toolbar: {
-                            show: false
+                      fetch('http://localhost:8080/api/v1/report/report-weekly')
+                      .then(res => res.json())
+                      .then(res => {
+                        const dateTime = res.map(item => item.dateTime);
+                        const orders = res.map(item => item.totalOrders);
+                        const customers = res.map(item => item.totalCustomers);
+                        const revenue = res.map(item => item.revenue);
+
+                        // You can use the fetched data to populate the chart here
+                        new ApexCharts(document.querySelector("#reportsChart"), {
+                          series: [{
+                            name: 'Doanh số',
+                            data: orders,
+                          }, {
+                            name: 'Doanh Thu',
+                            data: revenue
+                          }, {
+                            name: 'Khách hàng',
+                            data: customers
+                          }],
+                          chart: {
+                            height: 350,
+                            type: 'area',
+                            toolbar: {
+                              show: false
+                            },
                           },
-                        },
-                        markers: {
-                          size: 4
-                        },
-                        colors: ['#4154f1', '#2eca6a', '#ff771d'],
-                        fill: {
-                          type: "gradient",
-                          gradient: {
-                            shadeIntensity: 1,
-                            opacityFrom: 0.3,
-                            opacityTo: 0.4,
-                            stops: [0, 90, 100]
+                          markers: {
+                            size: 4
+                          },
+                          colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                          fill: {
+                            type: "gradient",
+                            gradient: {
+                              shadeIntensity: 1,
+                              opacityFrom: 0.3,
+                              opacityTo: 0.4,
+                              stops: [0, 90, 100]
+                            }
+                          },
+                          dataLabels: {
+                            enabled: false
+                          },
+                          stroke: {
+                            curve: 'smooth',
+                            width: 2
+                          },
+                          xaxis: {
+                            type: 'datetime',
+                            categories: dateTime
+                          },
+                          tooltip: {
+                            x: {
+                              format: 'dd/MM/yy HH:mm'
+                            },
                           }
-                        },
-                        dataLabels: {
-                          enabled: false
-                        },
-                        stroke: {
-                          curve: 'smooth',
-                          width: 2
-                        },
-                        xaxis: {
-                          type: 'datetime',
-                          categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-                        },
-                        tooltip: {
-                          x: {
-                            format: 'dd/MM/yy HH:mm'
-                          },
-                        }
-                      }).render();
+                        }).render();
+                      });
                     });
                   </script>
                   <!-- End Line Chart -->
@@ -620,46 +630,6 @@
                   </ul>
                 </div>
 
-                <div class="card-body pb-0">
-                  <h5 class="card-title">Chuyến đi bán chạy <span>| Hôm nay</span></h5>
-
-                  <table class="table table-borderless">
-                    <thead>
-                      <tr>
-                        <th scope="col">Hình ảnh</th>
-                        <th scope="col">Tên chuyến đi</th>
-                        <th scope="col">Giá (VND)</th>
-                        <th scope="col">Số lượng</th>
-                        <th scope="col">Doanh thu (VND)</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="assets/img/product-1.jpg" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Đi Sapa 3N2Đ có ăn sáng dịch vụ đưa đón</a></td>
-                        <td>4.000.000</td>
-                        <td class="fw-bold">124</td>
-                        <td>1.123.000.000</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="assets/img/product-2.jpg" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Tour du lịch Đà Nẵng 4N3Đ giá rẻ</a></td>
-                        <td>3.500.000</td>
-                        <td class="fw-bold">98</td>
-                        <td>343.000.000</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="assets/img/product-3.jpg" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Tour du lịch Nha Trang 3N2Đ giá rẻ</a></td>
-                        <td>2.800.000</td>
-                        <td class="fw-bold">76</td>
-                        <td>212.800.000</td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                </div>
-
               </div>
             </div><!-- End Top Selling -->
 
@@ -685,7 +655,7 @@
             </div>
 
             <div class="card-body">
-              <h5 class="card-title">Hoạt động gần đây<span>| Hôm </span></h5>
+              <h5 class="card-title">Hoạt động gần đây</h5>
 
               <div class="activity">
 
@@ -730,157 +700,7 @@
             </div>
           </div><!-- End Recent Activity -->
 
-          <!-- Budget Report -->
-          <!-- <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Bộ lọc</h6>
-                </li>
-
-                <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-                <li><a class="dropdown-item" href="#">Tháng này</a></li>
-                <li><a class="dropdown-item" href="#">Năm nay</a></li>
-              </ul>
-            </div>
-
-            <div class="card-body pb-0 ">
-              <h5 class="card-title">Báo cáo ngân sách<span>| Tháng này</span></h5>
-
-              <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
-
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  var budgetChart = echarts.init(document.querySelector("#budgetChart")).setOption({
-                    legend: {
-                      data: ['Ngân sách đã chi', 'Chi tiêu thực tế']
-                    },
-                    radar: {
-                      // shape: 'circle',
-                      indicator: [{
-                        name: 'Doanh số',
-                        max: 6500
-                      },
-                      {
-                        name: 'Dịch vụ',
-                        max: 16000
-                      },
-                      {
-                        name: 'Tour',
-                        max: 30000
-                      },
-                      {
-                        name: 'Khách hàng',
-                        max: 38000
-                      },
-                      {
-                        name: 'Thu nhập',
-                        max: 52000
-                      },
-                      {
-                        name: 'Lợi nhuận',
-                        max: 25000
-                      }
-                      ]
-                    },
-                    series: [{
-                      name: 'Budget vs spending',
-                      type: 'radar',
-                      data: [{
-                        value: [4200, 3000, 20000, 35000, 50000, 18000],
-                        name: 'Ngân sách đã chi'
-                      },
-                      {
-                        value: [5000, 14000, 28000, 26000, 42000, 21000],
-                        name: 'Chi tiêu thực tế'
-                      }
-                      ]
-                    }]
-                  });
-                });
-              </script>
-
-            </div>
-          </div>End Budget Report -->
-
-          <!-- Website Traffic -->
-          <!-- <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
-
-            <div class="card-body pb-0">
-              <h5 class="card-title">Website Traffic <span>| Today</span></h5>
-
-              <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
-
-              <script>
-                document.addEventListener("DOMContentLoaded", () => {
-                  echarts.init(document.querySelector("#trafficChart")).setOption({
-                    tooltip: {
-                      trigger: 'item'
-                    },
-                    legend: {
-                      top: '5%',
-                      left: 'center'
-                    },
-                    series: [{
-                      name: 'Access From',
-                      type: 'pie',
-                      radius: ['40%', '70%'],
-                      avoidLabelOverlap: false,
-                      label: {
-                        show: false,
-                        position: 'center'
-                      },
-                      emphasis: {
-                        label: {
-                          show: true,
-                          fontSize: '18',
-                          fontWeight: 'bold'
-                        }
-                      },
-                      labelLine: {
-                        show: false
-                      },
-                      data: [{
-                        value: 1048,
-                        name: 'Search Engine'
-                      },
-                      {
-                        value: 735,
-                        name: 'Direct'
-                      },
-                      {
-                        value: 580,
-                        name: 'Email'
-                      },
-                      {
-                        value: 484,
-                        name: 'Union Ads'
-                      },
-                      {
-                        value: 300,
-                        name: 'Video Ads'
-                      }
-                      ]
-                    }]
-                  });
-                });
-              </script>
-
-            </div>
-          </div>End Website Traffic -->
+    
 
           <!-- News & Updates Traffic -->
           <div class="card">
@@ -898,28 +718,12 @@
             </div>
 
             <div class="card-body pb-0">
-              <h5 class="card-title">Tin tức mới nhất <span>| Hôm nay</span></h5>
+              <h5 class="card-title">Tin tức mới nhất</h5>
 
               <div class="news">
-                <div class="post-item clearfix">
-                  <img src="assets/img/news-1.jpg" alt="">
-                  <h4><a href="#">Khám phá vẻ đẹp kỳ diệu của Phú Quốc</a></h4>
-                  <p>Trải nghiệm chuyến du lịch nghỉ dưỡng tuyệt vời với biển xanh, cát trắng và những hoạt động thú vị
-                    dành cho cả gia đình.</p>
-                </div>
-                <div class="post-item clearfix">
-                  <img src="assets/img/news-2.jpg" alt="">
-                  <h4><a href="#">Hành trình khám phá văn hóa Nhật Bản</a></h4>
-                  <p>Tham gia tour du lịch Nhật Bản để trải nghiệm nền văn hóa độc đáo, ẩm thực phong phú và cảnh quan
-                    tuyệt đẹp từ núi Phú Sĩ đến các thành phố hiện đại.</p>
-                </div>
-                <div class="post-item clearfix">
-                  <img src="assets/img/news-3.jpg" alt="">
-                  <h4><a href="#">Trải nghiệm châu Âu cổ kính</a></h4>
-                  <p>Khám phá các thành phố lịch sử như Paris, Rome và Barcelona với các di tích văn hóa, kiến trúc
-                    ấn tượng và nghệ thuật đỉnh cao.</p>
 
-                </div><!-- End sidebar recent posts-->
+                </div>
+                <!-- End sidebar recent posts-->
 
               </div>
             </div><!-- End News & Updates -->
@@ -960,6 +764,51 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      main();
+    });
+
+    function main() {
+      fetch('http://localhost:8080/api/v1/report/overview/orders?filter=Day')
+        .then(res => res.json())
+        .then(res => {
+          document.getElementById('order-total').innerText = res.value;
+          document.getElementById('order-percent').innerText = res.percent + "%";
+        });
+
+
+        fetch('http://localhost:8080/api/v1/report/overview/revenue?filter=Month')
+        .then(res => res.json())
+        .then(res => {
+          document.getElementById('revenue-total').innerText = res.value;
+          document.getElementById('revenue-percent').innerText = res.percent + "%";
+        });
+
+        fetch('http://localhost:8080/api/v1/report/overview/customer?filter=Year')
+        .then(res => res.json())
+        .then(res => {
+          document.getElementById('customer-total').innerText = res.value;
+          document.getElementById('customer-percent').innerText = res.percent + "%";
+        });
+
+        fetch('http://localhost:8080/api/v1/contents?size=4')
+        .then(res => res.json())
+        .then(res => {
+          const newsContainer = document.querySelector('.news');
+          var news = res.content;
+
+          newsContainer.innerHTML = news.map(item => `
+            <div class="post-item clearfix">
+              <img src="${item.imageUrl}" alt="">
+              <h4><a href="#">${item.title}</a></h4>
+              ${item.content}
+            </div>
+          `).join('');
+          
+        });
+    }
+  </script>
 
 </body>
 
