@@ -482,64 +482,64 @@
 
                   <script>
                     document.addEventListener("DOMContentLoaded", () => {
-                      fetch('http://localhost:8080/api/v1/report/report-weekly')
-                      .then(res => res.json())
-                      .then(res => {
-                        const dateTime = res.map(item => item.dateTime);
-                        const orders = res.map(item => item.totalOrders);
-                        const customers = res.map(item => item.totalCustomers);
-                        const revenue = res.map(item => item.revenue);
+                      authFetch('http://localhost:8080/api/v1/report/report-weekly')
+                        .then(res => res.json())
+                        .then(res => {
+                          const dateTime = res.map(item => item.dateTime);
+                          const orders = res.map(item => item.totalOrders);
+                          const customers = res.map(item => item.totalCustomers);
+                          const revenue = res.map(item => item.revenue);
 
-                        // You can use the fetched data to populate the chart here
-                        new ApexCharts(document.querySelector("#reportsChart"), {
-                          series: [{
-                            name: 'Doanh số',
-                            data: orders,
-                          }, {
-                            name: 'Doanh Thu',
-                            data: revenue
-                          }, {
-                            name: 'Khách hàng',
-                            data: customers
-                          }],
-                          chart: {
-                            height: 350,
-                            type: 'area',
-                            toolbar: {
-                              show: false
+                          // You can use the fetched data to populate the chart here
+                          new ApexCharts(document.querySelector("#reportsChart"), {
+                            series: [{
+                              name: 'Doanh số',
+                              data: orders,
+                            }, {
+                              name: 'Doanh Thu',
+                              data: revenue
+                            }, {
+                              name: 'Khách hàng',
+                              data: customers
+                            }],
+                            chart: {
+                              height: 350,
+                              type: 'area',
+                              toolbar: {
+                                show: false
+                              },
                             },
-                          },
-                          markers: {
-                            size: 4
-                          },
-                          colors: ['#4154f1', '#2eca6a', '#ff771d'],
-                          fill: {
-                            type: "gradient",
-                            gradient: {
-                              shadeIntensity: 1,
-                              opacityFrom: 0.3,
-                              opacityTo: 0.4,
-                              stops: [0, 90, 100]
+                            markers: {
+                              size: 4
+                            },
+                            colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                            fill: {
+                              type: "gradient",
+                              gradient: {
+                                shadeIntensity: 1,
+                                opacityFrom: 0.3,
+                                opacityTo: 0.4,
+                                stops: [0, 90, 100]
+                              }
+                            },
+                            dataLabels: {
+                              enabled: false
+                            },
+                            stroke: {
+                              curve: 'smooth',
+                              width: 2
+                            },
+                            xaxis: {
+                              type: 'datetime',
+                              categories: dateTime
+                            },
+                            tooltip: {
+                              x: {
+                                format: 'dd/MM/yy HH:mm'
+                              },
                             }
-                          },
-                          dataLabels: {
-                            enabled: false
-                          },
-                          stroke: {
-                            curve: 'smooth',
-                            width: 2
-                          },
-                          xaxis: {
-                            type: 'datetime',
-                            categories: dateTime
-                          },
-                          tooltip: {
-                            x: {
-                              format: 'dd/MM/yy HH:mm'
-                            },
-                          }
-                        }).render();
-                      });
+                          }).render();
+                        });
                     });
                   </script>
                   <!-- End Line Chart -->
@@ -694,7 +694,7 @@
             </div>
           </div><!-- End Recent Activity -->
 
-    
+
 
           <!-- News & Updates Traffic -->
           <div class="card">
@@ -716,15 +716,15 @@
 
               <div class="news">
 
-                </div>
-                <!-- End sidebar recent posts-->
-
               </div>
-            </div><!-- End News & Updates -->
+              <!-- End sidebar recent posts-->
 
-          </div><!-- End Right side columns -->
+            </div>
+          </div><!-- End News & Updates -->
 
-        </div>
+        </div><!-- End Right side columns -->
+
+      </div>
     </section>
 
   </main><!-- End #main -->
@@ -760,11 +760,70 @@
   <script src="assets/js/main.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
+      function authFetch(url, options = {}) {
+        const token = sessionStorage.getItem("token");
+
+        // Nếu không có token → đẩy về login
+        if (!token) {
+          window.location.href = "login.html";
+          return Promise.reject("Không có token. Chuyển về trang đăng nhập.");
+        }
+        const isFormData = options.body instanceof FormData;
+
+        // Thêm Authorization Header
+        options.headers = {
+          ...options.headers,
+          "Authorization": "Bearer " + token,
+          ...(isFormData ? {} : { "Content-Type": "application/json" })
+        };
+
+        return fetch(url, options)
+          .then(response => {
+
+            // Nếu bị chặn 403 → token hết hạn hoặc sai → logout & về login
+            if (response.status === 403 || response.status === 401) {
+              sessionStorage.clear(); // xoá token cũ
+              alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+              window.location.href = "login.html";
+              return Promise.reject("403 Forbidden - Redirect to login");
+            }
+
+            return response;
+          })
+          .catch(err => {
+            console.error("authFetch Error:", err);
+            throw err;
+          });
+      }
+      const logoutBtn = document.getElementById("logoutBtn");
+
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          // ❌ Xóa toàn bộ session login
+          sessionStorage.removeItem("token");
+          sessionStorage.removeItem("me");
+          sessionStorage.removeItem("userEmail");
+          sessionStorage.removeItem("userId");
+
+          // (Tuỳ chọn) gọi API logout
+          authFetch("http://localhost:8080/api/v1/auth/logout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" }
+          }).catch(() => { });
+
+          // ✅ về trang login
+          window.location.href = "login.html";
+        });
+      }
+
+
       main();
     });
 
     function main() {
-      fetch('http://localhost:8080/api/v1/report/overview/orders?filter=Day')
+      authFetch('http://localhost:8080/api/v1/report/overview/orders?filter=Day')
         .then(res => res.json())
         .then(res => {
           document.getElementById('order-total').innerText = res.value;
@@ -772,21 +831,21 @@
         });
 
 
-        fetch('http://localhost:8080/api/v1/report/overview/revenue?filter=Month')
+      authFetch('http://localhost:8080/api/v1/report/overview/revenue?filter=Month')
         .then(res => res.json())
         .then(res => {
           document.getElementById('revenue-total').innerText = res.value;
           document.getElementById('revenue-percent').innerText = res.percent + "%";
         });
 
-        fetch('http://localhost:8080/api/v1/report/overview/customer?filter=Year')
+      authFetch('http://localhost:8080/api/v1/report/overview/customer?filter=Year')
         .then(res => res.json())
         .then(res => {
           document.getElementById('customer-total').innerText = res.value;
           document.getElementById('customer-percent').innerText = res.percent + "%";
         });
 
-        fetch('http://localhost:8080/api/v1/contents?size=4')
+      authFetch('http://localhost:8080/api/v1/contents?size=4')
         .then(res => res.json())
         .then(res => {
           const newsContainer = document.querySelector('.news');
@@ -799,10 +858,11 @@
               ${item.content}
             </div>
           `).join('');
-          
+
         });
     }
   </script>
+  <script src="assets/js/auth-permission.js"></script>
 
 </body>
 

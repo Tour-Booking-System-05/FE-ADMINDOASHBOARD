@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     // --- 1. CẤU HÌNH VÀ DOM ELEMENTS ---
     const API_URL = 'http://localhost:8080/api/v1/categories';
-    // const API_URL = 'https://smithsonian-ste-adjust-kde.trycloudflare.com/api/v1/categories';
 
     let dataTable = null; // Biến giữ thể hiện của DataTables
     const modalEl = document.getElementById('addTourModal');
@@ -105,21 +104,23 @@ document.addEventListener('DOMContentLoaded', function () {
         logoutBtn.addEventListener("click", function (e) {
             e.preventDefault();
 
-            // Xóa token khỏi sessionStorage
+            // ❌ Xóa toàn bộ session login
             sessionStorage.removeItem("token");
+            sessionStorage.removeItem("me");
+            sessionStorage.removeItem("userEmail");
+            sessionStorage.removeItem("userId");
 
-            // (Tuỳ chọn) Gọi API logout để server trả response chuẩn
+            // (Tuỳ chọn) gọi API logout
             fetch("http://localhost:8080/api/v1/auth/logout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" }
-            })
-                .catch(() => { }) // Dù lỗi vẫn logout
-                .finally(() => {
-                    // Chuyển về trang login
-                    window.location.href = "login.html";
-                });
+            }).catch(() => { });
+
+            // ✅ về trang login
+            window.location.href = "login.html";
         });
     }
+
 
     // Alert góc phải
     function showAlert(message, type = 'success') {

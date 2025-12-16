@@ -26,7 +26,34 @@
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
 
     <link href="assets/css/style.css" rel="stylesheet">
+    <style>
+        /* Alert góc phải */
+        #alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1080;
+            width: 320px;
+        }
 
+        .alert {
+            animation: fadeIn 0.4s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -312,14 +339,6 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2 pt-3">
                         <h5 class="card-title mb-0 pt-0">Danh sách nhân viên</h5>
-
-                        <div class="col-md-3">
-                            <select id="statusFilter" class="form-select">
-                                <option selected value="all">Tất cả trạng thái</option>
-                                <option value="active">Hoạt động</option>
-                                <option value="expired">Khóa</option>
-                            </select>
-                        </div>
                     </div>
                     <table class="table datatable" id="employeeTable">
                         <thead>
@@ -363,139 +382,83 @@
     <div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="employeeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <form id="employeeForm">
+                <form id="editEmployeeForm">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="employeeModalLabel">Thêm nhân viên mới</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <h5 class="modal-title" id="employeeModalLabel">Thông tin nhân viên</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                     </div>
 
                     <div class="modal-body">
-                        <ul class="nav nav-tabs mb-3" id="employeeTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="info-tab" data-bs-toggle="tab"
-                                    data-bs-target="#infoTab" type="button" role="tab">Thông tin cơ bản</button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="role-tab" data-bs-toggle="tab" data-bs-target="#roleTab"
-                                    type="button" role="tab">Phân quyền</button>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="employeeTabContent">
-                            <div class="tab-pane fade show active" id="infoTab" role="tabpanel">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label">Họ và tên</label>
-                                        <input type="text" class="form-control" id="employeeName" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="employeeEmail" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Chức vụ</label>
-                                        <select class="form-select" id="employeePosition">
-                                            <option>Chọn chức vụ</option>
-                                            <option>Accountant</option>
-                                            <option>Manager</option>
-                                            <option>Staff</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Phòng ban</label>
-                                        <select class="form-select" id="employeeDepartment">
-                                            <option>Chọn phòng ban</option>
-                                            <option>Kế toán</option>
-                                            <option>Kinh doanh</option>
-                                            <option>CSKH</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label">Trạng thái</label>
-                                        <select class="form-select" id="employeeStatus">
-                                            <option value="active">Hoạt động</option>
-                                            <option value="expired">Khóa</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6" id="passwordGroup">
-                                        <label class="form-label">Mật khẩu tạm thời</label>
-                                        <div class="input-group">
-                                            <input type="password" class="form-control" id="employeePassword">
-                                            <button type="button" class="btn btn-outline-secondary"
-                                                id="resetPasswordBtn">Đặt lại mật khẩu</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="roleTab" role="tabpanel">
-                                <div class="row g-3">
-                                    <div class="col-12 d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <div class="fw-bold">Quản lý tour</div>
-                                            <div class="text-muted small">Thêm, sửa, xóa tour</div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="roleTour">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <div class="fw-bold">Quản lý đơn đặt tour</div>
-                                            <div class="text-muted small">Xem và xử lý đơn đặt</div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="roleOrder">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <div class="fw-bold">Quản lý khách hàng</div>
-                                            <div class="text-muted small">Xem thông tin khách hàng</div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="roleCustomer">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <div class="fw-bold">Quản lý thanh toán</div>
-                                            <div class="text-muted small">Xử lý thanh toán và hóa đơn</div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="rolePayment">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <div class="fw-bold">Xem báo cáo</div>
-                                            <div class="text-muted small">Truy cập thống kê và báo cáo</div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="roleReport">
-                                        </div>
-                                    </div>
-                                    <div class="col-12 d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <div class="fw-bold">Quản lý nội dung</div>
-                                            <div class="text-muted small">Quản lý tin tức, banner</div>
-                                        </div>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="roleContent">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Mã nhân viên</label>
+                            <input type="text" class="form-control" id="employeeIdInput" disabled>
                         </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Tên nhân viên</label>
+                            <input type="text" class="form-control" id="employeeNameInput">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="employeeEmailInput">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="text" class="form-control" id="employeePhoneInput">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Ngày sinh</label>
+                            <input type="date" class="form-control" id="employeeDobInput">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Giới tính</label>
+                            <select class="form-select" id="employeeGenderInput">
+                                <option value="NAM">Nam</option>
+                                <option value="NU">Nữ</option>
+                                <option value="KHAC">Khác</option>
+                            </select>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Chức vụ</label>
+                            <select id="employeeRoleInput" class="form-select">
+                                <option value="1">ADMIN</option>
+                                <option value="2">MANAGER</option>
+                                <option value="3">STAFF</option>
+                                <option value="4">CONTENT</option>
+                                <option value="5">GUIDE</option>
+                            </select>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Trạng thái</label>
+                            <select class="form-select" id="employeeStatusInput">
+                                <option value="Hoạt động">Hoạt động</option>
+                                <option value="Khóa">Khóa</option>
+                            </select>
+                        </div>
+
                     </div>
+
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger me-auto d-none" id="deleteEmployeeBtn">Xóa nhân
-                            viên</button>
+                        <button type="button" class="btn btn-primary" id="resetPasswordBtn">Đặt lại mật khẩu</button>
+                        <button type="button" class="btn btn-danger" id="deleteEmployeeBtn">Xóa nhân viên</button>
+                        <button type="submit" class="btn btn-success">Lưu</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                        <button type="submit" class="btn btn-primary">Lưu</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    <div id="alert-container" class="mb-2"></div>
+
     <footer id="footer" class="footer">
         <div class="copyright">
             &copy; Copyright <strong><span>Nhóm 5</span></strong>. Mọi quyền được bảo lưu
@@ -509,143 +472,17 @@
     <script src="assets/vendor/chart.js/chart.umd.js"></script>
     <script src="assets/vendor/echarts/echarts.min.js"></script>
     <script src="assets/vendor/quill/quill.js"></script>
-    <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="assets/vendor/tinymce/tinymce.min.js"></script>
     <script src="assets/vendor/php-email-form/validate.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="assets/js/employees.js">
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const modalEl = document.getElementById('employeeModal');
-            const employeeModal = new bootstrap.Modal(modalEl);
-            const addBtn = document.getElementById('addEmployeeBtn');
-            const form = document.getElementById('employeeForm');
-            const deleteBtn = document.getElementById('deleteEmployeeBtn');
-            const modalLabel = document.getElementById('employeeModalLabel');
-
-            let isEditing = false;
-            let editingRow = null;
-
-            const generatePassword = (len = 8) => {
-                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                let s = '';
-                for (let i = 0; i < len; i++) s += chars.charAt(Math.floor(Math.random() * chars.length));
-                return s;
-            }
-
-            const ensureToggleButton = (passwordInput) => {
-                const group = passwordInput.closest('.input-group');
-                if (!group) return;
-                let toggle = group.querySelector('#togglePwdBtn');
-                if (!toggle) {
-                    toggle = document.createElement('button');
-                    toggle.type = 'button';
-                    toggle.id = 'togglePwdBtn';
-                    toggle.className = 'btn btn-outline-secondary';
-                    toggle.innerHTML = '<i class="bi bi-eye"></i>';
-
-                    const resetBtn = group.querySelector('#resetPasswordBtn');
-                    group.insertBefore(toggle, resetBtn.nextSibling);
-
-                    toggle.addEventListener('click', () => {
-                        if (passwordInput.type === 'password') {
-                            passwordInput.type = 'text';
-                            toggle.querySelector('i').className = 'bi bi-eye-slash';
-                        } else {
-                            passwordInput.type = 'password';
-                            toggle.querySelector('i').className = 'bi bi-eye';
-                        }
-                    });
-                }
-            }
-
-            const showModalForAdd = () => {
-                isEditing = false;
-                editingRow = null;
-                form.reset();
-                modalLabel.textContent = 'Thêm nhân viên mới';
-                deleteBtn.classList.add('d-none');
-                document.getElementById('passwordGroup').classList.add('d-none');
-                document.getElementById('employeeStatus').value = 'active';
-                employeeModal.show();
-            };
-
-            const showModalForEdit = (row) => {
-                isEditing = true;
-                editingRow = row;
-                form.reset();
-                const cells = row.getElementsByTagName('td');
-
-                document.getElementById('employeeName').value = cells[1].textContent.trim();
-                document.getElementById('employeeEmail').value = cells[2].textContent.trim();
-
-                const statusText = cells[4].textContent.trim();
-                document.getElementById('employeeStatus').value = statusText === 'Hoạt động' ? 'active' : 'expired';
-
-                const rolesText = cells[3] ? cells[3].textContent.trim() : '';
-                const roles = rolesText ? rolesText.split(',').map(r => r.trim()) : [];
-                document.getElementById('roleTour').checked = roles.includes('Quản lý tour');
-                document.getElementById('roleOrder').checked = roles.includes('Quản lý đơn');
-                document.getElementById('roleCustomer').checked = roles.includes('Quản lý khách hàng');
-                document.getElementById('rolePayment').checked = roles.includes('Quản lý thanh toán');
-                document.getElementById('roleReport').checked = roles.includes('Xem báo cáo');
-                document.getElementById('roleContent').checked = roles.includes('Quản lý nội dung');
-
-                const pwdGroup = document.getElementById('passwordGroup');
-                pwdGroup.classList.remove('d-none');
-                const pwdInput = document.getElementById('employeePassword');
-                pwdInput.value = '';
-                pwdInput.type = 'password';
-
-                ensureToggleButton(pwdInput);
-
-                document.getElementById('resetPasswordBtn').onclick = () => {
-                    const newPwd = generatePassword(10);
-                    pwdInput.value = newPwd;
-                    pwdInput.type = 'text';
-                    const toggleIcon = pwdGroup.querySelector('#togglePwdBtn i');
-                    if (toggleIcon) toggleIcon.className = 'bi bi-eye-slash';
-                };
-
-                modalLabel.textContent = 'Chỉnh sửa thông tin nhân viên';
-                deleteBtn.classList.remove('d-none');
-                employeeModal.show();
-            };
-
-            addBtn.addEventListener('click', showModalForAdd);
-
-            document.querySelector('#employeeTable tbody').addEventListener('click', (e) => {
-                const row = e.target.closest('tr');
-                if (row) {
-                    showModalForEdit(row);
-                }
-            });
-
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                alert('Đã lưu thông tin nhân viên!');
-                employeeModal.hide();
-                setTimeout(() => window.location.reload(), 300);
-            });
-
-            deleteBtn.addEventListener('click', () => {
-                if (confirm('Bạn có chắc chắn muốn xóa nhân viên này không?')) {
-                    alert('Đã xóa nhân viên!');
-                    employeeModal.hide();
-                    setTimeout(() => window.location.reload(), 300);
-                }
-            });
-
-            const statusFilter = document.getElementById('statusFilter');
-            const tableRows = document.querySelectorAll('#employeeTable tbody tr');
-            statusFilter.addEventListener('change', function () {
-                const selectedStatus = this.value;
-                tableRows.forEach(row => {
-                    row.style.display = (selectedStatus === 'all' || row.dataset.status === selectedStatus) ? '' : 'none';
-                });
-            });
-        });
     </script>
+
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/auth-permission.js"></script>
 
 </body>
 
