@@ -357,10 +357,14 @@
                       <h6>Bộ lọc</h6>
                     </li>
 
-                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-                    <li><a class="dropdown-item" href="#">Tháng này</a></li>
-                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
+                    <li><a class="dropdown-item js-filter" href="#" data-target="orders" data-filter="Day">Hôm nay</a>
+                    </li>
+                    <li><a class="dropdown-item js-filter" href="#" data-target="orders" data-filter="Month">Tháng
+                        này</a></li>
+                    <li><a class="dropdown-item js-filter" href="#" data-target="orders" data-filter="Year">Năm nay</a>
+                    </li>
                   </ul>
+
                 </div>
 
                 <div class="card-body">
@@ -394,10 +398,15 @@
                       <h6>Bộ lọc</h6>
                     </li>
 
-                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-                    <li><a class="dropdown-item" href="#">Tháng nay</a></li>
-                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
+                    <li><a class="dropdown-item js-filter" href="#" data-target="revenue" data-filter="Day">Hôm nay</a>
+                    </li>
+                    <li><a class="dropdown-item js-filter" href="#" data-target="revenue" data-filter="Month">Tháng
+                        này</a></li>
+                    <li><a class="dropdown-item js-filter" href="#" data-target="revenue" data-filter="Year">Năm nay</a>
+                    </li>
+
                   </ul>
+
                 </div>
 
                 <div class="card-body">
@@ -432,10 +441,16 @@
                       <h6>Bộ lọc</h6>
                     </li>
 
-                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-                    <li><a class="dropdown-item" href="#">Tháng này</a></li>
-                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
+                    <li><a class="dropdown-item js-filter" href="#" data-target="customer" data-filter="Day">Hôm nay</a>
+                    </li>
+                    <li><a class="dropdown-item js-filter" href="#" data-target="customer" data-filter="Month">Tháng
+                        này</a></li>
+                    <li><a class="dropdown-item js-filter" href="#" data-target="customer" data-filter="Year">Năm
+                        nay</a></li>
+
                   </ul>
+
+
                 </div>
 
                 <div class="card-body">
@@ -447,7 +462,7 @@
                     </div>
                     <div class="ps-3">
                       <h6 id="customer-total">0</h6>
-                      <i class="bi bi-graph-down-arrow"></i>
+                      <i class="bi bi-graph-up-arrow"></i>
                       <span id="customer-percent" class="text-success small pt-1 fw-bold"> 0%</span> <span
                         class="text-muted small pt-2 ps-1">Tăng</span>
 
@@ -468,10 +483,13 @@
                     <li class="dropdown-header text-start">
                       <h6>Bộ lọc</h6>
                     </li>
+                    <li><a class="dropdown-item js-filter" href="#" data-target="revenue" data-filter="Day">Hôm nay</a>
+                    </li>
+                    <li><a class="dropdown-item js-filter" href="#" data-target="revenue" data-filter="Month">Tháng
+                        này</a></li>
+                    <li><a class="dropdown-item js-filter" href="#" data-target="revenue" data-filter="Year">Năm nay</a>
+                    </li>
 
-                    <li><a class="dropdown-item" href="#">Hôm nay</a></li>
-                    <li><a class="dropdown-item" href="#">Tháng này</a></li>
-                    <li><a class="dropdown-item" href="#">Năm nay</a></li>
                   </ul>
                 </div>
                 <div class="card-body">
@@ -566,44 +584,6 @@
                   </ul>
                 </div>
 
-                <div class="card-body">
-                  <h5 class="card-title">Đơn hàng gần đây<span>| Hôm nay</span></h5>
-
-                  <table class="table table-borderless datatable">
-                    <thead>
-                      <tr>
-                        <th scope="col">STT</th>
-                        <th scope="col">Khách hàng</th>
-                        <th scope="col">Chuyến đi</th>
-                        <th scope="col">Giá (VND)</th>
-                        <th scope="col">Trạng thái</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row"><a href="#">#1</a></th>
-                        <td>ThaoHT</td>
-                        <td><a href="#" class="text-primary">Tháp Eiffel - Paris - Pháp</a></td>
-                        <td>6.400.000</td>
-                        <td><span class="badge bg-success">Đã đi</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">#2</a></th>
-                        <td>MinhNT</td>
-                        <td><a href="#" class="text-primary">Quảng trường Thời Đại - New York - Mỹ</a></td>
-                        <td>6.500</td>
-                        <td><span class="badge bg-warning">Đang chờ</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">#3</a></th>
-                        <td>LanPT</td>
-                        <td><a href="#" class="text-primary">Cầu Cổng Vàng - San Francisco - Mỹ</a></td>
-                        <td>6.800</td>
-                        <td><span class="badge bg-success">Đã đi</span></td>
-                    </tbody>
-                  </table>
-
-                </div>
 
               </div>
             </div><!-- End Recent Sales -->
@@ -778,14 +758,22 @@
         };
 
         return fetch(url, options)
-          .then(response => {
+          .then(async (response) => {
 
-            // Nếu bị chặn 403 → token hết hạn hoặc sai → logout & về login
-            if (response.status === 403 || response.status === 401) {
-              sessionStorage.clear(); // xoá token cũ
+            // 401 = token sai / hết hạn -> xoá token & về login
+            if (response.status === 401) {
+              sessionStorage.clear();
               alert("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
               window.location.href = "login.html";
-              return Promise.reject("403 Forbidden - Redirect to login");
+              return Promise.reject("401 Unauthorized - Redirect to login");
+            }
+
+            // 403 = không đủ quyền / endpoint bị chặn -> KHÔNG xoá token
+            if (response.status === 403) {
+              const text = await response.text().catch(() => "");
+              console.error("403 Forbidden:", url, text);
+              alert("Bạn không có quyền truy cập chức năng này (403).");
+              return Promise.reject("403 Forbidden");
             }
 
             return response;
@@ -801,7 +789,7 @@
         logoutBtn.addEventListener("click", function (e) {
           e.preventDefault();
 
-          // ❌ Xóa toàn bộ session login
+          //  Xóa toàn bộ session login
           sessionStorage.removeItem("token");
           sessionStorage.removeItem("me");
           sessionStorage.removeItem("userEmail");
@@ -813,54 +801,96 @@
             headers: { "Content-Type": "application/json" }
           }).catch(() => { });
 
-          // ✅ về trang login
+          //  về trang login
           window.location.href = "login.html";
         });
       }
 
+      bindFilterEvents();
 
       main();
     });
+    function getFiltersFromUrl() {
+      const q = new URLSearchParams(location.search);
+      return {
+        orders: q.get("orders") || "Day",
+        revenue: q.get("revenue") || "Month",
+        customer: q.get("customer") || "Year",
+      };
+    }
+
+    function setFilterToUrlAndReload(target, filter) {
+      const q = new URLSearchParams(location.search);
+
+      q.set(target, filter);
+
+      // reset paging nếu bạn có bảng/tin tức (ví dụ)
+      // q.delete("page");
+
+      location.search = q.toString(); // => reload
+    }
+
+    function bindFilterEvents() {
+      document.querySelectorAll(".js-filter").forEach(a => {
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          const target = a.dataset.target;   // orders | revenue | customer
+          const filter = a.dataset.filter;   // Day | Month | Year
+          setFilterToUrlAndReload(target, filter);
+        });
+      });
+    }
 
     function main() {
-      authFetch('http://localhost:8080/api/v1/report/overview/orders?filter=Day')
+      const f = getFiltersFromUrl();
+
+      // Đơn hàng
+      authFetch(`http://localhost:8080/api/v1/report/overview/orders?filter=${encodeURIComponent(f.orders)}`)
         .then(res => res.json())
         .then(res => {
           document.getElementById('order-total').innerText = res.value;
           document.getElementById('order-percent').innerText = res.percent + "%";
+          // cập nhật title span "| ..."
+          document.querySelector('.sales-card .card-title span').innerText =
+            `| ${f.orders === "Day" ? "Hôm nay" : f.orders === "Month" ? "Tháng này" : "Năm nay"}`;
         });
 
-
-      authFetch('http://localhost:8080/api/v1/report/overview/revenue?filter=Month')
+      // Doanh thu
+      authFetch(`http://localhost:8080/api/v1/report/overview/revenue?filter=${encodeURIComponent(f.revenue)}`)
         .then(res => res.json())
         .then(res => {
           document.getElementById('revenue-total').innerText = res.value;
           document.getElementById('revenue-percent').innerText = res.percent + "%";
+          document.querySelector('.revenue-card .card-title span').innerText =
+            `| ${f.revenue === "Day" ? "Hôm nay" : f.revenue === "Month" ? "Tháng này" : "Năm nay"}`;
         });
 
-      authFetch('http://localhost:8080/api/v1/report/overview/customer?filter=Year')
+      // Khách hàng
+      authFetch(`http://localhost:8080/api/v1/report/overview/customer?filter=${encodeURIComponent(f.customer)}`)
         .then(res => res.json())
         .then(res => {
           document.getElementById('customer-total').innerText = res.value;
           document.getElementById('customer-percent').innerText = res.percent + "%";
+          document.querySelector('.customers-card .card-title span').innerText =
+            `| ${f.customer === "Day" ? "Hôm nay" : f.customer === "Month" ? "Tháng này" : "Năm nay"}`;
         });
 
+      // news
       authFetch('http://localhost:8080/api/v1/contents?size=4')
         .then(res => res.json())
         .then(res => {
           const newsContainer = document.querySelector('.news');
-          var news = res.content;
-
+          const news = res.content;
           newsContainer.innerHTML = news.map(item => `
-            <div class="post-item clearfix">
-              <img src="${item.imageUrl}" alt="">
-              <h4><a href="#">${item.title}</a></h4>
-              ${item.content}
-            </div>
-          `).join('');
-
+        <div class="post-item clearfix">
+          <img src="${item.imageUrl}" alt="">
+          <h4><a href="#">${item.title}</a></h4>
+          ${item.content}
+        </div>
+      `).join('');
         });
     }
+
   </script>
   <script src="assets/js/auth-permission.js"></script>
 

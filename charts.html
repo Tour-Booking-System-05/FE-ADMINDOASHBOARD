@@ -28,6 +28,7 @@
     <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
     <!-- Template Main CSS File -->
     <link href="assets/css/style.css" rel="stylesheet">
@@ -356,13 +357,6 @@
                         <option>1 tháng</option>
                     </select>
                 </div>
-                <div class="col-auto">
-                    <select class="form-select" id="selectType" style="min-width: 120px;">
-                        <option>Doanh thu</option>
-                        <option>Đơn đặt</option>
-                        <option>Khách hàng</option>
-                    </select>
-                </div>
                 <div class="col-auto ms-auto">
                     <button class="btn btn-light" id="exportReportBtn"> <i class="bi bi-download"></i> Xuất báo
                         cáo
@@ -378,10 +372,11 @@
                                 <span class="text-secondary"><i class="bi bi-currency-dollar"></i></span>
                             </div>
                             <h3 class="fw-bold mb-1" id="statRevenue">724.000.000 ₫</h3>
-                            <div class="text-success small">
+                            <div class="text-success small" id="statRevenuePct">
                                 <i class="bi bi-graph-up-arrow"></i>
-                                +21.8% so với tháng trước
+                                --
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -393,10 +388,11 @@
                                 <span class="text-secondary"><i class="bi bi-calendar"></i></span>
                             </div>
                             <h3 class="fw-bold mb-1" id="statOrders">724</h3>
-                            <div class="text-success small">
+                            <div class="text-success small" id="statOrdersPct">
                                 <i class="bi bi-graph-up-arrow"></i>
-                                +18.2% so với tháng trước
+                                --
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -408,10 +404,11 @@
                                 <span class="text-secondary"><i class="bi bi-people"></i></span>
                             </div>
                             <h3 class="fw-bold mb-1" id="statCustomers">622</h3>
-                            <div class="text-success small">
+                            <div class="text-success small" id="statCustomersPct">
                                 <i class="bi bi-graph-up-arrow"></i>
-                                +23.4% so với tháng trước
+                                --
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -422,72 +419,77 @@
                                 <span class="fw-bold">Tỉ lệ hủy tour</span>
                                 <span class="text-secondary"><i class="bi bi-percent"></i></span>
                             </div>
-                            <h3 class="fw-bold mb-1 text-danger" id="statCancelRate">5.5%</h3>
-                            <i class="bi bi-graph-down-arrow"></i> -19.4% so với
-                            tháng trước
+
+                            <!-- GIÁ TRỊ CHÍNH -->
+                            <h3 class="fw-bold mb-1" id="statCancelRate">--</h3>
+
+                            <!-- % THAY ĐỔI -->
+                            <div class="small" id="statCancelRatePct">
+                                <i class="bi bi-graph-down-arrow"></i>
+                                --
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            </div>
-            <div class="card mb-4">
-                <div class="card-body pb-0">
-                    <ul class="nav nav-tabs" id="statTabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="overview-tab" data-bs-toggle="tab"
-                                data-bs-target="#overview" type="button" role="tab">Tổng quan</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="customer-tab" data-bs-toggle="tab" data-bs-target="#customer"
-                                type="button" role="tab">Phân tích khách hàng</button>
-                        </li>
-                    </ul>
-                    <div class="tab-content pt-3" id="statTabsContent">
-                        <!-- Tab Tổng quan -->
-                        <div class="tab-pane fade show active" id="overview" role="tabpanel">
-                            <div class="row">
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Tổng doanh thu</h5>
-                                            <div id="areaChart"></div>
+
+                <div class="card mb-4">
+                    <div class="card-body pb-0">
+                        <ul class="nav nav-tabs" id="statTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="overview-tab" data-bs-toggle="tab"
+                                    data-bs-target="#overview" type="button" role="tab">Tổng quan</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="customer-tab" data-bs-toggle="tab"
+                                    data-bs-target="#customer" type="button" role="tab">Phân tích khách hàng</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content pt-3" id="statTabsContent">
+                            <!-- Tab Tổng quan -->
+                            <div class="tab-pane fade show active" id="overview" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-lg-6 mb-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Tổng doanh thu</h5>
+                                                <div id="areaChart"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Trạng thái đơn đặt</h5>
+                                                <canvas id="pieChart"></canvas>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Trạng thái đơn đặt</h5>
-                                            <canvas id="pieChart"></canvas>
+                            </div>
+                            <!-- Tab Phân tích khách hàng -->
+                            <div class="tab-pane fade" id="customer" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-lg-6 mb-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title"> Các mức vip của khách hàng</h5>
+                                                <canvas id="donutChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-4">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Khách hàng theo tháng</h5>
+                                                <div id="lineChart"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- Tab Phân tích khách hàng -->
-                        <div class="tab-pane fade" id="customer" role="tabpanel">
-                            <div class="row">
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title"> Các mức vip của khách hàng</h5>
-                                            <canvas id="donutChart"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 mb-4">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Khách hàng theo tháng</h5>
-                                            <div id="lineChart"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
-            </div>
         </section>
 
     </main>
@@ -514,7 +516,7 @@
     <script src="assets/vendor/simple-datatables/simple-datatables.js"></script>
     <script src="assets/vendor/tinymce/tinymce.min.js"></script>
     <script src="assets/vendor/php-email-form/validate.js"></script>
-    <script>
+    <!-- <script>
         document.getElementById('exportReportBtn').addEventListener('click', function () {
             const month = document.getElementById('selectMonth').value;
             const type = document.getElementById('selectType').value;
@@ -634,6 +636,7 @@
             }).render();
         });
     </script>
+     -->
     <!-- Template Main JS File -->
     <script src="assets/js/main.js"></script>
     <!-- Bootstrap Bundle JS -->
@@ -641,6 +644,7 @@
     <!-- Quill JS -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="assets/js/auth-permission.js"></script>
+    <script src="assets/js/statistics.js"></script>
 
 </body>
 

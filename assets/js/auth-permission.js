@@ -67,8 +67,7 @@ const PERM = {
     PROMOTION_MANAGE: 7,
     CONTENT_MANAGE: 8,
     SETTING_MANAGE: 9,
-    TRIP_VIEW_ASSIGNED: 10,
-    CUSTOMER_VIEW_ASSIGNED: 11
+
 };
 
 /**
@@ -87,6 +86,8 @@ function hideIfNoPerm(selector, permId) {
 function applyPermissionUI() {
     hideIfNoPerm('a[href="index.html"]', PERM.DASHBOARD);
     hideIfNoPerm('a[href="tour-managerment.html"]', PERM.TOUR_MANAGE);
+    hideIfNoPerm('a[href="tour-category.html"]', PERM.TOUR_MANAGE);
+
     hideIfNoPerm('a[href="order.html"]', PERM.ORDER_MANAGE);
     hideIfNoPerm('a[href="users.html"]', PERM.CUSTOMER_MANAGE);
     hideIfNoPerm('a[href="charts.html"]', PERM.REPORT_VIEW);

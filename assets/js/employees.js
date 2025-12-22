@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
         logoutBtn.addEventListener("click", function (e) {
             e.preventDefault();
 
-            // ❌ Xóa toàn bộ session login
+            //  Xóa toàn bộ session login
             sessionStorage.removeItem("token");
             sessionStorage.removeItem("me");
             sessionStorage.removeItem("userEmail");
