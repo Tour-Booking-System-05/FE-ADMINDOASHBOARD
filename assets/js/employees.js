@@ -241,6 +241,9 @@ document.addEventListener('DOMContentLoaded', function () {
         form.reset();
         document.getElementById('employeeModalLabel').innerText = 'Thêm nhân viên';
         setCreateModeUI();
+
+        filterRoleOptionsByMe(); // 👈 THÊM DÒNG NÀY
+
         modal.show();
     };
 
@@ -323,6 +326,34 @@ document.addEventListener('DOMContentLoaded', function () {
             showAlert(err.message, "danger");
         }
     });
+    function filterRoleOptionsByMe() {
+        const meRaw = sessionStorage.getItem("me");
+        if (!meRaw) return;
+
+        const me = JSON.parse(meRaw);
+
+        // ✅ chú ý: dữ liệu của bạn đang nằm trong me.data.roleId (nhìn screenshot)
+        const myRoleId = Number(me?.data?.roleId ?? me?.roleId);
+        if (!myRoleId) return;
+
+        const select = document.getElementById("employeeRoleInput");
+        if (!select) return;
+
+        // ✅ remove option có roleId < myRoleId (cao hơn mình)
+        Array.from(select.options).forEach(opt => {
+            const roleId = Number(opt.value);
+            if (roleId < myRoleId) {
+                opt.remove();
+            }
+        });
+
+        // nếu đang chọn value không hợp lệ thì reset
+        if (select.value && Number(select.value) < myRoleId) {
+            select.value = "";
+        }
+    }
+
+
 
     // ================== INIT ==================
     loadEmployees();

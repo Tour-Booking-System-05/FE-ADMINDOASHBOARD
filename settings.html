@@ -509,6 +509,227 @@
     <!-- Quill JS -->
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="assets/js/auth-permission.js"></script>
+    <script>
+        (() => {
+            const API_SETTINGS = "http://localhost:8080/api/v1/settings";
+            const API_UPLOAD = "http://localhost:8080/api/v1/settings/upload";
+            async function authFetch(url, options = {}) {
+                const token = sessionStorage.getItem("token");
+                if (!token) {
+                    window.location.href = "login.html";
+                    return Promise.reject("No token");
+                }
+
+                const isFormData = options.body instanceof FormData;
+
+                const headers = {
+                    ...(options.headers || {}),
+                    Authorization: "Bearer " + token,
+                    Accept: "application/json",
+                };
+
+                // ✅ FormData: không set Content-Type
+                if (!isFormData && options.body && !headers["Content-Type"]) {
+                    headers["Content-Type"] = "application/json";
+                }
+
+                return fetch(url, { ...options, headers });
+            }
+
+            if (typeof authFetch !== "function") {
+                console.error("authFetch function is not defined.");
+                return;
+            }
+
+            const companyTab = () => document.querySelector("#company");
+            const companyForm = () => companyTab()?.querySelector("form");
+
+            function getEls() {
+                const form = companyForm();
+                if (!form) return null;
+
+                const textInputs = form.querySelectorAll('input.form-control:not([type="file"])'); // 5 input
+                const fileInput = form.querySelector('input[type="file"].form-control');
+                const submitBtn = form.querySelector('button[type="submit"]');
+
+                return { form, textInputs, fileInput, submitBtn };
+            }
+
+            function ensureMsgBox(form) {
+                let box = form.querySelector(".__msg");
+                if (!box) {
+                    box = document.createElement("div");
+                    box.className = "__msg alert mt-3 d-none";
+                    form.appendChild(box);
+                }
+                return box;
+            }
+
+            function showMsg(form, type, text) {
+                const box = ensureMsgBox(form);
+                box.classList.remove("d-none", "alert-success", "alert-danger", "alert-warning", "alert-info");
+                box.classList.add("alert-" + type);
+                box.textContent = text;
+            }
+
+            function ensureLogoPreview(form) {
+                let img = form.querySelector("img.__logoPreview");
+                if (!img) {
+                    img = document.createElement("img");
+                    img.className = "__logoPreview mt-2";
+                    img.style.maxHeight = "90px";
+                    img.style.display = "none";
+
+                    // chèn ngay sau input file
+                    const fileRow = form.querySelector('input[type="file"]')?.parentElement;
+                    (fileRow || form).appendChild(img);
+                }
+                return img;
+            }
+
+            async function getSettings() {
+                const res = await authFetch(API_SETTINGS, { method: "GET" });
+                if (!res.ok) throw new Error("GET settings failed: " + res.status);
+                return res.json();
+            }
+
+            async function saveSettings(dto) {
+                const res = await authFetch(API_SETTINGS, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(dto)
+                });
+                if (!res.ok) {
+                    const t = await res.text().catch(() => "");
+                    throw new Error("PUT settings failed: " + res.status + " " + t);
+                }
+                return res.json();
+            }
+
+            async function uploadLogo(file) {
+                const fd = new FormData();
+                fd.append("file", file);
+
+                const res = await authFetch(API_UPLOAD, {
+                    method: "POST",
+                    body: fd
+                });
+                if (!res.ok) {
+                    const t = await res.text().catch(() => "");
+                    throw new Error("UPLOAD failed: " + res.status + " " + t);
+                }
+                const data = await res.json();
+                return data.url;
+            }
+
+            let current = null;
+
+            function fillForm(s) {
+                const ctx = getEls();
+                if (!ctx) return;
+                const { textInputs, form } = ctx;
+
+                // Thứ tự đúng theo HTML bạn gửi:
+                // 0: companyName, 1: companyTax, 2: companyAddress, 3: phone, 4: companyEmail
+                if (textInputs[0]) textInputs[0].value = s.companyName || "";
+                if (textInputs[1]) textInputs[1].value = s.companyTax || "";
+                if (textInputs[2]) textInputs[2].value = s.companyAddress || "";
+                if (textInputs[3]) textInputs[3].value = s.phone || "";
+                if (textInputs[4]) textInputs[4].value = s.companyEmail || "";
+
+                // preview logo nếu có
+                const img = ensureLogoPreview(form);
+                if (s.urlLogo) {
+                    img.src = s.urlLogo;
+                    img.style.display = "inline-block";
+                } else {
+                    img.src = "";
+                    img.style.display = "none";
+                }
+            }
+
+            function readForm() {
+                const ctx = getEls();
+                if (!ctx) return null;
+                const { textInputs } = ctx;
+
+                return {
+                    settingId: current?.settingId ?? null,
+                    companyName: (textInputs[0]?.value || "").trim(),
+                    companyTax: (textInputs[1]?.value || "").trim(),
+                    companyAddress: (textInputs[2]?.value || "").trim(),
+                    phone: (textInputs[3]?.value || "").trim(),
+                    companyEmail: (textInputs[4]?.value || "").trim(),
+                    urlLogo: current?.urlLogo ?? null
+                };
+            }
+
+            async function boot() {
+                const ctx = getEls();
+                if (!ctx) return;
+
+                const { form, fileInput, submitBtn } = ctx;
+
+                // ✅ không sửa HTML: bỏ required của file bằng JS để không bắt buộc chọn logo mỗi lần lưu
+                if (fileInput) fileInput.required = false;
+
+                const img = ensureLogoPreview(form);
+
+                // preview khi chọn logo mới
+                if (fileInput) {
+                    fileInput.addEventListener("change", () => {
+                        const f = fileInput.files?.[0];
+                        if (!f) return;
+                        img.src = URL.createObjectURL(f);
+                        img.style.display = "inline-block";
+                    });
+                }
+
+                // load settings
+                try {
+                    current = await getSettings();
+                    fillForm(current);
+                } catch (e) {
+                    console.error(e);
+                    showMsg(form, "danger", "Không tải được cài đặt: " + e.message);
+                }
+
+                form.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+
+                    try {
+                        submitBtn && (submitBtn.disabled = true);
+
+                        const dto = readForm();
+                        if (!dto) return;
+
+                        const file = fileInput?.files?.[0];
+                        if (file) {
+                            dto.urlLogo = await uploadLogo(file);
+                        }
+
+                        const saved = await saveSettings(dto);
+                        current = saved;
+
+                        // clear file + fill lại form
+                        if (fileInput) fileInput.value = "";
+                        fillForm(saved);
+
+                        showMsg(form, "success", "Lưu thông tin công ty thành công!");
+                    } catch (err) {
+                        console.error(err);
+                        showMsg(form, "danger", "Lưu thất bại: " + (err?.message || err));
+                    } finally {
+                        submitBtn && (submitBtn.disabled = false);
+                    }
+                });
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+                boot();
+            });
+        })();
+    </script>
 
 </body>
 
