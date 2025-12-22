@@ -38,6 +38,56 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+  <style>
+    .news .post-item .news-content {
+      display: -webkit-box !important;
+      -webkit-box-orient: vertical !important;
+      -webkit-line-clamp: 2 !important;
+
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+
+      line-height: 1.35 !important;
+      max-height: calc(1.35em * 2) !important;
+      /* fallback giúp chắc 2 dòng */
+      margin: 0 !important;
+
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+
+
+    /* Activity timeline – wrap text đúng cách */
+    .activity .activity-item {
+      align-items: flex-start;
+      /* canh trên khi text nhiều dòng */
+    }
+
+    .activity .activity-content {
+      white-space: normal;
+      /* cho phép xuống dòng */
+      word-break: break-word;
+      /* cắt từ nếu quá dài */
+      overflow-wrap: break-word;
+      /* hỗ trợ trình duyệt khác */
+      flex: 1;
+      /* chiếm phần còn lại */
+      line-height: 1.4;
+    }
+
+    /* Label thời gian cố định */
+    .activity .activite-label {
+      min-width: 60px;
+      text-align: right;
+      margin-right: 10px;
+      white-space: nowrap;
+    }
+
+    /* Icon không bị co */
+    .activity .activity-badge {
+      margin-top: 3px;
+    }
+  </style>
 </head>
 
 <body>
@@ -631,45 +681,10 @@
             <div class="card-body">
               <h5 class="card-title">Hoạt động gần đây</h5>
 
-              <div class="activity">
-
-                <div class="activity-item d-flex">
-                  <div class="activite-label">32 phút</div>
-                  <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                  <div class="activity-content">
-                    Những <a href="#" class="fw-bold text-dark">yêu cầu cần xử lý</a> đã được cập nhật
-                  </div>
-                </div><!-- End activity item-->
-                <div class="activity-item d-flex">
-                  <div class="activite-label">56 phút</div>
-                  <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                  <div class="activity-content">
-                    Đơn hàng mới <a href="#" class="fw-bold text-dark">#123456</a> đã được tạo
-                  </div>
-
-                </div><!-- End activity item-->
-                <div class="activity-item d-flex">
-                  <div class="activite-label">2 giờ</div>
-                  <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
-                  <div class="activity-content">
-                    Chuyến đi <a href="#" class="fw-bold text-dark">Tour du lịch Đà Nẵng 4N3Đ giá rẻ</a> đã được đặt
-                  </div>
-                </div><!-- End activity item-->
-                <div class="activity-item d-flex">
-                  <div class="activite-label">1 ngày</div>
-                  <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
-                  <div class="activity-content">
-                    Khách hàng mới <a href="#" class="fw-bold text-dark">Nguyễn Văn A</a> đã đăng ký
-                  </div>
-                </div><!-- End activity item-->
-                <div class="activity-item d-flex">
-                  <div class="activite-label">2 ngày</div>
-                  <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                  <div class="activity-content">
-                    Đơn hàng <a href="#" class="fw-bold text-dark">#123457</a> đã bị hủy
-                  </div>
-                </div><!-- End activity item-->
+              <div class="activity" id="recent-activity">
+                <!-- render bằng JS -->
               </div>
+
 
             </div>
           </div><!-- End Recent Activity -->
@@ -840,8 +855,99 @@
         });
       });
     }
+    function badgeClassByColor(color) {
+      // map "color" từ backend -> bootstrap text-*
+      switch ((color || "").toLowerCase()) {
+        case "success":
+        case "green":
+          return "text-success";
+        case "danger":
+        case "red":
+          return "text-danger";
+        case "primary":
+        case "blue":
+          return "text-primary";
+        case "info":
+          return "text-info";
+        case "warning":
+        case "yellow":
+          return "text-warning";
+        default:
+          return "text-muted";
+      }
+    }
 
+    function safe(text) {
+      // tránh null/undefined
+      return (text ?? "").toString();
+    }
+
+    function buildActivityContent(item) {
+      // Ưu tiên description nếu có, fallback title
+      // Nếu bạn muốn highlight entity như #123456 thì nên backend trả sẵn HTML hoặc tách field highlightText
+      const content = item.description && item.description.trim().length > 0
+        ? item.description
+        : item.title;
+
+      // Nếu content đã là text thường thì render thẳng.
+      // (Nếu bạn muốn chèn <a> highlight, mình hướng dẫn thêm ở mục 4)
+      return safe(content);
+    }
+
+    function renderActivities(list) {
+      const container = document.getElementById("recent-activity");
+      if (!container) return;
+
+      if (!list || list.length === 0) {
+        container.innerHTML = `<div class="text-muted small">Chưa có hoạt động nào.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(item => {
+        const label = safe(item.displayTime); // backend đã tính "32 phút", "2 giờ"...
+        const badgeClass = badgeClassByColor(item.color);
+        const content = buildActivityContent(item);
+
+        return `
+        <div class="activity-item d-flex">
+          <div class="activite-label">${label}</div>
+          <i class="bi bi-circle-fill activity-badge ${badgeClass} align-self-start"></i>
+          <div class="activity-content">
+            ${content}
+          </div>
+        </div>
+      `;
+      }).join("");
+    }
+
+    function loadRecentActivities() {
+      // gọi API bạn đã tạo
+      return authFetch("http://localhost:8080/api/v1/activities?page=0&size=5")
+        .then(res => res.json())
+        .then(page => {
+          // Spring Page: data nằm trong page.content
+          renderActivities(page.content || []);
+        })
+        .catch(err => {
+          console.error("Load activities error:", err);
+          const container = document.getElementById("recent-activity");
+          if (container) container.innerHTML = `<div class="text-danger small">Không tải được hoạt động gần đây.</div>`;
+        });
+    }
+    function stripHtml(html) {
+      const div = document.createElement("div");
+      div.innerHTML = html ?? "";
+      return (div.textContent || div.innerText || "").trim();
+    }
+
+    function truncateText(text, maxChars = 160) {
+      const t = (text ?? "").trim();
+      return t.length > maxChars ? t.slice(0, maxChars) + "..." : t;
+    }
+    // Trong DOMContentLoaded của bạn, gọi thêm:
+    // loadRecentActivities();
     function main() {
+      loadRecentActivities();
       const f = getFiltersFromUrl();
 
       // Đơn hàng
@@ -881,14 +987,21 @@
         .then(res => {
           const newsContainer = document.querySelector('.news');
           const news = res.content;
-          newsContainer.innerHTML = news.map(item => `
-        <div class="post-item clearfix">
-          <img src="${item.imageUrl}" alt="">
-          <h4><a href="#">${item.title}</a></h4>
-          ${item.content}
-        </div>
-      `).join('');
+          newsContainer.innerHTML = news.map(item => {
+            const plain = stripHtml(item.content); // bỏ tag HTML
+            const short = truncateText(plain, 160); // fallback nếu clamp vẫn fail
+            return `
+  <div class="post-item clearfix">
+    <img src="${item.imageUrl}" alt="">
+    <h4><a href="#">${item.title}</a></h4>
+    <p class="news-content">${short}</p>
+  </div>
+  `;
+          }).join('');
+
+
         });
+
     }
 
   </script>
